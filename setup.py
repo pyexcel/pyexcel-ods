@@ -33,7 +33,7 @@ setup(
         'Topic :: Utilities',
         'Topic :: Software Development :: Libraries',
         'Programming Language :: Python',
-        'License :: OSI Approved :: GNU Affero General Public License v3',
+        'License :: OSI Approved :: GNU General Public License v3',
         'Intended Audience :: Developers',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7'
