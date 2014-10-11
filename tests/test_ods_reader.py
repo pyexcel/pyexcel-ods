@@ -1,11 +1,11 @@
 import os
-import pyexcel_odf
+import pyexcel_ods
 import pyexcel
 
 
 class TestODSReader:
     def setUp(self):
-        r = pyexcel_odf.odsbook.ODSBook(os.path.join("tests",
+        r = pyexcel_ods.odsbook.ODSBook(os.path.join("tests",
                                                     "fixtures",
                                                     "ods_formats.ods"))
         self.data = {}

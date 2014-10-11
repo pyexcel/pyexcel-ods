@@ -13,7 +13,7 @@ except ImportError:
     from setuptools import setup, find_packages
 
 setup(
-    name='pyexcel-odf',
+    name='pyexcel-ods',
     author="C. W.",
     version='0.0.1',
     author_email="wangc_2011@hotmail.com",

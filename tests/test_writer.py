@@ -1,6 +1,6 @@
 import os
 import pyexcel
-import pyexcel_odf
+import pyexcel_ods
 from base import PyexcelWriterBase, PyexcelHatWriterBase
 
 

@@ -1,11 +1,11 @@
-# pyexcel-odf [![Build Status](https://api.travis-ci.org/chfw/pyexcel-odf.png)](http://travis-ci.org/chfw/pyexcel-odf)
+# pyexcel-ods [![Build Status](https://api.travis-ci.org/chfw/pyexcel-ods.png)](http://travis-ci.org/chfw/pyexcel-ods)
 
-**pyexcel-odf** is a plugin to pyexcel and provides the capbility to read, manipulate and write data in ods fromats using python 2.6 and python 2.7
+**pyexcel-ods** is a plugin to pyexcel and provides the capbility to read, manipulate and write data in ods fromats using python 2.6 and python 2.7
 
 # usage
 
 ```python
-import pyexcel_odf
+import pyexcel_ods
 from pyexcel import Reader
 from pyexcel.utils import to_array
 import json
