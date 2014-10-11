@@ -1,0 +1,15 @@
+language: python
+notifications:
+  email: false
+env:
+  global:
+python:
+  - 2.6
+  - 2.7
+install:
+  - pip install -r requirements.txt --use-mirrors
+  - pip install -r tests/requirements.txt --use-mirrors
+script:
+  nosetests --rednose --with-cov
+after_success:
+  codecov
