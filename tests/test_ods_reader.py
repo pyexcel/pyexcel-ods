@@ -1,13 +1,13 @@
 import os
-import pyexcel_ods
+from pyexcel.ext import ods
 import pyexcel
 
 
 class TestODSReader:
     def setUp(self):
-        r = pyexcel_ods.odsbook.ODSBook(os.path.join("tests",
-                                                    "fixtures",
-                                                    "ods_formats.ods"))
+        r = ods.odsbook.ODSBook(os.path.join("tests",
+                                             "fixtures",
+                                             "ods_formats.ods"))
         self.data = {}
         for s in r.sheet_names:
             self.data[s] = pyexcel.utils.to_array(r.SHEETS[s])
