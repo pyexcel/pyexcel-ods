@@ -18,7 +18,7 @@ Import it in your file to enable this plugin::
     from pyexcel.ext import ods
 
 Reading from an ods file
------------------------
+------------------------
 
 Here is the sample code::
 
@@ -49,8 +49,8 @@ Here is the sample code::
 Dependencies
 ============
 
-* pyexcel >= 0.0.4
-* odfpy
+1. pyexcel >= 0.0.4
+2. odfpy
 
 Credits
 =======
