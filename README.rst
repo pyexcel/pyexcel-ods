@@ -17,7 +17,7 @@ Import it in your file to enable this plugin::
 
     from pyexcel.ext import ods
 
-Reading from a ods file
+Reading from an ods file
 -----------------------
 
 Here is the sample code::
@@ -32,7 +32,7 @@ Here is the sample code::
     data = to_array(reader)
     print json.dumps(data)
 
-Writing to a ods file
+Writing to an ods file
 ----------------------
 
 Here is the sample code::
@@ -49,6 +49,7 @@ Here is the sample code::
 Dependencies
 ============
 
+* pyexcel >= 0.0.4
 * odfpy
 
 Credits
