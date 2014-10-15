@@ -1,6 +1,5 @@
 import os
 from pyexcel.ext import ods
-import pyexcel
 from base import ODSCellTypes
 
 

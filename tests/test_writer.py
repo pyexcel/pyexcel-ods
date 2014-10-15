@@ -2,6 +2,7 @@ import os
 from pyexcel.ext import ods
 from base import PyexcelWriterBase, PyexcelHatWriterBase
 
+
 class TestNativeODSWriter:
     def test_write_book(self):
         self.content = {
