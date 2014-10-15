@@ -1,3 +1,12 @@
+"""
+    pyexcel_ods.odsbook
+    ~~~~~~~~~~~~~~~~~~~
+
+    ODS format plugin for pyexcel
+
+    :copyright: (c) 2014 by C. W.
+    :license: GPL v3
+"""
 # Copyright 2011 Marco Conti
 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +27,6 @@ import odf.opendocument
 from odf.table import *
 from odf.text import P
 from odf.namespaces import OFFICENS
-from pyexcel.sheets import (STRING_FORMAT,
-                            FLOAT_FORMAT, EMPTY,
-                            DATE_FORMAT, BOOLEAN_FORMAT)
 
 
 def float_value(value):
@@ -37,12 +43,20 @@ def date_value(value):
     return ret
 
 
+def ods_date_value(value):
+    return value.strftime("%Y-%m-%d")
+
+
 def time_value(value):
     hour = int(value[2:4])
     minute = int(value[5:7])
     second = int(value[8:10])
     ret = datetime.time(hour, minute, second)
     return ret
+
+
+def ods_time_value(value):
+    return value.strftime("PT%HH%MM%SS")
 
 
 def boolean_value(value):
@@ -53,13 +67,30 @@ def boolean_value(value):
     return ret
 
 
+def ods_bool_value(value):
+    if value is True:
+        return "true"
+    else:
+        return "false"
+
+
 ODS_FORMAT_CONVERSION = {
-    "float": FLOAT_FORMAT,
-    "date": DATE_FORMAT,
-    "time": DATE_FORMAT,
-    "boolean": BOOLEAN_FORMAT,
-    "percentage": FLOAT_FORMAT,
-    "currency": FLOAT_FORMAT
+    "float": float,
+    "date": datetime.date,
+    "time": datetime.time,
+    "boolean": bool,
+    "percentage": float,
+    "currency": float
+}
+
+ODS_WRITE_FORMAT_COVERSION = {
+    float: "float",
+    int: "float",
+    str: "string",
+    datetime.date: "date",
+    datetime.time: "time",
+    bool: "boolean",
+    unicode: "string"
 }
 
 
@@ -70,6 +101,12 @@ VALUE_CONVERTERS = {
     "boolean": boolean_value,
     "percentage": float_value,
     "currency": float_value
+}
+
+ODS_VALUE_CONVERTERS = {
+    "date": ods_date_value,
+    "time": ods_time_value,
+    "boolean": ods_bool_value
 }
 
 
@@ -152,6 +189,15 @@ class ODSBook:
         return ret
 
     def sheets(self):
+        """
+        returns a dictionary of all sheet content
+
+        the keys represents sheet names
+        the values are two dimensional array
+        """
+        return self.SHEETS
+
+    def __dict__(self):
         return self.SHEETS
 
 
@@ -171,6 +217,19 @@ class ODSSheetWriter:
     def set_size(self, size):
         pass
 
+    def write_cell(self, row, x):
+        tc = TableCell()
+        x_type = type(x)
+        x_odf_type = ODS_WRITE_FORMAT_COVERSION.get(x_type, "string")
+        tc.setAttrNS(OFFICENS, "value-type", x_odf_type)
+        x_odf_value_token = VALUE_TOKEN.get(x_odf_type, "value")
+        converter = ODS_VALUE_CONVERTERS.get(x_odf_type, None)
+        if converter:
+            x = converter(x)
+        tc.setAttrNS(OFFICENS, x_odf_value_token, x)
+        tc.addElement(P(text=x))
+        row.addElement(tc)
+
     def write_row(self, array):
         """
         write a row into the file
@@ -178,9 +237,11 @@ class ODSSheetWriter:
         tr = TableRow()
         self.table.addElement(tr)
         for x in array:
-            tc = TableCell()
-            tc.addElement(P(text=x))
-            tr.addElement(tc)
+            self.write_cell(tr, x)
+
+    def write_array(self, table):
+        for r in table:
+            self.write_row(r)
 
     def close(self):
         """
@@ -205,6 +266,18 @@ class ODSWriter:
         write a row into the file
         """
         return ODSSheetWriter(self.doc, name)
+
+    def write(self, sheet_dicts):
+        """Write a dictionary to a multi-sheet file
+
+        Requirements for the dictionary is: key is the sheet name,
+        its value must be two dimensional array
+        """
+        keys = sheet_dicts.keys()
+        for name in keys:
+            sheet = self.create_sheet(name)
+            sheet.write_array(sheet_dicts[name])
+            sheet.close()
 
     def close(self):
         """
