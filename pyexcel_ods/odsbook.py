@@ -27,6 +27,11 @@ import odf.opendocument
 from odf.table import *
 from odf.text import P
 from odf.namespaces import OFFICENS
+import sys
+if sys.version_info[0] == 2 and sys.version_info[1] < 7:
+    from ordereddict import OrderedDict
+else:
+    from collections import OrderedDict
 
 
 def float_value(value):
@@ -125,7 +130,7 @@ class ODSBook:
     def __init__(self, file):
         """Load the file"""
         self.doc = odf.opendocument.load(file)
-        self.SHEETS = {}
+        self.SHEETS = OrderedDict()
         self.sheet_names = []
         for sheet in self.doc.spreadsheet.getElementsByType(Table):
             self.readSheet(sheet)
