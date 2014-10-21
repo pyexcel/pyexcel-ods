@@ -85,8 +85,8 @@ Here's the sample code::
         print(book.sheets())
 
 
-Write to an ods file
-*********************
+Write an ods to memory
+**********************
 
 Here's the sample code to write a dictionary to an ods file::
 
