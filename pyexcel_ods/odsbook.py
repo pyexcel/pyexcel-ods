@@ -127,9 +127,12 @@ VALUE_TOKEN = {
 
 class ODSBook:
 
-    def __init__(self, file):
+    def __init__(self, filename, file_content=None, **keywords):
         """Load the file"""
-        self.doc = odf.opendocument.load(file)
+        if filename:
+            self.doc = odf.opendocument.load(filename)
+        else:
+            self.doc = odf.opendocument.load(file_content)            
         self.SHEETS = OrderedDict()
         self.sheet_names = []
         for sheet in self.doc.spreadsheet.getElementsByType(Table):
