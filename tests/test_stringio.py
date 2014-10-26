@@ -12,7 +12,7 @@ class TestStringIO:
         create_sample_file1(odsfile)
         with open(odsfile, "rb") as f:
             content = f.read()
-            r = pyexcel.Reader(("ods", StringIO(content)))
+            r = pyexcel.Reader(("ods", content))
             result=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 1.1, 1]
             actual = pyexcel.utils.to_array(r.enumerate())
             assert result == actual
@@ -29,7 +29,7 @@ class TestStringIO:
         w = pyexcel.Writer(("ods",io))
         w.write_rows(data)
         w.close()
-        r = pyexcel.Reader(("ods", io))
+        r = pyexcel.Reader(("ods", io.getvalue()))
         result=[1, 2, 3, 4, 5, 6]
         actual = pyexcel.utils.to_array(r.enumerate())
         assert result == actual

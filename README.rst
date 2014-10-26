@@ -73,7 +73,6 @@ Read from an ods from memory
 Here's the sample code::
 
     from pyexcel_ods import ODSBook
-    from StringIO import StringIO
 
     # This is just an illustration
     # In reality, you might deal with ods file upload
@@ -81,7 +80,7 @@ Here's the sample code::
     odsfile = "example.ods"
     with open(odsfile, "rb") as f:
         content = f.read()
-        book = ODSBook(None, StringIO(content))
+        book = ODSBook(None, content)
         print(book.sheets())
 
 
@@ -130,7 +129,7 @@ Here is the sample code::
     print json.dumps(data)
 
 Writing to an ods file
-***********************
+**********************
 
 Here is the sample code::
 

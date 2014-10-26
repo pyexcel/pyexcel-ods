@@ -28,6 +28,7 @@ from odf.table import *
 from odf.text import P
 from odf.namespaces import OFFICENS
 import sys
+from StringIO import StringIO
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     from ordereddict import OrderedDict
 else:
@@ -132,7 +133,7 @@ class ODSBook:
         if filename:
             self.doc = odf.opendocument.load(filename)
         else:
-            self.doc = odf.opendocument.load(file_content)            
+            self.doc = odf.opendocument.load(StringIO(file_content))
         self.SHEETS = OrderedDict()
         self.sheet_names = []
         for sheet in self.doc.spreadsheet.getElementsByType(Table):
