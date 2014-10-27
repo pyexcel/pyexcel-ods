@@ -30,7 +30,7 @@ You can install it via pip::
 or clone it and install it::
 
     $ git clone http://github.com/chfw/pyexcel-ods.git
-    $ cd pyexcel
+    $ cd pyexcel-ods
     $ python setup.py install
 
 Usage
