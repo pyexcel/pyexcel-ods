@@ -10,6 +10,6 @@ install:
   - python setup.py install
   - pip install -r tests/requirements.txt --use-mirrors
 script:
-  nosetests --rednose --with-cov
+  make test
 after_success:
   codecov

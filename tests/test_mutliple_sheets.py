@@ -2,6 +2,7 @@ from base import PyexcelMultipleSheetBase
 import pyexcel
 import os
 from pyexcel.ext import ods
+from pyexcel.ext import xl
 
 
 class TestOdsNxlsMultipleSheets(PyexcelMultipleSheetBase):
@@ -61,7 +62,7 @@ class TestAddBooks:
         self._write_test_file(self.testfile2)
 
     def test_delete_sheets(self):
-        b1 = pyexcel.readers.Book(self.testfile)
+        b1 = pyexcel.load_book(self.testfile)
         assert len(b1.sheet_names()) == 3
         del b1["Sheet1"]
         assert len(b1.sheet_names()) == 2
@@ -80,7 +81,7 @@ class TestAddBooks:
             
     def test_delete_sheets2(self):
         """repetitively delete first sheet"""
-        b1 = pyexcel.readers.Book(self.testfile)
+        b1 = pyexcel.load_book(self.testfile)
         del b1[0]
         assert len(b1.sheet_names()) == 2
         del b1[0]
@@ -108,7 +109,7 @@ class TestAddBooks:
         
     def test_add_book1_in_place(self):
         """
-        test this scenario: book1 +=  book2
+        test this scenario book1 +=  book2
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
@@ -126,7 +127,7 @@ class TestAddBooks:
 
     def test_add_book2(self):
         """
-        test this scenario: book3 = book1 + sheet3
+        test this scenario book3 = book1 + sheet3
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
@@ -144,7 +145,7 @@ class TestAddBooks:
 
     def test_add_book2_in_place(self):
         """
-        test this scenario: book3 = book1 + sheet3
+        test this scenario book3 = book1 + sheet3
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
@@ -162,7 +163,7 @@ class TestAddBooks:
 
     def test_add_book3(self):
         """
-        test this scenario: book3 = sheet1 + sheet2
+        test this scenario book3 = sheet1 + sheet2
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
@@ -175,7 +176,7 @@ class TestAddBooks:
         
     def test_add_book4(self):
         """
-        test this scenario: book3 = sheet1 + book
+        test this scenario book3 = sheet1 + book
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
