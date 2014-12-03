@@ -1,3 +1,4 @@
+pyexcel
 pyexcel-xl
 nose
 rednose
