@@ -1,5 +1,5 @@
 """
-    pyexcel_ods.odsbook
+    pyexcel.ext.ods
     ~~~~~~~~~~~~~~~~~~~
 
     ODS format plugin for pyexcel
