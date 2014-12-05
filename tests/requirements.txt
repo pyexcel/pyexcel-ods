@@ -1,5 +1,4 @@
-pyexcel
-pyexcel-xl
+pyexcel-xls
 nose
 rednose
 nose-cov
