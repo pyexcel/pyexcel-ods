@@ -8,6 +8,7 @@ python:
   - 2.7
 install:
   - pip install git+https://github.com/chfw/pyexcel-io.git
+  - pip install git+https://github.com/chfw/pyexcel-xls.git
   - pip install git+https://github.com/chfw/pyexcel.git
   - python setup.py install
   - pip install -r tests/requirements.txt --use-mirrors
