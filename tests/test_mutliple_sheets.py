@@ -2,7 +2,7 @@ from base import PyexcelMultipleSheetBase
 import pyexcel
 import os
 from pyexcel.ext import ods
-from pyexcel.ext import xl
+from pyexcel.ext import xls
 
 
 class TestOdsNxlsMultipleSheets(PyexcelMultipleSheetBase):
