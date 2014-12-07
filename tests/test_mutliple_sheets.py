@@ -3,7 +3,6 @@ import pyexcel
 import os
 from pyexcel.ext import ods
 from pyexcel.ext import xls
-from pyexcel.ext import xlsx
 
 
 class TestOdsNxlsMultipleSheets(PyexcelMultipleSheetBase):
@@ -53,7 +52,6 @@ class TestAddBooks:
     def setUp(self):
         self.testfile = "multiple1.ods"
         self.testfile2 = "multiple1.xls"
-        self.testfile3 = "multiple2.xlsx"
         self.content = {
             "Sheet1": [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3]],
             "Sheet2": [[4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6]],

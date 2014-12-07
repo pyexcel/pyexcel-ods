@@ -23,10 +23,12 @@
 
 # Thanks to grt for the fixes
 import datetime
+from pyexcel_io import SheetReaderBase, BookReader, SheetWriter, BookWriter
 import odf.opendocument
 from odf.table import *
 from odf.text import P
 from odf.namespaces import OFFICENS
+from odf.opendocument import OpenDocumentSpreadsheet
 import sys
 from StringIO import StringIO
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
@@ -125,25 +127,18 @@ VALUE_TOKEN = {
     "currency": "value"
 }
 
+class ODSSheet(SheetReaderBase):
+    def __init__(self, sheet):
+        SheetReaderBase.__init__(self, sheet)
 
-class ODSBook:
-
-    def __init__(self, filename, file_content=None, **keywords):
-        """Load the file"""
-        if filename:
-            self.doc = odf.opendocument.load(filename)
-        else:
-            self.doc = odf.opendocument.load(StringIO(file_content))
-        self.SHEETS = OrderedDict()
-        self.sheet_names = []
-        for sheet in self.doc.spreadsheet.getElementsByType(Table):
-            self.readSheet(sheet)
-
-    def readSheet(self, sheet):
+    @property
+    def name(self):
+        return self.native_sheet.getAttribute("name")
+        
+    def to_array(self):
         """reads a sheet in the sheet dictionary, storing each sheet
         as an array (rows) of arrays (columns)"""
-        name = sheet.getAttribute("name")
-        rows = sheet.getElementsByType(TableRow)
+        rows = self.native_sheet.getElementsByType(TableRow)
         arrRows = []
         # for each row
         for row in rows:
@@ -166,9 +161,7 @@ class ODSBook:
             # if row contained something
             if(len(arrCells) and has_value):
                 arrRows.append(arrCells)
-
-        self.SHEETS[name] = arrRows
-        self.sheet_names.append(name)
+        return arrRows
 
     def _read_text_cell(self, cell):
         textContent = ""
@@ -196,33 +189,28 @@ class ODSBook:
                 textContent = self._read_text_cell(cell)
                 ret = textContent
         return ret
+            
 
-    def sheets(self):
-        """
-        returns a dictionary of all sheet content
+class ODSBook(BookReader):
+    def getSheet(self, native_sheet):
+        return ODSSheet(native_sheet)
 
-        the keys represents sheet names
-        the values are two dimensional array
-        """
-        return self.SHEETS
+    def load_from_memory(self, file_content):
+        return odf.opendocument.load(StringIO(file_content))
 
-    def __dict__(self):
-        return self.SHEETS
+    def load_from_file(self, filename):
+        return odf.opendocument.load(filename)
 
+    def sheetIterator(self):
+        return self.native_book.spreadsheet.getElementsByType(Table)
 
-class ODSSheetWriter:
+class ODSSheetWriter(SheetWriter):
     """
     ODS sheet writer
     """
-
-    def __init__(self, book, name):
-        self.doc = book
-        if name:
-            sheet_name = name
-        else:
-            sheet_name = "pyexcel_sheet1"
-        self.table = Table(name=sheet_name)
-
+    def set_sheet_name(self, name):
+        self.native_sheet = Table(name=name)
+        
     def set_size(self, size):
         pass
 
@@ -244,56 +232,39 @@ class ODSSheetWriter:
         write a row into the file
         """
         tr = TableRow()
-        self.table.addElement(tr)
+        self.native_sheet.addElement(tr)
         for x in array:
             self.write_cell(tr, x)
-
-    def write_array(self, table):
-        for r in table:
-            self.write_row(r)
 
     def close(self):
         """
         This call writes file
 
         """
-        self.doc.spreadsheet.addElement(self.table)
+        self.native_book.spreadsheet.addElement(self.native_sheet)
 
 
-class ODSWriter:
+class ODSWriter(BookWriter):
     """
     open document spreadsheet writer
 
     """
     def __init__(self, file):
-        from odf.opendocument import OpenDocumentSpreadsheet
-        self.doc = OpenDocumentSpreadsheet()
-        self.file = file
+        BookWriter.__init__(self, file)
+        self.native_book = OpenDocumentSpreadsheet()
 
     def create_sheet(self, name):
         """
         write a row into the file
         """
-        return ODSSheetWriter(self.doc, name)
-
-    def write(self, sheet_dicts):
-        """Write a dictionary to a multi-sheet file
-
-        Requirements for the dictionary is: key is the sheet name,
-        its value must be two dimensional array
-        """
-        keys = sheet_dicts.keys()
-        for name in keys:
-            sheet = self.create_sheet(name)
-            sheet.write_array(sheet_dicts[name])
-            sheet.close()
+        return ODSSheetWriter(self.native_book, None, name)
 
     def close(self):
         """
         This call writes file
 
         """
-        self.doc.write(self.file)
+        self.native_book.write(self.file)
 
 try:
     from pyexcel.io import READERS
@@ -305,4 +276,4 @@ except:
     # to allow this module to function independently
     pass
 
-__VERSION__ = "0.0.2"
+__VERSION__ = "0.0.3"

@@ -10,7 +10,8 @@ with open("README.rst", 'r') as readme:
     README_txt = readme.read()
 
 dependencies = [
-        'odfpy'
+    'odfpy',
+    'pyexcel-io'
     ]
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     dependencies.append('ordereddict')
@@ -18,7 +19,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 setup(
     name='pyexcel-ods',
     author="C. W.",
-    version='0.0.2',
+    version='0.0.3',
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-ods",
     description='A wrapper library to read, manipulate and write data in ods format',
@@ -27,6 +28,7 @@ setup(
     include_package_data=True,
     long_description=README_txt,
     zip_safe=False,
+    license='General Publice License version 3',
     tests_require=['nose'],
     classifiers=[
         'Development Status :: 3 - Alpha',
