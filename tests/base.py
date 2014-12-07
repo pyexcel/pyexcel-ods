@@ -145,7 +145,7 @@ class PyexcelMultipleSheetBase:
         r["Sheet3"].name_columns_by_row(0)
         assert r["Sheet3"][0,1] == 4
 
-        
+
 class ODSCellTypes:
 
     def test_formats(self):
