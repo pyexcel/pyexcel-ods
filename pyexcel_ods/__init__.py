@@ -247,7 +247,7 @@ class ODSWriter(BookWriter):
 
     """
     def __init__(self, file, **keywords):
-        BookWriter.__init__(self, file)
+        BookWriter.__init__(self, file, **keywords)
         self.native_book = OpenDocumentSpreadsheet()
 
     def create_sheet(self, name):
