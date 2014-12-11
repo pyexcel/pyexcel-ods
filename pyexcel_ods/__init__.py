@@ -128,9 +128,6 @@ VALUE_TOKEN = {
 }
 
 class ODSSheet(SheetReaderBase):
-    def __init__(self, sheet):
-        SheetReaderBase.__init__(self, sheet)
-
     @property
     def name(self):
         return self.native_sheet.getAttribute("name")
@@ -249,7 +246,7 @@ class ODSWriter(BookWriter):
     open document spreadsheet writer
 
     """
-    def __init__(self, file):
+    def __init__(self, file, **keywords):
         BookWriter.__init__(self, file)
         self.native_book = OpenDocumentSpreadsheet()
 
