@@ -77,7 +77,7 @@ Here's the sample code::
     {"Sheet 1": [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], "Sheet 2": [["row 1", "row 2", "row 3"]]}
 
 Write an ods file to memory
-**********************
+******************************
 
 Here's the sample code to write a dictionary to an ods file::
 
