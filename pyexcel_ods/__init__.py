@@ -127,11 +127,12 @@ VALUE_TOKEN = {
     "currency": "value"
 }
 
+
 class ODSSheet(SheetReaderBase):
     @property
     def name(self):
         return self.native_sheet.getAttribute("name")
-        
+
     def to_array(self):
         """reads a sheet in the sheet dictionary, storing each sheet
         as an array (rows) of arrays (columns)"""
@@ -186,7 +187,7 @@ class ODSSheet(SheetReaderBase):
                 textContent = self._read_text_cell(cell)
                 ret = textContent
         return ret
-            
+
 
 class ODSBook(BookReader):
     def getSheet(self, native_sheet):
@@ -201,13 +202,14 @@ class ODSBook(BookReader):
     def sheetIterator(self):
         return self.native_book.spreadsheet.getElementsByType(Table)
 
+
 class ODSSheetWriter(SheetWriter):
     """
     ODS sheet writer
     """
     def set_sheet_name(self, name):
         self.native_sheet = Table(name=name)
-        
+
     def set_size(self, size):
         pass
 
@@ -273,4 +275,4 @@ except:
     # to allow this module to function independently
     pass
 
-__VERSION__ = "0.0.3"
+__VERSION__ = "0.0.4"
