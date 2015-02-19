@@ -202,13 +202,19 @@ class ODSBook(BookReader):
     def sheetIterator(self):
         if self.sheet_name is not None:
             tables = self.native_book.spreadsheet.getElementsByType(Table)
-            return [table for table in tables if table.getAttribute('name') == self.sheet_name]
+            rets = [table for table in tables if table.getAttribute('name') == self.sheet_name]
+            if len(rets) == 0:
+                raise ValueError("%s cannot be found" % self.sheet_name)
+            else:
+                return rets
         elif self.sheet_index is not None:
             tables = self.native_book.spreadsheet.getElementsByType(Table)
-            if len(tables) > 0:
-                return [tables[0]]
+            length = len(tables)
+            if self.sheet_index < length:
+                return [tables[self.sheet_index]]
             else:
-                return []
+                raise ValueError("Index %d of out bound %d" %(self.sheet_index,
+                                                              length))
         else:
             return self.native_book.spreadsheet.getElementsByType(Table)
 
