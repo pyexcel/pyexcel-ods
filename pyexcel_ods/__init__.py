@@ -213,7 +213,7 @@ class ODSBook(BookReader):
             if self.sheet_index < length:
                 return [tables[self.sheet_index]]
             else:
-                raise ValueError("Index %d of out bound %d" %(self.sheet_index,
+                raise IndexError("Index %d of out bound %d" %(self.sheet_index,
                                                               length))
         else:
             return self.native_book.spreadsheet.getElementsByType(Table)

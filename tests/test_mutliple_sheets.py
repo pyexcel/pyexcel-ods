@@ -76,7 +76,7 @@ class TestAddBooks:
         assert len(b1.sheet_names()) == 1
         assert b1['Sheet1'].to_array() == self.content['Sheet1']
 
-    @raises(ValueError)
+    @raises(IndexError)
     def test_load_a_single_sheet3(self):
         pyexcel.load_book(self.testfile, sheet_index=10000)
         
