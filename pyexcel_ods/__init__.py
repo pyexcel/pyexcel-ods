@@ -190,7 +190,7 @@ class ODSSheet(SheetReaderBase):
 
 
 class ODSBook(BookReader):
-    def getSheet(self, native_sheet):
+    def get_sheet(self, native_sheet):
         return ODSSheet(native_sheet)
 
     def load_from_memory(self, file_content, **keywords):
@@ -199,7 +199,7 @@ class ODSBook(BookReader):
     def load_from_file(self, filename, **keywords):
         return odf.opendocument.load(filename)
 
-    def sheetIterator(self):
+    def sheet_iterator(self):
         if self.sheet_name is not None:
             tables = self.native_book.spreadsheet.getElementsByType(Table)
             rets = [table for table in tables if table.getAttribute('name') == self.sheet_name]
