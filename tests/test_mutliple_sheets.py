@@ -3,6 +3,12 @@ import pyexcel
 import os
 from pyexcel.ext import ods
 from pyexcel.ext import xls
+import sys
+
+if sys.version_info[0] == 2 and sys.version_info[1] < 7:
+    from ordereddict import OrderedDict
+else:
+    from collections import OrderedDict
 
 
 class TestOdsNxlsMultipleSheets(PyexcelMultipleSheetBase):
@@ -52,13 +58,22 @@ class TestAddBooks:
     def setUp(self):
         self.testfile = "multiple1.ods"
         self.testfile2 = "multiple1.xls"
-        self.content = {
-            "Sheet1": [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3]],
-            "Sheet2": [[4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6]],
-            "Sheet3": [[u'X', u'Y', u'Z'], [1, 4, 7], [2, 5, 8], [3, 6, 9]]
-        }
+        self.content = OrderedDict()
+        self.content.update({"Sheet1": [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3]]})
+        self.content.update({"Sheet2": [[4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6]]})
+        self.content.update({"Sheet3": [[u'X', u'Y', u'Z'], [1, 4, 7], [2, 5, 8], [3, 6, 9]]})
         self._write_test_file(self.testfile)
         self._write_test_file(self.testfile2)
+
+    def test_load_a_single_sheet(self):
+        b1 = pyexcel.load_book(self.testfile, sheet_name="Sheet1")
+        assert len(b1.sheet_names()) == 1
+        assert b1['Sheet1'].to_array() == self.content['Sheet1']
+
+    def test_load_a_single_sheet2(self):
+        b1 = pyexcel.load_book(self.testfile, sheet_index=0)
+        assert len(b1.sheet_names()) == 1
+        assert b1['Sheet1'].to_array() == self.content['Sheet1']
 
     def test_delete_sheets(self):
         b1 = pyexcel.load_book(self.testfile)

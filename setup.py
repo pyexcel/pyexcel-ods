@@ -11,7 +11,7 @@ with open("README.rst", 'r') as readme:
 
 dependencies = [
     'odfpy',
-    'pyexcel-io>=0.0.2'
+    'pyexcel-io>=0.0.3'
     ]
 
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:

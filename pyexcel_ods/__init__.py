@@ -193,14 +193,24 @@ class ODSBook(BookReader):
     def getSheet(self, native_sheet):
         return ODSSheet(native_sheet)
 
-    def load_from_memory(self, file_content):
+    def load_from_memory(self, file_content, **keywords):
         return odf.opendocument.load(StringIO(file_content))
 
-    def load_from_file(self, filename):
+    def load_from_file(self, filename, **keywords):
         return odf.opendocument.load(filename)
 
     def sheetIterator(self):
-        return self.native_book.spreadsheet.getElementsByType(Table)
+        if self.sheet_name is not None:
+            tables = self.native_book.spreadsheet.getElementsByType(Table)
+            return [table for table in tables if table.getAttribute('name') == self.sheet_name]
+        elif self.sheet_index is not None:
+            tables = self.native_book.spreadsheet.getElementsByType(Table)
+            if len(tables) > 0:
+                return [tables[0]]
+            else:
+                return []
+        else:
+            return self.native_book.spreadsheet.getElementsByType(Table)
 
 
 class ODSSheetWriter(SheetWriter):
