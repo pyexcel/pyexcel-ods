@@ -1,1 +1,1 @@
-nosetests --rednose --with-cov --with-doctest --doctest-extension=.rst
+nosetests --rednose --with-cov --cov pyexcel_ods --cov tests  --with-doctest --doctest-extension=.rst
