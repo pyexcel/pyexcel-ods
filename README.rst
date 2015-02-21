@@ -204,6 +204,7 @@ Dependencies
 ============
 
 1. odfpy
+2. pyexcel-io >= 0.0.3
 
 Credits
 =======
