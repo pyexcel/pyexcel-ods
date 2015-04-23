@@ -131,7 +131,7 @@ Here is the sample code::
 
     >>> import pyexcel as pe
     >>> from pyexcel.ext import ods
-    >>> sheet = pe.load_book("your_file.ods")
+    >>> sheet = pe.get_book(file_name="your_file.ods")
     >>> sheet
     Sheet Name: Sheet 1
     +---+---+---+
@@ -163,7 +163,7 @@ You got to wrap the binary content with StringIO to get odf working::
     >>> xlfile = "another_file.ods"
     >>> with open(xlfile, "rb") as f:
     ...     content = f.read()
-    ...     r = pe.load_book_from_memory("ods", content)
+    ...     r = pe.get_book(file_type="ods", content=content)
     ...     print(r)
     ...
     Sheet Name: Sheet 1
