@@ -1,5 +1,5 @@
 """
-    pyexcel.ext.ods
+    pyexcel_ods
     ~~~~~~~~~~~~~~~~~~~
 
     ODS format plugin for pyexcel
@@ -23,7 +23,14 @@
 
 # Thanks to grt for the fixes
 import datetime
-from pyexcel_io import SheetReaderBase, BookReader, SheetWriter, BookWriter
+from pyexcel_io import (
+    SheetReader,
+    BookReader,
+    SheetWriter,
+    BookWriter,
+    READERS,
+    WRITERS
+)
 import odf.opendocument
 from odf.table import *
 from odf.text import P
@@ -281,14 +288,8 @@ class ODSWriter(BookWriter):
         """
         self.native_book.write(self.file)
 
-try:
-    from pyexcel.io import READERS
-    from pyexcel.io import WRITERS
+READERS["ods"] = ODSBook
+WRITERS["ods"] = ODSWriter
 
-    READERS["ods"] = ODSBook
-    WRITERS["ods"] = ODSWriter
-except:
-    # to allow this module to function independently
-    pass
 
-__VERSION__ = "0.0.5"
+__VERSION__ = "0.0.6"
