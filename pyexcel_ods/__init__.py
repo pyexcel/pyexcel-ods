@@ -24,7 +24,7 @@
 # Thanks to grt for the fixes
 import datetime
 from pyexcel_io import (
-    SheetReader,
+    SheetReaderBase,
     BookReader,
     SheetWriter,
     BookWriter,
