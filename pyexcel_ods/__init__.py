@@ -29,7 +29,10 @@ from pyexcel_io import (
     SheetWriter,
     BookWriter,
     READERS,
-    WRITERS
+    WRITERS,
+    isstream,
+    load_data as read_data,
+    store_data as write_data
 )
 import odf.opendocument
 from odf.table import *
@@ -37,11 +40,7 @@ from odf.text import P
 from odf.namespaces import OFFICENS
 from odf.opendocument import OpenDocumentSpreadsheet
 import sys
-from StringIO import StringIO
-if sys.version_info[0] == 2 and sys.version_info[1] < 7:
-    from ordereddict import OrderedDict
-else:
-    from collections import OrderedDict
+PY2 = sys.version_info[0] == 2
 
 
 def float_value(value):
@@ -201,7 +200,7 @@ class ODSBook(BookReader):
         return ODSSheet(native_sheet)
 
     def load_from_memory(self, file_content, **keywords):
-        return odf.opendocument.load(StringIO(file_content))
+        return odf.opendocument.load(file_content)
 
     def load_from_file(self, filename, **keywords):
         return odf.opendocument.load(filename)
@@ -290,6 +289,31 @@ class ODSWriter(BookWriter):
 
 READERS["ods"] = ODSBook
 WRITERS["ods"] = ODSWriter
+
+
+
+def is_string(atype):
+    """find out if a type is str or not"""
+    if atype == str:
+            return True
+    elif PY2:
+        if atype == unicode:
+            return True
+        elif atype == str:
+            return True
+    return False
+
+
+def store_data(afile, data, file_type=None, **keywords):
+    if isstream(afile) and file_type is None:
+        file_type='ods'
+    write_data(afile, data, file_type=file_type, **keywords)
+
+
+def load_data(afile, file_type=None, **keywords):
+    if isstream(afile) and file_type is None:
+        file_type='ods'
+    return read_data(afile, file_type=file_type, **keywords)
 
 
 __VERSION__ = "0.0.6"

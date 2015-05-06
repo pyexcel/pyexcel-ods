@@ -46,6 +46,8 @@ Usage
 
 As a standalone library
 ------------------------
+Write to an ods file
+*********************
 
 .. testcode::
    :hide:
@@ -55,33 +57,26 @@ As a standalone library
     ...     from StringIO import StringIO
     ... else:
     ...     from io import BytesIO as StringIO
-    >>> from pyexcel_xls import OrderedDict
+    >>> from pyexcel_io import OrderedDict
 
-Write to an ods file
-*********************
 
 Here's the sample code to write a dictionary to an ods file::
 
-    >>> from pyexcel_ods import ODSWriter
+    >>> from pyexcel_ods import store_data
     >>> data = OrderedDict()
     >>> data.update({"Sheet 1": [[1, 2, 3], [4, 5, 6]]})
     >>> data.update({"Sheet 2": [["row 1", "row 2", "row 3"]]})
-    >>> writer = ODSWriter("your_file.ods")
-    >>> writer.write(data)
-    >>> writer.close()
+    >>> store_data("your_file.ods", data)
 
 Read from an ods file
 **********************
 
 Here's the sample code::
 
-    >>> from pyexcel_ods import ODSBook
-    >>> book = ODSBook("your_file.ods")
-    >>> # book.sheets() returns a dictionary of all sheet content
-    >>> #   the keys represents sheet names
-    >>> #   the values are two dimensional array
+    >>> from pyexcel_ods import load_data
+    >>> data = load_data("your_file.ods")
     >>> import json
-    >>> print(json.dumps(book.sheets()))
+    >>> print(json.dumps(data))
     {"Sheet 1": [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], "Sheet 2": [["row 1", "row 2", "row 3"]]}
 
 Write an ods file to memory
@@ -89,15 +84,13 @@ Write an ods file to memory
 
 Here's the sample code to write a dictionary to an ods file::
 
-    >>> from pyexcel_ods import ODSWriter
+    >>> from pyexcel_ods import store_data
     >>> data = OrderedDict()
     >>> data.update({"Sheet 1": [[1, 2, 3], [4, 5, 6]]})
     >>> data.update({"Sheet 2": [[7, 8, 9], [10, 11, 12]]})
     >>> io = StringIO()
-    >>> writer = ODSWriter(io)
-    >>> writer.write(data)
-    >>> writer.close()
-    >>> # do something witht the io
+    >>> store_data(io, data)
+    >>> # do something with the io
     >>> # In reality, you might give it to your http response
     >>> # object for downloading
 
@@ -108,10 +101,10 @@ Read from an ods from memory
 Here's the sample code::
 
     >>> # This is just an illustration
-    >>> # In reality, you might deal with xl file upload
+    >>> # In reality, you might deal with ods file upload
     >>> # where you will read from requests.FILES['YOUR_XL_FILE']
-    >>> book = ODSBook(None, io.getvalue())
-    >>> print(json.dumps(book.sheets()))
+    >>> data = load_data(io)
+    >>> print(json.dumps(data))
     {"Sheet 1": [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], "Sheet 2": [[7.0, 8.0, 9.0], [10.0, 11.0, 12.0]]}
 
 
@@ -151,7 +144,7 @@ Here is the sample code::
 
     >>> sheet.save_as("another_file.ods")
 
-Reading from a StringIO instance
+Reading from a IO instance
 ================================
 
 You got to wrap the binary content with StringIO to get odf working::
@@ -159,11 +152,11 @@ You got to wrap the binary content with StringIO to get odf working::
 
     >>> # This is just an illustration
     >>> # In reality, you might deal with xl file upload
-    >>> # where you will read from requests.FILES['YOUR_XL_FILE']
-    >>> xlfile = "another_file.ods"
-    >>> with open(xlfile, "rb") as f:
+    >>> # where you will read from requests.FILES['YOUR_ODS_FILE']
+    >>> odsfile = "another_file.ods"
+    >>> with open(odsfile, "rb") as f:
     ...     content = f.read()
-    ...     r = pe.get_book(file_type="ods", content=content)
+    ...     r = pe.get_book(file_type="ods", file_content=content)
     ...     print(r)
     ...
     Sheet Name: Sheet 1
