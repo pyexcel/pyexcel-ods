@@ -102,7 +102,7 @@ Here's the sample code::
 
     >>> # This is just an illustration
     >>> # In reality, you might deal with ods file upload
-    >>> # where you will read from requests.FILES['YOUR_XL_FILE']
+    >>> # where you will read from requests.FILES['YOUR_ODS_FILE']
     >>> data = load_data(io)
     >>> print(json.dumps(data))
     {"Sheet 1": [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], "Sheet 2": [[7.0, 8.0, 9.0], [10.0, 11.0, 12.0]]}
@@ -197,7 +197,7 @@ Dependencies
 ============
 
 1. odfpy
-2. pyexcel-io >= 0.0.3
+2. pyexcel-io >= 0.0.4
 
 Credits
 =======
