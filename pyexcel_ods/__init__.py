@@ -149,23 +149,21 @@ class ODSSheet(SheetReaderBase):
         for row in rows:
             arrCells = []
             cells = row.getElementsByType(TableCell)
-            has_value = False
 
             # for each cell
             for cell in cells:
                 # repeated value?
                 repeat = cell.getAttribute("numbercolumnsrepeated")
                 if(not repeat):
-                    has_value = True
                     ret = self._read_cell(cell)
                     arrCells.append(ret)
                 else:
                     r = int(repeat)
+                    ret = self._read_cell(cell)
                     for i in range(0, r):
-                        arrCells.append("")
+                        arrCells.append(ret)
             # if row contained something
-            if(len(arrCells) and has_value):
-                arrRows.append(arrCells)
+            arrRows.append(arrCells)
         return arrRows
 
     def _read_text_cell(self, cell):
