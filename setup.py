@@ -20,7 +20,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 setup(
     name='pyexcel-ods',
     author="C. W.",
-    version='0.0.6',
+    version='0.0.7',
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-ods",
     description='A wrapper library to read, manipulate and write data in ods format',
@@ -29,7 +29,7 @@ setup(
     include_package_data=True,
     long_description=README_txt,
     zip_safe=False,
-    license='General Publice License version 3',
+    license='New BSD License',
     tests_require=['nose'],
     classifiers=[
         'Development Status :: 3 - Alpha',
