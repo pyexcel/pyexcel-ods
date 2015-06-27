@@ -2,23 +2,6 @@
 pyexcel-ods - Let you focus on data, instead of ods format
 ===========================================================
 
-.. image:: https://api.travis-ci.org/chfw/pyexcel-ods.png
-    :target: http://travis-ci.org/chfw/pyexcel-ods
-
-.. image:: https://codecov.io/github/chfw/pyexcel-ods/coverage.png
-    :target: https://codecov.io/github/chfw/pyexcel-ods
-
-.. image:: https://pypip.in/d/pyexcel-ods/badge.png
-    :target: https://pypi.python.org/pypi/pyexcel-ods
-
-.. image:: https://pypip.in/py_versions/pyexcel-ods/badge.png
-    :target: https://pypi.python.org/pypi/pyexcel-ods
-
-.. image:: https://pypip.in/implementation/pyexcel-ods/badge.png
-    :target: https://pypi.python.org/pypi/pyexcel-ods
-
-.. image:: http://img.shields.io/gittip/chfw.svg
-    :target: https://gratipay.com/chfw/
 
 **pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in ods fromat using python 2.6 and python 2.7. You are likely to use it with `pyexcel <https://github.com/chfw/pyexcel>`_. `pyexcel-ods3 <https://github.com/chfw/pyexcel-ods3>`_ is a sister library that does the same thing but supports Python 3.3 and 3.4.
 
@@ -48,17 +31,6 @@ As a standalone library
 ------------------------
 Write to an ods file
 *********************
-
-.. testcode::
-   :hide:
-
-    >>> import sys
-    >>> if sys.version_info[0] < 3:
-    ...     from StringIO import StringIO
-    ... else:
-    ...     from io import BytesIO as StringIO
-    >>> from pyexcel_io import OrderedDict
-
 
 Here's the sample code to write a dictionary to an ods file::
 
@@ -196,7 +168,7 @@ New BSD License
 Dependencies
 ============
 
-1. odfpy
+1. odfpy == 0.9.6
 2. pyexcel-io >= 0.0.4
 
 Credits
@@ -204,9 +176,3 @@ Credits
 
 ODSReader is originally written by `Marco Conti <https://github.com/marcoconti83/read-ods-with-odfpy>`_
 
-.. testcode::
-   :hide:
-
-   >>> import os
-   >>> os.unlink("your_file.ods")
-   >>> os.unlink("another_file.ods")

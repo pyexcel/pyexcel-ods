@@ -10,7 +10,7 @@ with open("README.rst", 'r') as readme:
     README_txt = readme.read()
 
 dependencies = [
-    'odfpy',
+    'odfpy==0.9.6',
     'pyexcel-io>=0.0.4'
     ]
 
