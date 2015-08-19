@@ -243,7 +243,8 @@ class ODSSheetWriter(SheetWriter):
         converter = ODS_VALUE_CONVERTERS.get(x_odf_type, None)
         if converter:
             x = converter(x)
-        tc.setAttrNS(OFFICENS, x_odf_value_token, x)
+        if x_odf_type != 'string':
+            tc.setAttrNS(OFFICENS, x_odf_value_token, x)
         tc.addElement(P(text=x))
         row.addElement(tc)
 
@@ -302,4 +303,4 @@ def get_data(afile, file_type=None, **keywords):
     return read_data(afile, file_type=file_type, **keywords)
 
 
-__VERSION__ = "0.0.7"
+__VERSION__ = "0.0.9"
