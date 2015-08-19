@@ -29,6 +29,18 @@ Usage
 
 As a standalone library
 ------------------------
+
+.. testcode::
+   :hide:
+
+    >>> import sys
+    >>> if sys.version_info[0] < 3:
+    ...     from StringIO import StringIO
+    ... else:
+    ...     from io import BytesIO as StringIO
+    >>> from pyexcel_io import OrderedDict
+
+
 Write to an ods file
 *********************
 
@@ -176,3 +188,9 @@ Credits
 
 ODSReader is originally written by `Marco Conti <https://github.com/marcoconti83/read-ods-with-odfpy>`_
 
+.. testcode::
+   :hide:
+
+   >>> import os
+   >>> os.unlink("your_file.ods")
+   >>> os.unlink("another_file.ods")
