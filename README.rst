@@ -2,11 +2,11 @@
 pyexcel-ods - Let you focus on data, instead of ods format
 ================================================================================
 
-.. image:: https://api.travis-ci.org/chfw/pyexcel-ods3.png
-    :target: http://travis-ci.org/chfw/pyexcel-ods3
+.. image:: https://api.travis-ci.org/chfw/pyexcel-ods.png
+    :target: http://travis-ci.org/chfw/pyexcel-ods
 
-.. image:: https://codecov.io/github/chfw/pyexcel-ods3/coverage.png
-    :target: https://codecov.io/github/chfw/pyexcel-ods3
+.. image:: https://codecov.io/github/chfw/pyexcel-ods/coverage.png
+    :target: https://codecov.io/github/chfw/pyexcel-ods
 
 
 **pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in
