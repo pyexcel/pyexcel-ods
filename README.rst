@@ -1,9 +1,19 @@
-===========================================================
+================================================================================
 pyexcel-ods - Let you focus on data, instead of ods format
-===========================================================
+================================================================================
+
+.. image:: https://api.travis-ci.org/chfw/pyexcel-ods3.png
+    :target: http://travis-ci.org/chfw/pyexcel-ods3
+
+.. image:: https://codecov.io/github/chfw/pyexcel-ods3/coverage.png
+    :target: https://codecov.io/github/chfw/pyexcel-ods3
 
 
-**pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in ods fromat using python 2.6 and python 2.7. You are likely to use it with `pyexcel <https://github.com/chfw/pyexcel>`_. `pyexcel-ods3 <https://github.com/chfw/pyexcel-ods3>`_ is a sister library that does the same thing but supports Python 3.3 and 3.4.
+**pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in
+ods fromat using python 2.6 and python 2.7. You are likely to use it with
+`pyexcel <https://github.com/chfw/pyexcel>`_.
+`pyexcel-ods3 <https://github.com/chfw/pyexcel-ods3>`_ is a sister library that
+does the same thing but supports Python 3.3 and 3.4 and depends on lxml.
 
 Known constraints
 ==================
@@ -86,7 +96,7 @@ Here's the sample code::
 
     >>> # This is just an illustration
     >>> # In reality, you might deal with ods file upload
-    >>> # where you will read from requests.FILES['YOUR_XL_FILE']
+    >>> # where you will read from requests.FILES['YOUR_ODS_FILE']
     >>> data = get_data(io)
     >>> print(json.dumps(data))
     {"Sheet 1": [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], "Sheet 2": [[7.0, 8.0, 9.0], [10.0, 11.0, 12.0]]}
@@ -135,7 +145,7 @@ You got to wrap the binary content with StringIO to get odf working::
 
 
     >>> # This is just an illustration
-    >>> # In reality, you might deal with xl file upload
+    >>> # In reality, you might deal with ods file upload
     >>> # where you will read from requests.FILES['YOUR_ODS_FILE']
     >>> odsfile = "another_file.ods"
     >>> with open(odsfile, "rb") as f:
