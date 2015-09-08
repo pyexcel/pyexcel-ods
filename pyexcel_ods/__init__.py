@@ -31,15 +31,15 @@ from pyexcel_io import (
     READERS,
     WRITERS,
     isstream,
-    is_string,
     load_data as read_data,
     store_data as write_data
 )
 import odf.opendocument
-from odf.table import *
+from odf.table import TableRow, TableCell, Table
 from odf.text import P
 from odf.namespaces import OFFICENS
 from odf.opendocument import OpenDocumentSpreadsheet
+from dateutil.parser import parse
 import sys
 PY2 = sys.version_info[0] == 2
 
@@ -50,12 +50,8 @@ def float_value(value):
 
 
 def date_value(value):
-    tokens = value.split('-')
-    year = int(tokens[0])
-    month = int(tokens[1])
-    day = int(tokens[2])
-    ret = datetime.date(year, month, day)
-    return ret
+    ret = parse(value)
+    return ret.date()
 
 
 def ods_date_value(value):

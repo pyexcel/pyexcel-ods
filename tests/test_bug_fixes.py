@@ -15,3 +15,9 @@ def test_bug_fix_for_issue_2():
     save_data("your_file.ods", data)
     new_data = get_data("your_file.ods")
     assert new_data["Sheet 2"] == [[u'row 1', u'H\xe9ll\xf4!', u'Hol\xc1!']]
+
+def test_date_util_parse():
+    from pyexcel_ods import date_value
+    value = "2015-08-17T19:20:00"
+    d = date_value(value)
+    assert d.strftime("%Y-%m-%d") == "2015-08-17"
