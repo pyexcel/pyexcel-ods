@@ -1,2 +1,2 @@
 odfpy==0.9.6
-dateutil
+python-dateutil==2.4.2
