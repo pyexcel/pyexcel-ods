@@ -34,12 +34,12 @@ from pyexcel_io import (
     load_data as read_data,
     store_data as write_data
 )
+import datetime
 import odf.opendocument
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
 from odf.namespaces import OFFICENS
 from odf.opendocument import OpenDocumentSpreadsheet
-from dateutil.parser import parse
 import sys
 PY2 = sys.version_info[0] == 2
 
@@ -50,8 +50,14 @@ def float_value(value):
 
 
 def date_value(value):
-    ret = parse(value)
-    return ret.date()
+    if len(value) == 10:
+        ret = datetime.datetime.strptime(value, "%Y-%m-%d")
+        ret = ret.date()
+    elif len(value) == 19:
+        ret = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+    else:
+        raise Exception("Bad date format")
+    return ret
 
 
 def ods_date_value(value):

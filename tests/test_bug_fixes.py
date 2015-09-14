@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 import os
 from pyexcel_ods import get_data, save_data
+from nose.tools import raises
 
 
 def test_bug_fix_for_issue_1():
@@ -20,4 +21,13 @@ def test_date_util_parse():
     from pyexcel_ods import date_value
     value = "2015-08-17T19:20:00"
     d = date_value(value)
+    assert d.strftime("%Y-%m-%dT%H:%M:%S") == "2015-08-17T19:20:00"
+    value = "2015-08-17"
+    d = date_value(value)
     assert d.strftime("%Y-%m-%d") == "2015-08-17"
+
+@raises(Exception)
+def test_invalid_date():
+    from pyexcel_ods import date_value
+    value = "2015-08-"
+    date_value(value)
