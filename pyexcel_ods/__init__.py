@@ -34,7 +34,6 @@ from pyexcel_io import (
     load_data as read_data,
     store_data as write_data
 )
-import datetime
 import odf.opendocument
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
@@ -50,14 +49,19 @@ def float_value(value):
 
 
 def date_value(value):
-    if len(value) == 10:
-        ret = datetime.datetime.strptime(value, "%Y-%m-%d")
-        ret = ret.date()
-    elif len(value) == 19:
-        ret = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
-    else:
-        raise Exception("Bad date format")
-    return ret
+    try:
+        if len(value) == 10:
+            ret = datetime.datetime.strptime(value, "%Y-%m-%d")
+            ret = ret.date()
+        elif len(value) == 19:
+            ret = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+        elif len(value) > 19:
+            ret = datetime.datetime.strptime(value[0:26], "%Y-%m-%dT%H:%M:%S.%f")
+        else:
+            raise Exception("Bad date value %s" % value)
+        return ret
+    except:
+        raise Exception("Bad date value %s" % value)
 
 
 def ods_date_value(value):
