@@ -22,7 +22,12 @@
 # limitations under the License.
 
 # Thanks to grt for the fixes
+import sys
 import datetime
+from odf.table import TableRow, TableCell, Table
+from odf.text import P
+from odf.namespaces import OFFICENS
+from odf.opendocument import OpenDocumentSpreadsheet, load
 from pyexcel_io import (
     SheetReaderBase,
     BookReader,
@@ -34,13 +39,6 @@ from pyexcel_io import (
     load_data as read_data,
     store_data as write_data
 )
-import odf.opendocument
-from odf.table import TableRow, TableCell, Table
-from odf.text import P
-from odf.namespaces import OFFICENS
-from odf.opendocument import OpenDocumentSpreadsheet
-import sys
-PY2 = sys.version_info[0] == 2
 
 
 def float_value(value):
@@ -49,19 +47,27 @@ def float_value(value):
 
 
 def date_value(value):
+    ret = "invalid"
     try:
+        # catch strptime exceptions only
         if len(value) == 10:
-            ret = datetime.datetime.strptime(value, "%Y-%m-%d")
+            ret = datetime.datetime.strptime(
+                value,
+                "%Y-%m-%d")
             ret = ret.date()
         elif len(value) == 19:
-            ret = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+            ret = datetime.datetime.strptime(
+                value,
+                "%Y-%m-%dT%H:%M:%S")
         elif len(value) > 19:
-            ret = datetime.datetime.strptime(value[0:26], "%Y-%m-%dT%H:%M:%S.%f")
-        else:
-            raise Exception("Bad date value %s" % value)
-        return ret
+            ret = datetime.datetime.strptime(
+                value[0:26],
+                "%Y-%m-%dT%H:%M:%S.%f")
     except:
+        pass
+    if ret == "invalid":
         raise Exception("Bad date value %s" % value)
+    return ret
 
 
 def ods_date_value(value):
@@ -103,6 +109,7 @@ ODS_FORMAT_CONVERSION = {
     "percentage": float,
     "currency": float
 }
+
 
 ODS_WRITE_FORMAT_COVERSION = {
     float: "float",
@@ -205,15 +212,16 @@ class ODSBook(BookReader):
         return ODSSheet(native_sheet)
 
     def load_from_memory(self, file_content, **keywords):
-        return odf.opendocument.load(file_content)
+        return load(file_content)
 
     def load_from_file(self, filename, **keywords):
-        return odf.opendocument.load(filename)
+        return load(filename)
 
     def sheet_iterator(self):
         if self.sheet_name is not None:
             tables = self.native_book.spreadsheet.getElementsByType(Table)
-            rets = [table for table in tables if table.getAttribute('name') == self.sheet_name]
+            rets = [table for table in tables
+                    if table.getAttribute('name') == self.sheet_name]
             if len(rets) == 0:
                 raise ValueError("%s cannot be found" % self.sheet_name)
             else:
@@ -224,8 +232,8 @@ class ODSBook(BookReader):
             if self.sheet_index < length:
                 return [tables[self.sheet_index]]
             else:
-                raise IndexError("Index %d of out bound %d" %(self.sheet_index,
-                                                              length))
+                raise IndexError("Index %d of out bound %d" % (
+                    self.sheet_index, length))
         else:
             return self.native_book.spreadsheet.getElementsByType(Table)
 
@@ -293,19 +301,26 @@ class ODSWriter(BookWriter):
         """
         self.native_book.write(self.file)
 
+# Register ods reader and writer
 READERS["ods"] = ODSBook
 WRITERS["ods"] = ODSWriter
 
 
 def save_data(afile, data, file_type=None, **keywords):
+    """
+    Save all data to a file
+    """
     if isstream(afile) and file_type is None:
-        file_type='ods'
+        file_type = 'ods'
     write_data(afile, data, file_type=file_type, **keywords)
 
 
 def get_data(afile, file_type=None, **keywords):
+    """
+    Retrieve all data from incoming file
+    """
     if isstream(afile) and file_type is None:
-        file_type='ods'
+        file_type = 'ods'
     return read_data(afile, file_type=file_type, **keywords)
 
 
