@@ -325,5 +325,3 @@ def get_data(afile, file_type=None, **keywords):
         file_type = 'ods'
     return read_data(afile, file_type=file_type, **keywords)
 
-
-__VERSION__ = "0.0.11"
