@@ -6,15 +6,15 @@ from base import ODSCellTypes
 class TestODSReader(ODSCellTypes):
     def setUp(self):
         r = ods.ODSBook(os.path.join("tests",
-                                             "fixtures",
-                                             "ods_formats.ods"))
+                                     "fixtures",
+                                     "ods_formats.ods"))
         self.data = r.sheets()
 
 class TestODSWriter(ODSCellTypes):
     def setUp(self):
         r = ods.ODSBook(os.path.join("tests",
-                                             "fixtures",
-                                             "ods_formats.ods"))
+                                     "fixtures",
+                                     "ods_formats.ods"))
         self.data1 = r.sheets()
         self.testfile = "odswriter.ods"
         w = ods.ODSWriter(self.testfile)

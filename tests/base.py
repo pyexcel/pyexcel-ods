@@ -1,5 +1,6 @@
-import pyexcel
 import os
+import pyexcel
+from nose.tools import raises
 
 
 def create_sample_file1(file):
@@ -178,7 +179,6 @@ class ODSCellTypes:
         # int
         assert self.data["Sheet1"][0][6] == "Int"
         assert self.data["Sheet1"][1][6] == 3
-        assert self.data["Sheet1"][2][6] == ""
         assert self.data["Sheet1"][4][6] == 11
         # Scientifed not supported
         assert self.data["Sheet1"][1][7] == 100000
@@ -186,3 +186,10 @@ class ODSCellTypes:
         assert self.data["Sheet1"][1][8] == 1.25
         # Text
         assert self.data["Sheet1"][1][9] == "abc"
+
+    @raises(IndexError)
+    def test_trailing_empty_cells_per_row(self):
+        # because [2,6] does not exit and
+        # no longer '' is appended for it
+        assert self.data["Sheet1"][2][6] == ""
+        

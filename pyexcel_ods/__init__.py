@@ -22,7 +22,6 @@
 # limitations under the License.
 
 # Thanks to grt for the fixes
-import sys
 import datetime
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
@@ -157,27 +156,30 @@ class ODSSheet(SheetReaderBase):
         """reads a sheet in the sheet dictionary, storing each sheet
         as an array (rows) of arrays (columns)"""
         rows = self.native_sheet.getElementsByType(TableRow)
-        arrRows = []
+        arr_rows = []
         # for each row
         for row in rows:
-            arrCells = []
+            tmp_row = []
+            arr_cells = []
             cells = row.getElementsByType(TableCell)
 
             # for each cell
             for cell in cells:
                 # repeated value?
                 repeat = cell.getAttribute("numbercolumnsrepeated")
+                cell_value = self._read_cell(cell)
                 if(not repeat):
-                    ret = self._read_cell(cell)
-                    arrCells.append(ret)
+                    tmp_row.append(cell_value)
                 else:
                     r = int(repeat)
-                    ret = self._read_cell(cell)
                     for i in range(0, r):
-                        arrCells.append(ret)
+                        tmp_row.append(cell_value)
+                if cell_value is not None and cell_value != '':
+                    arr_cells += tmp_row
+                    tmp_row = []
             # if row contained something
-            arrRows.append(arrCells)
-        return arrRows
+            arr_rows.append(arr_cells)
+        return arr_rows
 
     def _read_text_cell(self, cell):
         textContent = ""
