@@ -44,7 +44,7 @@ Usage
 As a standalone library
 ------------------------
 
-.. testcode::
+.. test-code::
    :hide:
 
     >>> import sys
@@ -219,7 +219,7 @@ Credits
 
 ODSReader is originally written by `Marco Conti <https://github.com/marcoconti83/read-ods-with-odfpy>`_
 
-.. testcode::
+.. test-code::
    :hide:
 
    >>> import os
