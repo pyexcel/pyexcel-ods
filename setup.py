@@ -14,13 +14,16 @@ dependencies = [
     'pyexcel-io>=0.0.4'
     ]
 
+with open("VERSION", "r") as version:
+    version_txt = version.read().rstrip()
+
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     dependencies.append('ordereddict')
 
 setup(
     name='pyexcel-ods',
     author="C. W.",
-    version='0.0.12',
+    version=version_txt,
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-ods",
     description='A wrapper library to read, manipulate and write data in ods format',
