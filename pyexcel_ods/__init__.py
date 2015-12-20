@@ -35,7 +35,7 @@ from pyexcel_io import (
     READERS,
     WRITERS,
     isstream,
-    load_data as read_data,
+    get_data as read_data,
     store_data as write_data
 )
 
