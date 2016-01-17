@@ -9,6 +9,9 @@ class TestODSReader(ODSCellTypes):
                                      "fixtures",
                                      "ods_formats.ods"))
         self.data = r.sheets()
+        for key in self.data.keys():
+            self.data[key] = list(self.data[key])
+
 
 class TestODSWriter(ODSCellTypes):
     def setUp(self):
@@ -22,6 +25,8 @@ class TestODSWriter(ODSCellTypes):
         w.close()
         r2 = ods.ODSBook(self.testfile)
         self.data = r2.sheets()
+        for key in self.data.keys():
+            self.data[key] = list(self.data[key])
 
     def tearDown(self):
         if os.path.exists(self.testfile):

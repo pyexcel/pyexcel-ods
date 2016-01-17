@@ -7,7 +7,7 @@ from nose.tools import raises
 
 def test_bug_fix_for_issue_1():
     data = get_data(os.path.join("tests", "fixtures", "repeated.ods"))
-    assert data['Sheet1'] == [['repeated', 'repeated', 'repeated', 'repeated']]
+    assert data == [['repeated', 'repeated', 'repeated', 'repeated']]
                     
 def test_bug_fix_for_issue_2():
     data = {}

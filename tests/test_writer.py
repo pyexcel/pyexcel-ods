@@ -16,6 +16,8 @@ class TestNativeODSWriter:
         writer.close()
         reader = ods.ODSBook(self.testfile)
         content = reader.sheets()
+        for key in content.keys():
+            content[key] = list(content[key])
         assert content == self.content
 
     def tearDown(self):
@@ -25,7 +27,7 @@ class TestNativeODSWriter:
 
 class TestODSnCSVWriter(PyexcelWriterBase):
     def setUp(self):
-        self.testfile="test.ods"
+        self.testfile="testods.ods"
         self.testfile2="test.csv"
 
     def tearDown(self):
@@ -37,7 +39,7 @@ class TestODSnCSVWriter(PyexcelWriterBase):
 
 class TestODSHatWriter(PyexcelHatWriterBase):
     def setUp(self):
-        self.testfile="test.ods"
+        self.testfile="testhat.ods"
 
     def tearDown(self):
         if os.path.exists(self.testfile):
