@@ -2,17 +2,17 @@
 pyexcel-ods - Let you focus on data, instead of ods format
 ================================================================================
 
-.. image:: https://api.travis-ci.org/chfw/pyexcel-ods.png
-    :target: http://travis-ci.org/chfw/pyexcel-ods
+.. image:: https://api.travis-ci.org/pyexcel/pyexcel-ods.png
+    :target: http://travis-ci.org/pyexcel/pyexcel-ods
 
-.. image:: https://codecov.io/github/chfw/pyexcel-ods/coverage.png
-    :target: https://codecov.io/github/chfw/pyexcel-ods
+.. image:: https://codecov.io/github/pyexcel/pyexcel-ods/coverage.png
+    :target: https://codecov.io/github/pyexcel/pyexcel-ods
 
 
 **pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in
 ods fromat using python 2.6 and python 2.7. You are likely to use it with
-`pyexcel <https://github.com/chfw/pyexcel>`_.
-`pyexcel-ods3 <https://github.com/chfw/pyexcel-ods3>`_ is a sister library that
+`pyexcel <https://github.com/pyexcel/pyexcel>`_.
+`pyexcel-ods3 <https://github.com/pyexcel/pyexcel-ods3>`_ is a sister library that
 does the same thing but supports Python 3.3 and 3.4 and depends on lxml.
 
 Known constraints
@@ -34,12 +34,19 @@ or clone it and install it:
 
 .. code-block:: bash
 
-    $ git clone http://github.com/chfw/pyexcel-ods.git
+    $ git clone http://github.com/pyexcel/pyexcel-ods.git
     $ cd pyexcel-ods
     $ python setup.py install
 
 Usage
 =====
+
+New feature
+-----------------
+
+1. Passing "streaming=True" to get_data, you will get the two dimensional array as a generator
+2. Passing "data=your_generator" to save_data is acceptable too.
+
 
 As a standalone library
 ------------------------

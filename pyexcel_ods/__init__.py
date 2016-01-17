@@ -4,7 +4,7 @@
 
     ODS format plugin for pyexcel
 
-    :copyright: (c) 2015 by Onni Software Ltd.
+    :copyright: (c) 2015-2016 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for further details
 """
 # Copyright 2011 Marco Conti
