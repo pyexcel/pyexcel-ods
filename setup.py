@@ -4,7 +4,6 @@ except ImportError:
     from ez_setup import use_setuptools
     use_setuptools()
     from setuptools import setup, find_packages
-import sys
 
 with open("README.rst", 'r') as readme:
     README_txt = readme.read()
@@ -16,8 +15,6 @@ dependencies = [
 
 extra_dependencies = {}
 
-if sys.version_info[0] == 2 and sys.version_info[1] < 7:
-    dependencies.append('ordereddict')
 
 setup(
     name='pyexcel-ods',
@@ -46,5 +43,7 @@ setup(
         'Programming Language :: Python',
         'License :: OSI Approved :: BSD License',
         'Intended Audience :: Developers',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7'
     ]
 )
