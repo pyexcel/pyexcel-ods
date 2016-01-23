@@ -1,7 +1,7 @@
-pyexcel-io
-pyexcel-xls
 nose
 rednose
 nose-cov
 codecov
 coverage
+pyexcel
+pyexcel-xls

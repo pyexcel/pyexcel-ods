@@ -1,3 +1,2 @@
-pyexcel_io>=0.1.0
+pyexcel-io>=0.1.0
 odfpy==0.9.6
-
