@@ -182,14 +182,14 @@ class ODSSheet(SheetReaderBase):
         return arr_rows
 
     def _read_text_cell(self, cell):
-        textContent = ""
+        textContent = []
         ps = cell.getElementsByType(P)
         # for each text node
         for p in ps:
             for n in p.childNodes:
                 if (n.nodeType == 3):
-                    textContent = textContent + unicode(n.data)
-        return textContent
+                    textContent.append(unicode(n.data))
+        return '\n'.join(textContent)
 
     def _read_cell(self, cell):
         cell_type = cell.getAttrNS(OFFICENS, "value-type")
@@ -261,7 +261,11 @@ class ODSSheetWriter(SheetWriter):
             x = converter(x)
         if x_odf_type != 'string':
             tc.setAttrNS(OFFICENS, x_odf_value_token, x)
-        tc.addElement(P(text=x))
+            tc.addElement(P(text=x))
+        else:
+            lines = x.split('\n')
+            for line in lines:
+                tc.addElement(P(text=line))
         row.addElement(tc)
 
     def write_row(self, array):
