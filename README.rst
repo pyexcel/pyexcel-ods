@@ -2,26 +2,25 @@
 pyexcel-ods - Let you focus on data, instead of ods format
 ================================================================================
 
-.. image:: https://api.travis-ci.org/chfw/pyexcel-ods.png
-    :target: http://travis-ci.org/chfw/pyexcel-ods
+.. image:: https://api.travis-ci.org/pyexcel/pyexcel-ods.png
+    :target: http://travis-ci.org/pyexcel/pyexcel-ods
 
-.. image:: https://codecov.io/github/chfw/pyexcel-ods/coverage.png
-    :target: https://codecov.io/github/chfw/pyexcel-ods
-
+.. image:: https://codecov.io/github/pyexcel/pyexcel-ods/coverage.png
+    :target: https://codecov.io/github/pyexcel/pyexcel-ods
 
 **pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in
 ods fromat using python 2.6 and python 2.7. You are likely to use it with
-`pyexcel <https://github.com/chfw/pyexcel>`_.
-`pyexcel-ods3 <https://github.com/chfw/pyexcel-ods3>`_ is a sister library that
+`pyexcel <https://github.com/pyexcel/pyexcel>`_.
+`pyexcel-ods3 <https://github.com/pyexcel/pyexcel-ods3>`_ is a sister library that
 does the same thing but supports Python 3.3 and 3.4 and depends on lxml.
 
 Known constraints
-==================
+================================================================================
 
 Fonts, colors and charts are not supported. 
 
 Installation
-============
+================================================================================
 
 You can install it via pip:
 
@@ -29,22 +28,32 @@ You can install it via pip:
 
     $ pip install pyexcel-ods
 
-
 or clone it and install it:
 
 .. code-block:: bash
 
-    $ git clone http://github.com/chfw/pyexcel-ods.git
+    $ git clone http://github.com/pyexcel/pyexcel-ods.git
     $ cd pyexcel-ods
     $ python setup.py install
 
 Usage
-=====
+================================================================================
+
+New feature
+--------------------------------------------------------------------------------
+
+
+1. Passing "streaming=True" to get_data, you will get the two dimensional array as a generator
+2. Passing "data=your_generator" to save_data is acceptable too.
+
 
 As a standalone library
-------------------------
+--------------------------------------------------------------------------------
 
-.. test-code::
+Write to an ods file
+********************************************************************************
+
+.. testcode::
    :hide:
 
     >>> import sys
@@ -55,21 +64,18 @@ As a standalone library
     >>> from pyexcel_io import OrderedDict
 
 
-Write to an ods file
-*********************
-
 Here's the sample code to write a dictionary to an ods file:
 
 .. code-block:: python
 
     >>> from pyexcel_ods import save_data
-    >>> data = OrderedDict()
+    >>> data = OrderedDict() # from collections import OrderedDict
     >>> data.update({"Sheet 1": [[1, 2, 3], [4, 5, 6]]})
     >>> data.update({"Sheet 2": [["row 1", "row 2", "row 3"]]})
     >>> save_data("your_file.ods", data)
 
 Read from an ods file
-**********************
+********************************************************************************
 
 Here's the sample code:
 
@@ -81,8 +87,8 @@ Here's the sample code:
     >>> print(json.dumps(data))
     {"Sheet 1": [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], "Sheet 2": [["row 1", "row 2", "row 3"]]}
 
-Write an ods file to memory
-******************************
+Write an ods to memory
+********************************************************************************
 
 Here's the sample code to write a dictionary to an ods file:
 
@@ -99,10 +105,11 @@ Here's the sample code to write a dictionary to an ods file:
     >>> # object for downloading
 
 
-Read from an ods from memory
-*****************************
 
-Here's the sample code:
+Read from an ods from memory
+********************************************************************************
+
+Continue from previous example:
 
 .. code-block:: python
 
@@ -115,7 +122,7 @@ Here's the sample code:
 
 
 As a pyexcel plugin
---------------------
+--------------------------------------------------------------------------------
 
 Import it in your file to enable this plugin:
 
@@ -126,7 +133,7 @@ Import it in your file to enable this plugin:
 Please note only pyexcel version 0.0.4+ support this.
 
 Reading from an ods file
-************************
+********************************************************************************
 
 Here is the sample code:
 
@@ -148,7 +155,7 @@ Here is the sample code:
     +-------+-------+-------+
 
 Writing to an ods file
-**********************
+********************************************************************************
 
 Here is the sample code:
 
@@ -157,9 +164,9 @@ Here is the sample code:
     >>> sheet.save_as("another_file.ods")
 
 Reading from a IO instance
-================================
+================================================================================
 
-You got to wrap the binary content with StringIO to get odf working:
+You got to wrap the binary content with stream to get ods working:
 
 .. code-block:: python
 
@@ -185,7 +192,7 @@ You got to wrap the binary content with StringIO to get odf working:
 
 
 Writing to a StringIO instance
-================================
+================================================================================
 
 You need to pass a StringIO instance to Writer:
 
@@ -203,23 +210,16 @@ You need to pass a StringIO instance to Writer:
     >>> # object for downloading
 
 License
-=========
+================================================================================
 
 New BSD License
 
-
-Dependencies
-============
-
-1. odfpy == 0.9.6
-2. pyexcel-io >= 0.0.4
-
 Credits
-=======
+================================================================================
 
 ODSReader is originally written by `Marco Conti <https://github.com/marcoconti83/read-ods-with-odfpy>`_
 
-.. test-code::
+.. testcode::
    :hide:
 
    >>> import os
