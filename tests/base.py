@@ -1,6 +1,7 @@
 import os
 import pyexcel
 from nose.tools import raises
+import datetime
 
 
 def create_sample_file1(file):
@@ -26,8 +27,6 @@ class PyexcelHatWriterBase:
         pyexcel.save_as(adict=self.content, dest_file_name=self.testfile)
         r = pyexcel.get_sheet(file_name=self.testfile, name_columns_by_row=0)
         actual = pyexcel.utils.to_dict(r)
-        print actual
-        print self.content
         assert actual == self.content
     
 
@@ -125,6 +124,8 @@ class ODSCellTypes:
         assert self.data["Sheet1"][1][1].strftime(time_format) == "12:12:11"
         assert self.data["Sheet1"][2][1].strftime(time_format) == "12:00:00"
         assert self.data["Sheet1"][3][1] == 0
+        assert self.data["Sheet1"][4][1] == datetime.timedelta(hours=27, minutes=17, seconds=54)
+        assert self.data["Sheet1"][5][1] == "Other"
         # boolean
         assert self.data["Sheet1"][0][2] == "Boolean"
         assert self.data["Sheet1"][1][2] is True

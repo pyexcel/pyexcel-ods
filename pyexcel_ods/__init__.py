@@ -77,7 +77,10 @@ def time_value(value):
     hour = int(value[2:4])
     minute = int(value[5:7])
     second = int(value[8:10])
-    ret = datetime.time(hour, minute, second)
+    if hour < 24:
+        ret = datetime.time(hour, minute, second)
+    else:
+        ret = datetime.timedelta(hours=hour, minutes=minute, seconds=second)
     return ret
 
 
@@ -100,10 +103,18 @@ def ods_bool_value(value):
         return "false"
 
 
+def ods_timedelta_value(cell):
+    hours = cell.days * 24 + cell.seconds // 3600
+    minutes = (cell.seconds // 60) % 60
+    seconds = cell.seconds % 60
+    return "PT%02dH%02dM%02dS" % (hours, minutes, seconds)
+
+
 ODS_FORMAT_CONVERSION = {
     "float": float,
     "date": datetime.date,
     "time": datetime.time,
+    'timedelta': datetime.timedelta,
     "boolean": bool,
     "percentage": float,
     "currency": float
@@ -116,6 +127,7 @@ ODS_WRITE_FORMAT_COVERSION = {
     str: "string",
     datetime.date: "date",
     datetime.time: "time",
+    datetime.timedelta: "timedelta",
     bool: "boolean",
     unicode: "string"
 }
@@ -125,6 +137,7 @@ VALUE_CONVERTERS = {
     "float": float_value,
     "date": date_value,
     "time": time_value,
+    "timedelta": time_value,
     "boolean": boolean_value,
     "percentage": float_value,
     "currency": float_value
@@ -133,7 +146,8 @@ VALUE_CONVERTERS = {
 ODS_VALUE_CONVERTERS = {
     "date": ods_date_value,
     "time": ods_time_value,
-    "boolean": ods_bool_value
+    "boolean": ods_bool_value,
+    "timedelta": ods_timedelta_value
 }
 
 
@@ -143,7 +157,8 @@ VALUE_TOKEN = {
     "time": "time-value",
     "boolean": "boolean-value",
     "percentage": "value",
-    "currency": "value"
+    "currency": "value",
+    "timedelta": "time-value"
 }
 
 
@@ -210,6 +225,7 @@ class ODSSheet(SheetReaderBase):
 
 
 class ODSBook(BookReader):
+
     def get_sheet(self, native_sheet):
         return ODSSheet(native_sheet)
 
@@ -250,20 +266,20 @@ class ODSSheetWriter(SheetWriter):
     def set_size(self, size):
         pass
 
-    def write_cell(self, row, x):
+    def write_cell(self, row, cell):
         tc = TableCell()
-        x_type = type(x)
-        x_odf_type = ODS_WRITE_FORMAT_COVERSION.get(x_type, "string")
-        tc.setAttrNS(OFFICENS, "value-type", x_odf_type)
-        x_odf_value_token = VALUE_TOKEN.get(x_odf_type, "value")
-        converter = ODS_VALUE_CONVERTERS.get(x_odf_type, None)
+        cell_type = type(cell)
+        cell_odf_type = ODS_WRITE_FORMAT_COVERSION.get(cell_type, "string")
+        tc.setAttrNS(OFFICENS, "value-type", cell_odf_type)
+        cell_odf_value_token = VALUE_TOKEN.get(cell_odf_type, "value")
+        converter = ODS_VALUE_CONVERTERS.get(cell_odf_type, None)
         if converter:
-            x = converter(x)
-        if x_odf_type != 'string':
-            tc.setAttrNS(OFFICENS, x_odf_value_token, x)
-            tc.addElement(P(text=x))
+            cell = converter(cell)
+        if cell_odf_type != 'string':
+            tc.setAttrNS(OFFICENS, cell_odf_value_token, cell)
+            tc.addElement(P(text=cell))
         else:
-            lines = x.split('\n')
+            lines = cell.split('\n')
             for line in lines:
                 tc.addElement(P(text=line))
         row.addElement(tc)
@@ -274,8 +290,8 @@ class ODSSheetWriter(SheetWriter):
         """
         tr = TableRow()
         self.native_sheet.addElement(tr)
-        for x in array:
-            self.write_cell(tr, x)
+        for cell in array:
+            self.write_cell(tr, cell)
 
     def close(self):
         """
