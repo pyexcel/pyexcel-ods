@@ -13,7 +13,7 @@ dependencies = [
     'odfpy==0.9.6',
 ]
 
-extra_dependencies = {}
+extras = {}
 
 
 setup(
