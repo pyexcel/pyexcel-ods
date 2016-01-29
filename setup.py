@@ -19,7 +19,7 @@ extras = {}
 setup(
     name='pyexcel-ods',
     author='C. W.',
-    version='0.1.0',
+    version='0.1.1',
     author_email='wangc_2011 (at) hotmail.com',
     url='https://github.com/pyexcel/pyexcel-ods',
     description='A wrapper library to read, manipulate and write data in ods format',
