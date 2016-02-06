@@ -15,7 +15,7 @@ ods fromat using python 2.6 and python 2.7. You are likely to use it with
 does the same thing but supports Python 3.3 and 3.4 and depends on lxml.
 
 Known constraints
-================================================================================
+==================
 
 Fonts, colors and charts are not supported. 
 
@@ -27,6 +27,7 @@ You can install it via pip:
 .. code-block:: bash
 
     $ pip install pyexcel-ods
+
 
 or clone it and install it:
 
@@ -213,7 +214,6 @@ License
 ================================================================================
 
 New BSD License
-
 Credits
 ================================================================================
 
