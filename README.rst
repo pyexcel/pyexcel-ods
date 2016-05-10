@@ -17,7 +17,7 @@ does the same thing but supports Python 3.3 and 3.4 and depends on lxml.
 Known constraints
 ==================
 
-Fonts, colors and charts are not supported. 
+Fonts, colors and charts are not supported.
 
 Installation
 ================================================================================
@@ -62,7 +62,11 @@ Write to an ods file
     ...     from StringIO import StringIO
     ... else:
     ...     from io import BytesIO as StringIO
-    >>> from pyexcel_io import OrderedDict
+    >>> PY2 = sys.version_info[0] == 2
+    >>> if PY2 and sys.version_info[1] < 7:
+    ...      from ordereddict import OrderedDict
+    ... else:
+    ...     from collections import OrderedDict
 
 
 Here's the sample code to write a dictionary to an ods file:
@@ -125,6 +129,12 @@ Continue from previous example:
 As a pyexcel plugin
 --------------------------------------------------------------------------------
 
+No longer, explicit import is needed since pyexcel version 0.2.2. Instead,
+this library is auto-loaded. So if you want to read data in ods format,
+installing it is enough.
+
+Any version under pyexcel 0.2.2, you have to keep doing the following:
+
 Import it in your file to enable this plugin:
 
 .. code-block:: python
@@ -141,16 +151,16 @@ Here is the sample code:
 .. code-block:: python
 
     >>> import pyexcel as pe
-    >>> from pyexcel.ext import ods
+    >>> # from pyexcel.ext import ods
     >>> sheet = pe.get_book(file_name="your_file.ods")
     >>> sheet
-    Sheet Name: Sheet 1
+    Sheet 1:
     +---+---+---+
     | 1 | 2 | 3 |
     +---+---+---+
     | 4 | 5 | 6 |
     +---+---+---+
-    Sheet Name: Sheet 2
+    Sheet 2:
     +-------+-------+-------+
     | row 1 | row 2 | row 3 |
     +-------+-------+-------+
@@ -180,13 +190,13 @@ You got to wrap the binary content with stream to get ods working:
     ...     r = pe.get_book(file_type="ods", file_content=content)
     ...     print(r)
     ...
-    Sheet Name: Sheet 1
+    Sheet 1:
     +---+---+---+
     | 1 | 2 | 3 |
     +---+---+---+
     | 4 | 5 | 6 |
     +---+---+---+
-    Sheet Name: Sheet 2
+    Sheet 2:
     +-------+-------+-------+
     | row 1 | row 2 | row 3 |
     +-------+-------+-------+
@@ -214,6 +224,38 @@ License
 ================================================================================
 
 New BSD License
+
+Developer guide
+==================
+
+Development steps for code changes
+
+#. git clone https://github.com/pyexcel/pyexcel-ods.git
+#. cd pyexcel-ods
+#. pip install -r requirements.txt
+#. pip install -r tests/requirements.txt
+
+
+In order to update test envrionment, and documentation, additional setps are
+required:
+
+#. pip install moban
+#. git clone https://github.com/pyexcel/pyexcel-commons.git
+#. make your changes in `.moban.d` directory, then issue command `moban`
+
+
+How to test your contribution
+------------------------------
+
+Although `nose` and `doctest` are both used in code testing, it is adviable that unit tests are put in tests. `doctest` is incorporated only to make sure the code examples in documentation remain valid across different development releases.
+
+On Linux/Unix systems, please launch your tests like this::
+
+    $ make test
+
+On Windows systems, please issue this command::
+
+    > test.bat
 
 Credits
 ================================================================================
