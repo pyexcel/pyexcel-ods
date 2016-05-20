@@ -154,13 +154,13 @@ Here is the sample code:
     >>> # from pyexcel.ext import ods
     >>> sheet = pe.get_book(file_name="your_file.ods")
     >>> sheet
-    Sheet Name: Sheet 1
-    +-----+-----+-----+
-    | 1.0 | 2.0 | 3.0 |
-    +-----+-----+-----+
-    | 4.0 | 5.0 | 6.0 |
-    +-----+-----+-----+
-    Sheet Name: Sheet 2
+    Sheet 1:
+    +---+---+---+
+    | 1 | 2 | 3 |
+    +---+---+---+
+    | 4 | 5 | 6 |
+    +---+---+---+
+    Sheet 2:
     +-------+-------+-------+
     | row 1 | row 2 | row 3 |
     +-------+-------+-------+
@@ -190,13 +190,13 @@ You got to wrap the binary content with stream to get ods working:
     ...     r = pe.get_book(file_type="ods", file_content=content)
     ...     print(r)
     ...
-    Sheet Name: Sheet 1
-    +-----+-----+-----+
-    | 1.0 | 2.0 | 3.0 |
-    +-----+-----+-----+
-    | 4.0 | 5.0 | 6.0 |
-    +-----+-----+-----+
-    Sheet Name: Sheet 2
+    Sheet 1:
+    +---+---+---+
+    | 1 | 2 | 3 |
+    +---+---+---+
+    | 4 | 5 | 6 |
+    +---+---+---+
+    Sheet 2:
     +-------+-------+-------+
     | row 1 | row 2 | row 3 |
     +-------+-------+-------+
