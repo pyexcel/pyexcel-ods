@@ -5,5 +5,5 @@ version: 0.1.1
 file_type: ods
 dependencies:
   - pyexcel-io>=0.1.0
-  - odfpy>=0.9.6
+  - odfpy==0.9.6
 description: A wrapper library to read, manipulate and write data in ods format

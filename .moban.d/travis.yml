@@ -1,4 +1,10 @@
 {% extends "travis.yml.jj2" %}
 
+{%block custom_python_versions%}
+python:
+  - 2.6
+  - 2.7
+{%endblock%}
+
 {% block custom_install %}  - rm README.rst; touch README.rst  # fails
 {%endblock%}
