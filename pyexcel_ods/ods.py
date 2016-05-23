@@ -32,18 +32,18 @@ else:
 
 
 def is_integer_ok_for_xl_float(value):
-    if value == math.floor(value):
-        return True
-    else:
-        return False
+    """check if a float had zero value in digits"""
+    return value == math.floor(value)
 
 
 def float_value(value):
+    """convert a value to float"""
     ret = float(value)
     return ret
 
 
 def date_value(value):
+    """convert to data value accroding ods specification"""
     ret = "invalid"
     try:
         # catch strptime exceptions only
@@ -60,7 +60,7 @@ def date_value(value):
             ret = datetime.datetime.strptime(
                 value[0:26],
                 "%Y-%m-%dT%H:%M:%S.%f")
-    except:
+    except ValueError:
         pass
     if ret == "invalid":
         raise Exception("Bad date value %s" % value)
@@ -72,6 +72,7 @@ def ods_date_value(value):
 
 
 def time_value(value):
+    """convert to time value accroding the specification"""
     hour = int(value[2:4])
     minute = int(value[5:7])
     second = int(value[8:10])
@@ -87,6 +88,7 @@ def ods_time_value(value):
 
 
 def boolean_value(value):
+    """get bolean value"""
     if value == "true":
         ret = True
     else:
@@ -95,6 +97,7 @@ def boolean_value(value):
 
 
 def ods_bool_value(value):
+    """convert a boolean value to text"""
     if value is True:
         return "true"
     else:
@@ -102,6 +105,7 @@ def ods_bool_value(value):
 
 
 def ods_timedelta_value(cell):
+    """convert a cell value to time delta"""
     hours = cell.days * 24 + cell.seconds // 3600
     minutes = (cell.seconds // 60) % 60
     seconds = cell.seconds % 60
@@ -161,6 +165,7 @@ VALUE_TOKEN = {
 
 
 class ODSSheet(SheetReader):
+    """native ods sheet"""
     def __init__(self, sheet, auto_detect_int=True, **keywords):
         SheetReader.__init__(self, sheet, **keywords)
         self.auto_detect_int = auto_detect_int
@@ -184,12 +189,11 @@ class ODSSheet(SheetReader):
                 # repeated value?
                 repeat = cell.getAttribute("numbercolumnsrepeated")
                 cell_value = self._read_cell(cell)
-                if(not repeat):
-                    tmp_row.append(cell_value)
+                if repeat:
+                    number_of_repeat = int(repeat)
+                    tmp_row += [cell_value] * number_of_repeat
                 else:
-                    r = int(repeat)
-                    for i in range(0, r):
-                        tmp_row.append(cell_value)
+                    tmp_row.append(cell_value)
                 if cell_value is not None and cell_value != '':
                     arr_cells += tmp_row
                     tmp_row = []
@@ -197,22 +201,22 @@ class ODSSheet(SheetReader):
             yield arr_cells
 
     def _read_text_cell(self, cell):
-        textContent = []
-        ps = cell.getElementsByType(P)
+        text_content = []
+        paragraphs = cell.getElementsByType(P)
         # for each text node
-        for p in ps:
-            for n in p.childNodes:
-                if (n.nodeType == 3):
-                    textContent.append(unicode(n.data))
-        return '\n'.join(textContent)
+        for paragraph in paragraphs:
+            for node in paragraph.childNodes:
+                if (node.nodeType == 3):
+                    text_content.append(unicode(node.data))
+        return '\n'.join(text_content)
 
     def _read_cell(self, cell):
         cell_type = cell.getAttrNS(OFFICENS, "value-type")
         value_token = VALUE_TOKEN.get(cell_type, "value")
         ret = None
         if cell_type == "string":
-            textContent = self._read_text_cell(cell)
-            ret = textContent
+            text_content = self._read_text_cell(cell)
+            ret = text_content
         else:
             if cell_type in VALUE_CONVERTERS:
                 value = cell.getAttrNS(OFFICENS, value_token)
@@ -222,22 +226,26 @@ class ODSSheet(SheetReader):
                         n_value = int(n_value)
                 ret = n_value
             else:
-                textContent = self._read_text_cell(cell)
-                ret = textContent
+                text_content = self._read_text_cell(cell)
+                ret = text_content
         return ret
 
 
 class ODSBook(BookReader):
+    """read ods book"""
 
     def open(self, file_name, **keywords):
+        """open ods file"""
         BookReader.open(self, file_name, **keywords)
         self._load_from_file()
 
     def open_stream(self, file_stream, **keywords):
+        """open ods file stream"""
         BookReader.open_stream(self, file_stream, **keywords)
         self._load_from_memory()
 
     def read_sheet_by_name(self, sheet_name):
+        """read a named sheet"""
         tables = self.native_book.spreadsheet.getElementsByType(Table)
         rets = [table for table in tables
                 if table.getAttribute('name') == sheet_name]
@@ -247,6 +255,7 @@ class ODSBook(BookReader):
             return self.read_sheet(rets[0])
 
     def read_sheet_by_index(self, sheet_index):
+        """read a sheet at a specified index"""
         tables = self.native_book.spreadsheet.getElementsByType(Table)
         length = len(tables)
         if sheet_index < length:
@@ -256,14 +265,16 @@ class ODSBook(BookReader):
                 sheet_index, length))
 
     def read_all(self):
+        """read all sheets"""
         result = OrderedDict()
         for sheet in self.native_book.spreadsheet.getElementsByType(Table):
             ods_sheet = ODSSheet(sheet, **self.keywords)
             result[ods_sheet.name] = ods_sheet.to_array()
 
         return result
-            
+
     def read_sheet(self, native_sheet):
+        """read one native sheet"""
         sheet = ODSSheet(native_sheet, **self.keywords)
         return {sheet.name: sheet.to_array()}
 
@@ -279,37 +290,40 @@ class ODSSheetWriter(SheetWriter):
     ODS sheet writer
     """
     def set_sheet_name(self, name):
+        """initialize the native table"""
         self.native_sheet = Table(name=name)
 
     def set_size(self, size):
+        """not used in this class but used in ods3"""
         pass
 
     def write_cell(self, row, cell):
-        tc = TableCell()
+        """write a native cell"""
+        cell_to_be_written = TableCell()
         cell_type = type(cell)
         cell_odf_type = ODS_WRITE_FORMAT_COVERSION.get(cell_type, "string")
-        tc.setAttrNS(OFFICENS, "value-type", cell_odf_type)
+        cell_to_be_written.setAttrNS(OFFICENS, "value-type", cell_odf_type)
         cell_odf_value_token = VALUE_TOKEN.get(cell_odf_type, "value")
         converter = ODS_VALUE_CONVERTERS.get(cell_odf_type, None)
         if converter:
             cell = converter(cell)
         if cell_odf_type != 'string':
-            tc.setAttrNS(OFFICENS, cell_odf_value_token, cell)
-            tc.addElement(P(text=cell))
+            cell_to_be_written.setAttrNS(OFFICENS, cell_odf_value_token, cell)
+            cell_to_be_written.addElement(P(text=cell))
         else:
             lines = cell.split('\n')
             for line in lines:
-                tc.addElement(P(text=line))
-        row.addElement(tc)
+                cell_to_be_written.addElement(P(text=line))
+        row.addElement(cell_to_be_written)
 
     def write_row(self, array):
         """
         write a row into the file
         """
-        tr = TableRow()
-        self.native_sheet.addElement(tr)
+        row = TableRow()
+        self.native_sheet.addElement(row)
         for cell in array:
-            self.write_cell(tr, cell)
+            self.write_cell(row, cell)
 
     def close(self):
         """
@@ -327,9 +341,6 @@ class ODSWriter(BookWriter):
     def __init__(self):
         BookWriter.__init__(self)
         self.native_book = OpenDocumentSpreadsheet()
-
-    def open(self, file_name, **keywords):
-        BookWriter.open(self, file_name, **keywords)
 
     def create_sheet(self, name):
         """
