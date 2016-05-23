@@ -7,8 +7,9 @@ from nose.tools import raises
 
 def test_bug_fix_for_issue_1():
     data = get_data(os.path.join("tests", "fixtures", "repeated.ods"))
-    assert data == [['repeated', 'repeated', 'repeated', 'repeated']]
-                    
+    assert data["Sheet1"] == [['repeated', 'repeated', 'repeated', 'repeated']]
+
+
 def test_bug_fix_for_issue_2():
     data = {}
     data.update({"Sheet 1": [[1, 2, 3], [4, 5, 6]]})
@@ -17,8 +18,9 @@ def test_bug_fix_for_issue_2():
     new_data = get_data("your_file.ods")
     assert new_data["Sheet 2"] == [[u'row 1', u'H\xe9ll\xf4!', u'Hol\xc1!']]
 
+
 def test_date_util_parse():
-    from pyexcel_ods import date_value
+    from pyexcel_ods.ods import date_value
     value = "2015-08-17T19:20:00"
     d = date_value(value)
     assert d.strftime("%Y-%m-%dT%H:%M:%S") == "2015-08-17T19:20:00"
@@ -34,25 +36,29 @@ def test_date_util_parse():
     value = "2015-08-17T19:20:59.999999999999999"
     d = date_value(value)
     assert d.strftime("%Y-%m-%dT%H:%M:%S") == "2015-08-17T19:20:59"
-    
+
+
 @raises(Exception)
 def test_invalid_date():
-    from pyexcel_ods import date_value
+    from pyexcel_ods.ods import date_value
     value = "2015-08-"
     date_value(value)
 
+
 @raises(Exception)
 def test_fake_date_time_10():
-    from pyexcel_ods import date_value
+    from pyexcel_ods.ods import date_value
     date_value("1234567890")
+
 
 @raises(Exception)
 def test_fake_date_time_19():
-    from pyexcel_ods import date_value
+    from pyexcel_ods.ods import date_value
     date_value("1234567890123456789")
+
 
 @raises(Exception)
 def test_fake_date_time_20():
-    from pyexcel_ods import date_value
+    from pyexcel_ods.ods import date_value
     date_value("12345678901234567890")
     

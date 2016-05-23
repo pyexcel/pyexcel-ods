@@ -1,12 +1,3 @@
-"""
-    pyexcel_ods
-    ~~~~~~~~~~~~~~~~~~~
-
-    ODS format plugin for pyexcel
-
-    :copyright: (c) 2015-2016 by Onni Software Ltd.
-    :license: New BSD License, see LICENSE for further details
-"""
 # Copyright 2011 Marco Conti
 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,22 +13,21 @@
 # limitations under the License.
 
 # Thanks to grt for the fixes
+import sys
 import datetime
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
 from odf.namespaces import OFFICENS
 from odf.opendocument import OpenDocumentSpreadsheet, load
-from pyexcel_io import (
-    SheetReaderBase,
-    BookReader,
-    SheetWriter,
-    BookWriter,
-    READERS,
-    WRITERS,
-    isstream,
-    get_data as read_data,
-    store_data as write_data
-)
+
+from pyexcel_io.book import BookReader, BookWriter
+from pyexcel_io.sheet import SheetReader, SheetWriter
+
+PY27_BELOW = sys.version_info[0] == 2 and sys.version_info[1] < 7
+if PY27_BELOW:
+    from ordereddict import OrderedDict
+else:
+    from collections import OrderedDict
 
 
 def float_value(value):
@@ -162,7 +152,7 @@ VALUE_TOKEN = {
 }
 
 
-class ODSSheet(SheetReaderBase):
+class ODSSheet(SheetReader):
     @property
     def name(self):
         return self.native_sheet.getAttribute("name")
@@ -224,34 +214,49 @@ class ODSSheet(SheetReaderBase):
 
 class ODSBook(BookReader):
 
-    def get_sheet(self, native_sheet):
-        return ODSSheet(native_sheet)
+    def open(self, file_name, **keywords):
+        BookReader.open(self, file_name, **keywords)
+        self._load_from_file()
 
-    def load_from_memory(self, file_content, **keywords):
-        return load(file_content)
+    def open_stream(self, file_stream, **keywords):
+        BookReader.open_stream(self, file_stream, **keywords)
+        self._load_from_memory()
 
-    def load_from_file(self, filename, **keywords):
-        return load(filename)
-
-    def sheet_iterator(self):
-        if self.sheet_name is not None:
-            tables = self.native_book.spreadsheet.getElementsByType(Table)
-            rets = [table for table in tables
-                    if table.getAttribute('name') == self.sheet_name]
-            if len(rets) == 0:
-                raise ValueError("%s cannot be found" % self.sheet_name)
-            else:
-                return rets
-        elif self.sheet_index is not None:
-            tables = self.native_book.spreadsheet.getElementsByType(Table)
-            length = len(tables)
-            if self.sheet_index < length:
-                return [tables[self.sheet_index]]
-            else:
-                raise IndexError("Index %d of out bound %d" % (
-                    self.sheet_index, length))
+    def read_sheet_by_name(self, sheet_name):
+        tables = self.native_book.spreadsheet.getElementsByType(Table)
+        rets = [table for table in tables
+                if table.getAttribute('name') == sheet_name]
+        if len(rets) == 0:
+            raise ValueError("%s cannot be found" % sheet_name)
         else:
-            return self.native_book.spreadsheet.getElementsByType(Table)
+            return self.read_sheet(rets[0])
+
+    def read_sheet_by_index(self, sheet_index):
+        tables = self.native_book.spreadsheet.getElementsByType(Table)
+        length = len(tables)
+        if sheet_index < length:
+            return self.read_sheet(tables[sheet_index])
+        else:
+            raise IndexError("Index %d of out bound %d" % (
+                sheet_index, length))
+
+    def read_all(self):
+        result = OrderedDict()
+        for sheet in self.native_book.spreadsheet.getElementsByType(Table):
+            ods_sheet = ODSSheet(sheet)
+            result[ods_sheet.name] = ods_sheet.to_array()
+
+        return result
+            
+    def read_sheet(self, native_sheet):
+        sheet = ODSSheet(native_sheet)
+        return {sheet.name: sheet.to_array()}
+
+    def _load_from_memory(self):
+        self.native_book = load(self.file_stream)
+
+    def _load_from_file(self):
+        self.native_book = load(self.file_name)
 
 
 class ODSSheetWriter(SheetWriter):
@@ -304,9 +309,12 @@ class ODSWriter(BookWriter):
     open document spreadsheet writer
 
     """
-    def __init__(self, file, **keywords):
-        BookWriter.__init__(self, file, **keywords)
+    def __init__(self):
+        BookWriter.__init__(self)
         self.native_book = OpenDocumentSpreadsheet()
+
+    def open(self, file_name, **keywords):
+        BookWriter.open(self, file_name, **keywords)
 
     def create_sheet(self, name):
         """
@@ -319,27 +327,16 @@ class ODSWriter(BookWriter):
         This call writes file
 
         """
-        self.native_book.write(self.file)
-
-# Register ods reader and writer
-READERS["ods"] = ODSBook
-WRITERS["ods"] = ODSWriter
+        self.native_book.write(self.file_alike_object)
 
 
-def save_data(afile, data, file_type=None, **keywords):
-    """
-    Save all data to a file
-    """
-    if isstream(afile) and file_type is None:
-        file_type = 'ods'
-    write_data(afile, data, file_type=file_type, **keywords)
+_ods_registry = {
+    "file_type": "ods",
+    "reader": ODSBook,
+    "writer": ODSWriter,
+    "stream_type": "binary",
+    "mime_type": "application/vnd.oasis.opendocument.spreadsheet",
+    "library": "pyexcel-ods"
+}
 
-
-def get_data(afile, file_type=None, **keywords):
-    """
-    Retrieve all data from incoming file
-    """
-    if isstream(afile) and file_type is None:
-        file_type = 'ods'
-    return read_data(afile, file_type=file_type, **keywords)
-
+exports = (_ods_registry,)

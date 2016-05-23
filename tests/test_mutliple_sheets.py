@@ -1,8 +1,6 @@
 from base import PyexcelMultipleSheetBase
 import pyexcel
 import os
-from pyexcel.ext import ods
-from pyexcel.ext import xls
 from nose.tools import raises
 import sys
 
