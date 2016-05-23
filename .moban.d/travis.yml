@@ -6,5 +6,3 @@ python:
   - 2.7
 {%endblock%}
 
-{% block custom_install %}  - rm README.rst; touch README.rst  # fails
-{%endblock%}

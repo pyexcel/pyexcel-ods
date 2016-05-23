@@ -6,7 +6,6 @@ python:
   - 2.6
   - 2.7
 before_install:
-  - rm README.rst; touch README.rst  # fails
   - if [[ -f min_requirements.txt && "$MINREQ" -eq 1 ]]; then
       mv min_requirements.txt requirements.txt ;
     fi
