@@ -7,7 +7,7 @@ except ImportError:
 
 NAME = 'pyexcel-ods'
 AUTHOR = 'C.W.'
-VERSION = '0.1.1'
+VERSION = '0.2.0'
 EMAIL = 'wangc_2011 (at) hotmail.com'
 LICENSE = 'New BSD'
 PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
@@ -19,7 +19,7 @@ KEYWORDS = [
 ]
 
 INSTALL_REQUIRES = [
-    'pyexcel-io>=0.1.0',
+    'pyexcel-io>=0.2.0',
     'odfpy==0.9.6',
 ]
 

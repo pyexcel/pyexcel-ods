@@ -14,6 +14,7 @@
 
 # Thanks to grt for the fixes
 import sys
+import math
 import datetime
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
@@ -28,6 +29,13 @@ if PY27_BELOW:
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
+
+
+def is_integer_ok_for_xl_float(value):
+    if value == math.floor(value):
+        return True
+    else:
+        return False
 
 
 def float_value(value):
@@ -153,6 +161,10 @@ VALUE_TOKEN = {
 
 
 class ODSSheet(SheetReader):
+    def __init__(self, sheet, auto_detect_int=True, **keywords):
+        SheetReader.__init__(self, sheet, **keywords)
+        self.auto_detect_int = auto_detect_int
+
     @property
     def name(self):
         return self.native_sheet.getAttribute("name")
@@ -202,9 +214,12 @@ class ODSSheet(SheetReader):
             textContent = self._read_text_cell(cell)
             ret = textContent
         else:
-            if cell_type in ODS_FORMAT_CONVERSION:
+            if cell_type in VALUE_CONVERTERS:
                 value = cell.getAttrNS(OFFICENS, value_token)
                 n_value = VALUE_CONVERTERS[cell_type](value)
+                if cell_type == 'float' and self.auto_detect_int:
+                    if is_integer_ok_for_xl_float(n_value):
+                        n_value = int(n_value)
                 ret = n_value
             else:
                 textContent = self._read_text_cell(cell)
@@ -243,13 +258,13 @@ class ODSBook(BookReader):
     def read_all(self):
         result = OrderedDict()
         for sheet in self.native_book.spreadsheet.getElementsByType(Table):
-            ods_sheet = ODSSheet(sheet)
+            ods_sheet = ODSSheet(sheet, **self.keywords)
             result[ods_sheet.name] = ods_sheet.to_array()
 
         return result
             
     def read_sheet(self, native_sheet):
-        sheet = ODSSheet(native_sheet)
+        sheet = ODSSheet(native_sheet, **self.keywords)
         return {sheet.name: sheet.to_array()}
 
     def _load_from_memory(self):
