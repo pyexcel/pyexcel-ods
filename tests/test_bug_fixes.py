@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 import os
 from pyexcel_ods import get_data, save_data
-from nose.tools import raises
+from nose.tools import raises, eq_
 
 
 def test_bug_fix_for_issue_1():
@@ -61,4 +61,18 @@ def test_fake_date_time_19():
 def test_fake_date_time_20():
     from pyexcel_ods.ods import date_value
     date_value("12345678901234567890")
-    
+
+
+def test_issue_13():
+    test_file = "test_issue_13.ods"
+    data = [
+        [1,2],
+        [],
+        [],
+        [],
+        [3,4]
+    ]
+    save_data(test_file, {test_file: data})
+    written_data = get_data(test_file)
+    eq_(data, written_data[test_file])
+    os.unlink(test_file)
