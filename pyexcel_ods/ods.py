@@ -24,7 +24,9 @@ from odf.opendocument import OpenDocumentSpreadsheet, load
 from pyexcel_io.book import BookReader, BookWriter
 from pyexcel_io.sheet import SheetReader, SheetWriter
 
-PY27_BELOW = sys.version_info[0] == 2 and sys.version_info[1] < 7
+PY2 = sys.version_info[0] == 2
+
+PY27_BELOW = PY2 and sys.version_info[1] < 7
 if PY27_BELOW:
     from ordereddict import OrderedDict
 else:
@@ -130,10 +132,11 @@ ODS_WRITE_FORMAT_COVERSION = {
     datetime.date: "date",
     datetime.time: "time",
     datetime.timedelta: "timedelta",
-    bool: "boolean",
-    unicode: "string"
+    bool: "boolean"
 }
 
+if PY2:
+    ODS_WRITE_FORMAT_COVERSION[unicode] = "string"
 
 VALUE_CONVERTERS = {
     "float": float_value,
@@ -207,7 +210,10 @@ class ODSSheet(SheetReader):
         for paragraph in paragraphs:
             for node in paragraph.childNodes:
                 if (node.nodeType == 3):
-                    text_content.append(unicode(node.data))
+                    if PY2:
+                        text_content.append(unicode(node.data))
+                    else:
+                        text_content.append(node.data)
         return '\n'.join(text_content)
 
     def _read_cell(self, cell):

@@ -20,7 +20,7 @@ KEYWORDS = [
 
 INSTALL_REQUIRES = [
     'pyexcel-io>=0.2.0',
-    'odfpy==0.9.6',
+    'odfpy>=0.9.6',
 ]
 
 EXTRAS_REQUIRE = {
