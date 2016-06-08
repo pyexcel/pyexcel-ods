@@ -11,11 +11,14 @@ VERSION = '0.2.0'
 EMAIL = 'wangc_2011 (at) hotmail.com'
 LICENSE = 'New BSD'
 PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
-DESCRIPTION = 'A wrapper library to read, manipulate and write data in ods format'
+DESCRIPTION = (
+    'A wrapper library to read, manipulate and write data in ods format' +
+    ''
+)
 KEYWORDS = [
-   'excel',
-   'python',
-   'pyexcel',
+    'excel',
+    'python',
+    'pyexcel',
 ]
 
 INSTALL_REQUIRES = [
@@ -33,8 +36,8 @@ CLASSIFIERS = [
     'Programming Language :: Python',
     'License :: OSI Approved :: BSD License',
     'Intended Audience :: Developers',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7'
+    'Programming Language :: Python :: 2.6',
+    'Programming Language :: Python :: 2.7'
 ]
 
 

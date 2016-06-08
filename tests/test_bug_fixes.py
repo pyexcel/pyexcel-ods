@@ -66,13 +66,14 @@ def test_fake_date_time_20():
 def test_issue_13():
     test_file = "test_issue_13.ods"
     data = [
-        [1,2],
+        [1, 2],
         [],
         [],
         [],
-        [3,4]
+        [3, 4]
     ]
-    save_data(test_file, {test_file: data})
+    save_data(test_file,
+              {test_file: data})
     written_data = get_data(test_file)
     eq_(data, written_data[test_file])
     os.unlink(test_file)
