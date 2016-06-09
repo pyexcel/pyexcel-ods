@@ -12,6 +12,7 @@ class TestODSReader(ODSCellTypes):
         self.data = r.read_all()
         for key in self.data.keys():
             self.data[key] = list(self.data[key])
+        r.close()
 
 
 class TestODSWriter(ODSCellTypes):

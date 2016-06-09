@@ -1,9 +1,10 @@
 import os
+from unittest import TestCase
 import pyexcel
 from base import create_sample_file1
 
 
-class TestStringIO:
+class TestStringIO(TestCase):
 
     def test_ods_stringio(self):
         odsfile = "cute.ods"
@@ -13,7 +14,7 @@ class TestStringIO:
             r = pyexcel.get_sheet(file_type="ods", file_content=content)
             result = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 1.1, 1]
             actual = pyexcel.utils.to_array(r.enumerate())
-            assert result == actual
+            self.assertEqual(result, actual)
         if os.path.exists(odsfile):
             os.unlink(odsfile)
 
@@ -26,4 +27,4 @@ class TestStringIO:
         r = pyexcel.get_sheet(file_type="ods", file_content=io.getvalue())
         result = [1, 2, 3, 4, 5, 6]
         actual = pyexcel.utils.to_array(r.enumerate())
-        assert result == actual
+        self.assertEqual(result, actual)

@@ -52,7 +52,7 @@ class TestAddBooks:
         self._write_test_file(self.testfile2)
 
     def test_load_a_single_sheet(self):
-        b1 = pyexcel.load_book(self.testfile, sheet_name="Sheet1")
+        b1 = pyexcel.get_book(file_name=self.testfile, sheet_name="Sheet1")
         assert len(b1.sheet_names()) == 1
         assert b1['Sheet1'].to_array() == self.content['Sheet1']
 
@@ -117,7 +117,7 @@ class TestAddBooks:
 
     def test_add_book1_in_place(self):
         """
-        test this scenario book1 +=  book2
+        test this scenario: book1 +=  book2
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
@@ -135,7 +135,7 @@ class TestAddBooks:
 
     def test_add_book2(self):
         """
-        test this scenario book3 = book1 + sheet3
+        test this scenario: book3 = book1 + sheet3
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
@@ -153,7 +153,7 @@ class TestAddBooks:
 
     def test_add_book2_in_place(self):
         """
-        test this scenario book3 = book1 + sheet3
+        test this scenario: book3 = book1 + sheet3
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
@@ -171,7 +171,7 @@ class TestAddBooks:
 
     def test_add_book3(self):
         """
-        test this scenario book3 = sheet1 + sheet2
+        test this scenario: book3 = sheet1 + sheet2
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
@@ -184,7 +184,7 @@ class TestAddBooks:
 
     def test_add_book4(self):
         """
-        test this scenario book3 = sheet1 + book
+        test this scenario: book3 = sheet1 + book
         """
         b1 = pyexcel.BookReader(self.testfile)
         b2 = pyexcel.BookReader(self.testfile2)
