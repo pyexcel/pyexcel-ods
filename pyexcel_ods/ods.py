@@ -182,13 +182,22 @@ class ODSSheet(SheetReader):
         as an array (rows) of arrays (columns)"""
         rows = self.native_sheet.getElementsByType(TableRow)
         # for each row
-        for row in rows:
+        for row_index, row in enumerate(rows):
+            if self.skip_row(row_index, self.start_row, self.row_limit):
+                continue
+
             tmp_row = []
             arr_cells = []
             cells = row.getElementsByType(TableCell)
 
             # for each cell
-            for cell in cells:
+            for column_index, cell in enumerate(cells):
+                skip_column = self.skip_column(column_index,
+                                               self.start_column,
+                                               self.column_limit)
+                if skip_column:
+                    continue
+
                 # repeated value?
                 repeat = cell.getAttribute("numbercolumnsrepeated")
                 cell_value = self._read_cell(cell)
@@ -289,6 +298,7 @@ class ODSBook(BookReader):
 
     def _load_from_file(self):
         self.native_book = load(self.file_name)
+        pass
 
 
 class ODSSheetWriter(SheetWriter):
