@@ -172,45 +172,49 @@ class ODSSheet(SheetReader):
     def __init__(self, sheet, auto_detect_int=True, **keywords):
         SheetReader.__init__(self, sheet, **keywords)
         self.auto_detect_int = auto_detect_int
+        self.rows = self.native_sheet.getElementsByType(TableRow)
+        self.cached_rows = {}
+        self._number_of_rows = len(self.rows)
+        self._number_of_columns = self._find_columns()
+
+    def number_of_rows(self):
+        return self._number_of_rows
+
+    def number_of_columns(self):
+        return self._number_of_columns
 
     @property
     def name(self):
         return self.native_sheet.getAttribute("name")
 
-    def to_array(self):
-        """reads a sheet in the sheet dictionary, storing each sheet
-        as an array (rows) of arrays (columns)"""
-        rows = self.native_sheet.getElementsByType(TableRow)
-        # for each row
-        for row_index, row in enumerate(rows):
-            if self.skip_row(row_index, self.start_row, self.row_limit):
-                continue
+    def _cell_value(self, row, column):
+        current_row = self.rows[row]
+        cells = current_row.getElementsByType(TableCell)
+        cell_value = None
+        if str(row) in self.cached_rows:
+            row_cache = self.cached_rows[str(row)]
+            cell_value = row_cache[column]
+            return cell_value
 
-            tmp_row = []
-            arr_cells = []
-            cells = row.getElementsByType(TableCell)
+        try:
+            cell = cells[column]
+            cell_value = self._read_cell(cell)
+        except IndexError:
+            cell_value = None
+        return cell_value
 
-            # for each cell
-            for column_index, cell in enumerate(cells):
-                skip_column = self.skip_column(column_index,
-                                               self.start_column,
-                                               self.column_limit)
-                if skip_column:
-                    continue
-
-                # repeated value?
-                repeat = cell.getAttribute("numbercolumnsrepeated")
-                cell_value = self._read_cell(cell)
-                if repeat:
-                    number_of_repeat = int(repeat)
-                    tmp_row += [cell_value] * number_of_repeat
-                else:
-                    tmp_row.append(cell_value)
-                if cell_value is not None and cell_value != '':
-                    arr_cells += tmp_row
-                    tmp_row = []
-            # if row contained something
-            yield arr_cells
+    def _read_row(self, cells):
+        tmp_row = []
+        for cell in cells:
+            # repeated value?
+            repeat = cell.getAttribute("numbercolumnsrepeated")
+            cell_value = self._read_cell(cell)
+            if repeat:
+                number_of_repeat = int(repeat)
+                tmp_row += [cell_value] * number_of_repeat
+            else:
+                tmp_row.append(cell_value)
+        return tmp_row
 
     def _read_text_cell(self, cell):
         text_content = []
@@ -244,6 +248,29 @@ class ODSSheet(SheetReader):
                 text_content = self._read_text_cell(cell)
                 ret = text_content
         return ret
+
+    def _find_columns(self):
+        max = -1
+        for row_index, row in enumerate(self.rows):
+            cells = row.getElementsByType(TableCell)
+            if self._check_for_column_repeat(cells):
+                row_cache = self._read_row(cells)
+                self.cached_rows.update({str(row_index): row_cache})
+                length = len(row_cache)
+            else:
+                length = len(cells)
+            if length > max:
+                max = length
+        return max
+
+    def _check_for_column_repeat(self, cells):
+        found_repeated_columns = False
+        for cell in cells:
+            repeat = cell.getAttribute("numbercolumnsrepeated")
+            if repeat:
+                found_repeated_columns = True
+                break
+        return found_repeated_columns
 
 
 class ODSBook(BookReader):

@@ -7,7 +7,7 @@ from nose.tools import raises, eq_
 
 def test_bug_fix_for_issue_1():
     data = get_data(os.path.join("tests", "fixtures", "repeated.ods"))
-    assert data["Sheet1"] == [['repeated', 'repeated', 'repeated', 'repeated']]
+    eq_(data["Sheet1"], [['repeated', 'repeated', 'repeated', 'repeated']])
 
 
 def test_bug_fix_for_issue_2():
@@ -72,8 +72,7 @@ def test_issue_13():
         [],
         [3, 4]
     ]
-    save_data(test_file,
-              {test_file: data})
-    written_data = get_data(test_file)
+    save_data(test_file, {test_file: data})
+    written_data = get_data(test_file, skip_empty_rows=False)
     eq_(data, written_data[test_file])
     os.unlink(test_file)
