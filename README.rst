@@ -132,6 +132,8 @@ Pagination feature
 
 Let's assume the following file is a huge ods file:
 
+.. code-block:: python
+
    >>> huge_data = [
    ...     [1, 21, 31],
    ...     [2, 22, 32],
@@ -150,16 +152,16 @@ And let's pretend to read partial data:
 .. code-block:: python
 
    >>> partial_data = get_data("huge_file.ods", start_row=2, row_limit=3)
-   >>> partial_data['huge']
-   [[3, 23, 33], [4, 24, 34], [5, 25, 35]]
+   >>> print(json.dumps(partial_data))
+   {"huge": [[3, 23, 33], [4, 24, 34], [5, 25, 35]]}
 
 And you could as well do the same for columns:
 
 .. code-block:: python
 
    >>> partial_data = get_data("huge_file.ods", start_column=1, column_limit=2)
-   >>> partial_data['huge']
-   [[21, 31], [22, 32], [23, 33], [24, 34], [25, 35], [26, 36]]
+   >>> print(json.dumps(partial_data))
+   {"huge": [[21, 31], [22, 32], [23, 33], [24, 34], [25, 35], [26, 36]]}
 
 Obvious, you could do both at the same time:
 
@@ -168,8 +170,8 @@ Obvious, you could do both at the same time:
    >>> partial_data = get_data("huge_file.ods",
    ...     start_row=2, row_limit=3,
    ...     start_column=1, column_limit=2)
-   >>> partial_data['huge']
-   [[23, 33], [24, 34], [25, 35]]
+   >>> print(json.dumps(partial_data))
+   {"huge": [[23, 33], [24, 34], [25, 35]]}
 
 .. testcode::
    :hide:
