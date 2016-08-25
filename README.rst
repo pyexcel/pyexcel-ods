@@ -56,6 +56,7 @@ Write to an ods file
 .. testcode::
    :hide:
 
+    >>> import os
     >>> import sys
     >>> if sys.version_info[0] < 3:
     ...     from StringIO import StringIO
@@ -90,6 +91,7 @@ Here's the sample code:
     >>> import json
     >>> print(json.dumps(data))
     {"Sheet 1": [[1, 2, 3], [4, 5, 6]], "Sheet 2": [["row 1", "row 2", "row 3"]]}
+
 
 Write an ods to memory
 ********************************************************************************
@@ -169,6 +171,11 @@ Obvious, you could do both at the same time:
    >>> partial_data['huge']
    [[23, 33], [24, 34], [25, 35]]
 
+.. testcode::
+   :hide:
+
+   >>> os.unlink("huge_file.ods")
+
 
 As a pyexcel plugin
 --------------------------------------------------------------------------------
@@ -186,6 +193,7 @@ Import it in your file to enable this plugin:
     from pyexcel.ext import ods
 
 Please note only pyexcel version 0.0.4+ support this.
+
 
 Reading from an ods file
 ********************************************************************************
@@ -209,6 +217,7 @@ Here is the sample code:
     | row 1 | row 2 | row 3 |
     +-------+-------+-------+
 
+
 Writing to an ods file
 ********************************************************************************
 
@@ -218,8 +227,9 @@ Here is the sample code:
 
     >>> sheet.save_as("another_file.ods")
 
+
 Reading from a IO instance
-================================================================================
+********************************************************************************
 
 You got to wrap the binary content with stream to get ods working:
 
@@ -247,7 +257,7 @@ You got to wrap the binary content with stream to get ods working:
 
 
 Writing to a StringIO instance
-================================================================================
+********************************************************************************
 
 You need to pass a StringIO instance to Writer:
 
@@ -326,5 +336,4 @@ ODSReader is originally written by `Marco Conti <https://github.com/marcoconti83
 
    >>> import os
    >>> os.unlink("your_file.ods")
-   >>> os.unlink("huge_file.ods")
    >>> os.unlink("another_file.ods")
