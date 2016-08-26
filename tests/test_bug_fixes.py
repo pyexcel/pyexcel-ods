@@ -20,7 +20,7 @@ def test_bug_fix_for_issue_2():
 
 
 def test_date_util_parse():
-    from pyexcel_ods.ods import date_value
+    from pyexcel_ods.converter import date_value
     value = "2015-08-17T19:20:00"
     d = date_value(value)
     assert d.strftime("%Y-%m-%dT%H:%M:%S") == "2015-08-17T19:20:00"

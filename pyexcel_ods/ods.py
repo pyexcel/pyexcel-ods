@@ -15,7 +15,7 @@
 # Thanks to grt for the fixes
 import sys
 import math
-import datetime
+
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
 from odf.namespaces import OFFICENS
@@ -24,6 +24,8 @@ from odf.opendocument import OpenDocumentSpreadsheet, load
 from pyexcel_io.book import BookReader, BookWriter
 from pyexcel_io.sheet import SheetReader, SheetWriter
 
+import pyexcel_ods.converter as converter
+
 PY2 = sys.version_info[0] == 2
 
 PY27_BELOW = PY2 and sys.version_info[1] < 7
@@ -31,140 +33,6 @@ if PY27_BELOW:
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
-
-
-def is_integer_ok_for_xl_float(value):
-    """check if a float had zero value in digits"""
-    return value == math.floor(value)
-
-
-def float_value(value):
-    """convert a value to float"""
-    ret = float(value)
-    return ret
-
-
-def date_value(value):
-    """convert to data value accroding ods specification"""
-    ret = "invalid"
-    try:
-        # catch strptime exceptions only
-        if len(value) == 10:
-            ret = datetime.datetime.strptime(
-                value,
-                "%Y-%m-%d")
-            ret = ret.date()
-        elif len(value) == 19:
-            ret = datetime.datetime.strptime(
-                value,
-                "%Y-%m-%dT%H:%M:%S")
-        elif len(value) > 19:
-            ret = datetime.datetime.strptime(
-                value[0:26],
-                "%Y-%m-%dT%H:%M:%S.%f")
-    except ValueError:
-        pass
-    if ret == "invalid":
-        raise Exception("Bad date value %s" % value)
-    return ret
-
-
-def ods_date_value(value):
-    return value.strftime("%Y-%m-%d")
-
-
-def time_value(value):
-    """convert to time value accroding the specification"""
-    hour = int(value[2:4])
-    minute = int(value[5:7])
-    second = int(value[8:10])
-    if hour < 24:
-        ret = datetime.time(hour, minute, second)
-    else:
-        ret = datetime.timedelta(hours=hour, minutes=minute, seconds=second)
-    return ret
-
-
-def ods_time_value(value):
-    return value.strftime("PT%HH%MM%SS")
-
-
-def boolean_value(value):
-    """get bolean value"""
-    if value == "true":
-        ret = True
-    else:
-        ret = False
-    return ret
-
-
-def ods_bool_value(value):
-    """convert a boolean value to text"""
-    if value is True:
-        return "true"
-    else:
-        return "false"
-
-
-def ods_timedelta_value(cell):
-    """convert a cell value to time delta"""
-    hours = cell.days * 24 + cell.seconds // 3600
-    minutes = (cell.seconds // 60) % 60
-    seconds = cell.seconds % 60
-    return "PT%02dH%02dM%02dS" % (hours, minutes, seconds)
-
-
-ODS_FORMAT_CONVERSION = {
-    "float": float,
-    "date": datetime.date,
-    "time": datetime.time,
-    'timedelta': datetime.timedelta,
-    "boolean": bool,
-    "percentage": float,
-    "currency": float
-}
-
-
-ODS_WRITE_FORMAT_COVERSION = {
-    float: "float",
-    int: "float",
-    str: "string",
-    datetime.date: "date",
-    datetime.time: "time",
-    datetime.timedelta: "timedelta",
-    bool: "boolean"
-}
-
-if PY2:
-    ODS_WRITE_FORMAT_COVERSION[unicode] = "string"
-
-VALUE_CONVERTERS = {
-    "float": float_value,
-    "date": date_value,
-    "time": time_value,
-    "timedelta": time_value,
-    "boolean": boolean_value,
-    "percentage": float_value,
-    "currency": float_value
-}
-
-ODS_VALUE_CONVERTERS = {
-    "date": ods_date_value,
-    "time": ods_time_value,
-    "boolean": ods_bool_value,
-    "timedelta": ods_timedelta_value
-}
-
-
-VALUE_TOKEN = {
-    "float": "value",
-    "date": "date-value",
-    "time": "time-value",
-    "boolean": "boolean-value",
-    "percentage": "value",
-    "currency": "value",
-    "timedelta": "time-value"
-}
 
 
 class ODSSheet(SheetReader):
@@ -231,15 +99,15 @@ class ODSSheet(SheetReader):
 
     def _read_cell(self, cell):
         cell_type = cell.getAttrNS(OFFICENS, "value-type")
-        value_token = VALUE_TOKEN.get(cell_type, "value")
+        value_token = converter.VALUE_TOKEN.get(cell_type, "value")
         ret = None
         if cell_type == "string":
             text_content = self._read_text_cell(cell)
             ret = text_content
         else:
-            if cell_type in VALUE_CONVERTERS:
+            if cell_type in converter.VALUE_CONVERTERS:
                 value = cell.getAttrNS(OFFICENS, value_token)
-                n_value = VALUE_CONVERTERS[cell_type](value)
+                n_value = converter.VALUE_CONVERTERS[cell_type](value)
                 if cell_type == 'float' and self.auto_detect_int:
                     if is_integer_ok_for_xl_float(n_value):
                         n_value = int(n_value)
@@ -344,12 +212,15 @@ class ODSSheetWriter(SheetWriter):
         """write a native cell"""
         cell_to_be_written = TableCell()
         cell_type = type(cell)
-        cell_odf_type = ODS_WRITE_FORMAT_COVERSION.get(cell_type, "string")
+        cell_odf_type = converter.ODS_WRITE_FORMAT_COVERSION.get(
+            cell_type, "string")
         cell_to_be_written.setAttrNS(OFFICENS, "value-type", cell_odf_type)
-        cell_odf_value_token = VALUE_TOKEN.get(cell_odf_type, "value")
-        converter = ODS_VALUE_CONVERTERS.get(cell_odf_type, None)
-        if converter:
-            cell = converter(cell)
+        cell_odf_value_token = converter.VALUE_TOKEN.get(
+            cell_odf_type, "value")
+        converter_func = converter.ODS_VALUE_CONVERTERS.get(
+            cell_odf_type, None)
+        if converter_func:
+            cell = converter_func(cell)
         if cell_odf_type != 'string':
             cell_to_be_written.setAttrNS(OFFICENS, cell_odf_value_token, cell)
             cell_to_be_written.addElement(P(text=cell))
@@ -397,6 +268,11 @@ class ODSWriter(BookWriter):
 
         """
         self.native_book.write(self.file_alike_object)
+
+
+def is_integer_ok_for_xl_float(value):
+    """check if a float had zero value in digits"""
+    return value == math.floor(value)
 
 
 _ods_registry = {
