@@ -1,14 +1,15 @@
 Change log
 ================================================================================
 
-0.2.1 - unreleased
+0.2.1 - 31.08.2016
 --------------------------------------------------------------------------------
 
 Added
 ********************************************************************************
 
-#. support pagination. two pairs: start_row, row_limit and start_column, column_limit
-   help you deal with large files.
+#. support pagination. two pairs: start_row, row_limit and start_column,
+   column_limit help you deal with large files.
+#. use odfpy 1.3.3 as compulsory package. offically support python 3
 
 0.2.0 - 01.06.2016
 --------------------------------------------------------------------------------
@@ -16,8 +17,10 @@ Added
 Added
 ********************************************************************************
 
-#. By default, `float` will be converted to `int` where fits. `auto_detect_int`, a flag to switch off the autoatic conversion from `float` to `int`.
-#. 'library=pyexcel-ods' was added so as to inform pyexcel to use it instead of other libraries, in the situation where multiple plugins were installed.
+#. By default, `float` will be converted to `int` where fits. `auto_detect_int`,
+   a flag to switch off the autoatic conversion from `float` to `int`.
+#. 'library=pyexcel-ods' was added so as to inform pyexcel to use it instead of
+   other libraries, in the situation where multiple plugins were installed.
 
 
 Updated
