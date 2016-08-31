@@ -26,6 +26,7 @@ INSTALL_REQUIRES = [
     'odfpy>=0.9.6',
 ]
 
+
 EXTRAS_REQUIRE = {
 }
 
