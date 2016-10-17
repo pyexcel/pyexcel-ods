@@ -61,8 +61,11 @@ class ODSSheet(SheetReader):
         cell_value = None
         if str(row) in self.cached_rows:
             row_cache = self.cached_rows[str(row)]
-            cell_value = row_cache[column]
-            return cell_value
+            try:
+                cell_value = row_cache[column]
+                return cell_value
+            except IndexError:
+                return None
 
         try:
             cell = cells[column]

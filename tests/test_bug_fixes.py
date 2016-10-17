@@ -76,3 +76,9 @@ def test_issue_13():
     written_data = get_data(test_file, skip_empty_rows=False)
     eq_(data, written_data[test_file])
     os.unlink(test_file)
+
+
+def test_issue_61():
+    test_file = "issue_61.ods"
+    data=get_data(os.path.join("tests", "fixtures", test_file))
+    print(data)
