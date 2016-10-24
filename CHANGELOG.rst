@@ -3,15 +3,12 @@ Change log
 
 0.2.2 - unreleased
 --------------------------------------------------------------------------------
-#. issue `#14 <https://github.com/pyexcel/pyexcel-ods/issues/14>`_, index error
-   when reading a ods file that has non-uniform columns repeated property.
-
 
 Updated
 ********************************************************************************
 
-#. support pagination. two pairs: start_row, row_limit and start_column,
-   column_limit help you deal with large files.
+#. issue `#14 <https://github.com/pyexcel/pyexcel-ods/issues/14>`_, index error
+   when reading a ods file that has non-uniform columns repeated property.
 
 
 0.2.1 - 31.08.2016
