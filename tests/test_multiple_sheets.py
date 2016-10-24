@@ -1,8 +1,8 @@
-from base import PyexcelMultipleSheetBase
-import pyexcel
 import os
-from nose.tools import raises
 import sys
+import pyexcel
+from nose.tools import raises
+from base import PyexcelMultipleSheetBase
 
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     from ordereddict import OrderedDict
@@ -42,7 +42,8 @@ class TestAddBooks:
         3,3,3,3
         """
         self.rows = 3
-        pyexcel.save_book_as(bookdict=self.content, dest_file_name=file)
+        pyexcel.save_book_as(bookdict=self.content,
+                             dest_file_name=file)
 
     def setUp(self):
         self.testfile = "multiple1.ods"
@@ -63,11 +64,11 @@ class TestAddBooks:
 
     @raises(IndexError)
     def test_load_a_single_sheet3(self):
-        pyexcel.load_book(self.testfile, sheet_index=10000)
+        pyexcel.get_book(file_name=self.testfile, sheet_index=10000)
 
     @raises(ValueError)
     def test_load_a_single_sheet4(self):
-        pyexcel.load_book(self.testfile, sheet_name="Not exist")
+        pyexcel.get_book(file_name=self.testfile, sheet_name="Not exist")
 
     def test_delete_sheets(self):
         b1 = pyexcel.load_book(self.testfile)
