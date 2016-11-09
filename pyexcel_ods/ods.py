@@ -41,15 +41,15 @@ class ODSSheet(SheetReader):
         SheetReader.__init__(self, sheet, **keywords)
         self.auto_detect_int = auto_detect_int
         self.rows = self.native_sheet.getElementsByType(TableRow)
-        self.cached_rows = {}
-        self._number_of_rows = len(self.rows)
-        self._number_of_columns = self._find_columns()
+        self.__cached_rows = {}
+        self.__number_of_rows = len(self.rows)
+        self.__number_of_columns = self.__find_columns()
 
     def number_of_rows(self):
-        return self._number_of_rows
+        return self.__number_of_rows
 
     def number_of_columns(self):
-        return self._number_of_columns
+        return self.__number_of_columns
 
     @property
     def name(self):
@@ -59,8 +59,8 @@ class ODSSheet(SheetReader):
         current_row = self.rows[row]
         cells = current_row.getElementsByType(TableCell)
         cell_value = None
-        if str(row) in self.cached_rows:
-            row_cache = self.cached_rows[str(row)]
+        if str(row) in self.__cached_rows:
+            row_cache = self.__cached_rows[str(row)]
             try:
                 cell_value = row_cache[column]
                 return cell_value
@@ -69,17 +69,17 @@ class ODSSheet(SheetReader):
 
         try:
             cell = cells[column]
-            cell_value = self._read_cell(cell)
+            cell_value = self.__read_cell(cell)
         except IndexError:
             cell_value = None
         return cell_value
 
-    def _read_row(self, cells):
+    def __read_row(self, cells):
         tmp_row = []
         for cell in cells:
             # repeated value?
             repeat = cell.getAttribute("numbercolumnsrepeated")
-            cell_value = self._read_cell(cell)
+            cell_value = self.__read_cell(cell)
             if repeat:
                 number_of_repeat = int(repeat)
                 tmp_row += [cell_value] * number_of_repeat
@@ -87,7 +87,7 @@ class ODSSheet(SheetReader):
                 tmp_row.append(cell_value)
         return tmp_row
 
-    def _read_text_cell(self, cell):
+    def __read_text_cell(self, cell):
         text_content = []
         paragraphs = cell.getElementsByType(P)
         # for each text node
@@ -100,12 +100,12 @@ class ODSSheet(SheetReader):
                         text_content.append(node.data)
         return '\n'.join(text_content)
 
-    def _read_cell(self, cell):
+    def __read_cell(self, cell):
         cell_type = cell.getAttrNS(OFFICENS, "value-type")
         value_token = converter.VALUE_TOKEN.get(cell_type, "value")
         ret = None
         if cell_type == "string":
-            text_content = self._read_text_cell(cell)
+            text_content = self.__read_text_cell(cell)
             ret = text_content
         else:
             if cell_type in converter.VALUE_CONVERTERS:
@@ -116,17 +116,17 @@ class ODSSheet(SheetReader):
                         n_value = int(n_value)
                 ret = n_value
             else:
-                text_content = self._read_text_cell(cell)
+                text_content = self.__read_text_cell(cell)
                 ret = text_content
         return ret
 
-    def _find_columns(self):
+    def __find_columns(self):
         max = -1
         for row_index, row in enumerate(self.rows):
             cells = row.getElementsByType(TableCell)
-            if self._check_for_column_repeat(cells):
-                row_cache = self._read_row(cells)
-                self.cached_rows.update({str(row_index): row_cache})
+            if self.__check_for_column_repeat(cells):
+                row_cache = self.__read_row(cells)
+                self.__cached_rows.update({str(row_index): row_cache})
                 length = len(row_cache)
             else:
                 length = len(cells)
@@ -134,7 +134,7 @@ class ODSSheet(SheetReader):
                 max = length
         return max
 
-    def _check_for_column_repeat(self, cells):
+    def __check_for_column_repeat(self, cells):
         found_repeated_columns = False
         for cell in cells:
             repeat = cell.getAttribute("numbercolumnsrepeated")
@@ -196,7 +196,6 @@ class ODSBook(BookReader):
 
     def _load_from_file(self):
         self.native_book = load(self.file_name)
-        pass
 
 
 class ODSSheetWriter(SheetWriter):
