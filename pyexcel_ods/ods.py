@@ -39,10 +39,10 @@ class ODSSheet(SheetReader):
     """native ods sheet"""
     def __init__(self, sheet, auto_detect_int=True, **keywords):
         SheetReader.__init__(self, sheet, **keywords)
-        self.auto_detect_int = auto_detect_int
-        self.rows = self.native_sheet.getElementsByType(TableRow)
+        self.__auto_detect_int = auto_detect_int
+        self.__rows = self._native_sheet.getElementsByType(TableRow)
         self.__cached_rows = {}
-        self.__number_of_rows = len(self.rows)
+        self.__number_of_rows = len(self.__rows)
         self.__number_of_columns = self.__find_columns()
 
     def number_of_rows(self):
@@ -53,10 +53,10 @@ class ODSSheet(SheetReader):
 
     @property
     def name(self):
-        return self.native_sheet.getAttribute("name")
+        return self._native_sheet.getAttribute("name")
 
     def _cell_value(self, row, column):
-        current_row = self.rows[row]
+        current_row = self.__rows[row]
         cells = current_row.getElementsByType(TableCell)
         cell_value = None
         if str(row) in self.__cached_rows:
@@ -111,7 +111,7 @@ class ODSSheet(SheetReader):
             if cell_type in converter.VALUE_CONVERTERS:
                 value = cell.getAttrNS(OFFICENS, value_token)
                 n_value = converter.VALUE_CONVERTERS[cell_type](value)
-                if cell_type == 'float' and self.auto_detect_int:
+                if cell_type == 'float' and self.__auto_detect_int:
                     if is_integer_ok_for_xl_float(n_value):
                         n_value = int(n_value)
                 ret = n_value
@@ -122,7 +122,7 @@ class ODSSheet(SheetReader):
 
     def __find_columns(self):
         max = -1
-        for row_index, row in enumerate(self.rows):
+        for row_index, row in enumerate(self.__rows):
             cells = row.getElementsByType(TableCell)
             if self.__check_for_column_repeat(cells):
                 row_cache = self.__read_row(cells)
@@ -159,7 +159,7 @@ class ODSBook(BookReader):
 
     def read_sheet_by_name(self, sheet_name):
         """read a named sheet"""
-        tables = self.native_book.spreadsheet.getElementsByType(Table)
+        tables = self._native_book.spreadsheet.getElementsByType(Table)
         rets = [table for table in tables
                 if table.getAttribute('name') == sheet_name]
         if len(rets) == 0:
@@ -169,7 +169,7 @@ class ODSBook(BookReader):
 
     def read_sheet_by_index(self, sheet_index):
         """read a sheet at a specified index"""
-        tables = self.native_book.spreadsheet.getElementsByType(Table)
+        tables = self._native_book.spreadsheet.getElementsByType(Table)
         length = len(tables)
         if sheet_index < length:
             return self.read_sheet(tables[sheet_index])
@@ -180,22 +180,22 @@ class ODSBook(BookReader):
     def read_all(self):
         """read all sheets"""
         result = OrderedDict()
-        for sheet in self.native_book.spreadsheet.getElementsByType(Table):
-            ods_sheet = ODSSheet(sheet, **self.keywords)
+        for sheet in self._native_book.spreadsheet.getElementsByType(Table):
+            ods_sheet = ODSSheet(sheet, **self._keywords)
             result[ods_sheet.name] = ods_sheet.to_array()
 
         return result
 
     def read_sheet(self, native_sheet):
         """read one native sheet"""
-        sheet = ODSSheet(native_sheet, **self.keywords)
+        sheet = ODSSheet(native_sheet, **self._keywords)
         return {sheet.name: sheet.to_array()}
 
     def _load_from_memory(self):
-        self.native_book = load(self.file_stream)
+        self._native_book = load(self._file_stream)
 
     def _load_from_file(self):
-        self.native_book = load(self.file_name)
+        self._native_book = load(self._file_name)
 
 
 class ODSSheetWriter(SheetWriter):
@@ -204,7 +204,7 @@ class ODSSheetWriter(SheetWriter):
     """
     def set_sheet_name(self, name):
         """initialize the native table"""
-        self.native_sheet = Table(name=name)
+        self._native_sheet = Table(name=name)
 
     def set_size(self, size):
         """not used in this class but used in ods3"""
@@ -237,7 +237,7 @@ class ODSSheetWriter(SheetWriter):
         write a row into the file
         """
         row = TableRow()
-        self.native_sheet.addElement(row)
+        self._native_sheet.addElement(row)
         for cell in array:
             self.write_cell(row, cell)
 
@@ -246,7 +246,7 @@ class ODSSheetWriter(SheetWriter):
         This call writes file
 
         """
-        self.native_book.spreadsheet.addElement(self.native_sheet)
+        self._native_book.spreadsheet.addElement(self._native_sheet)
 
 
 class ODSWriter(BookWriter):
@@ -256,20 +256,20 @@ class ODSWriter(BookWriter):
     """
     def __init__(self):
         BookWriter.__init__(self)
-        self.native_book = OpenDocumentSpreadsheet()
+        self._native_book = OpenDocumentSpreadsheet()
 
     def create_sheet(self, name):
         """
         write a row into the file
         """
-        return ODSSheetWriter(self.native_book, None, name)
+        return ODSSheetWriter(self._native_book, None, name)
 
     def close(self):
         """
         This call writes file
 
         """
-        self.native_book.write(self.file_alike_object)
+        self._native_book.write(self._file_alike_object)
 
 
 def is_integer_ok_for_xl_float(value):

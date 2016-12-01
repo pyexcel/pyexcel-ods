@@ -7,7 +7,7 @@ except ImportError:
 
 NAME = 'pyexcel-ods'
 AUTHOR = 'C.W.'
-VERSION = '0.2.3'
+VERSION = '0.3.0'
 EMAIL = 'wangc_2011 (at) hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
@@ -32,7 +32,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'pyexcel-io>=0.2.0',
+    'pyexcel-io>=0.3.0',
     'odfpy>=1.3.3',
 ]
 
