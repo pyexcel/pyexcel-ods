@@ -40,39 +40,25 @@ class ODSSheet(SheetReader):
     def __init__(self, sheet, auto_detect_int=True, **keywords):
         SheetReader.__init__(self, sheet, **keywords)
         self.__auto_detect_int = auto_detect_int
-        self.__rows = self._native_sheet.getElementsByType(TableRow)
-        self.__cached_rows = {}
-        self.__number_of_rows = len(self.__rows)
-        self.__number_of_columns = self.__find_columns()
-
-    def number_of_rows(self):
-        return self.__number_of_rows
-
-    def number_of_columns(self):
-        return self.__number_of_columns
 
     @property
     def name(self):
         return self._native_sheet.getAttribute("name")
 
-    def _cell_value(self, row, column):
-        current_row = self.__rows[row]
-        cells = current_row.getElementsByType(TableCell)
-        cell_value = None
-        if str(row) in self.__cached_rows:
-            row_cache = self.__cached_rows[str(row)]
-            try:
-                cell_value = row_cache[column]
-                return cell_value
-            except IndexError:
-                return None
+    def _iterate_rows(self):
+        return self._native_sheet.getElementsByType(TableRow)
 
-        try:
-            cell = cells[column]
+    def _iterate_columns(self, row):
+        cells = row.getElementsByType(TableCell)
+        for cell in cells:
+            repeat = cell.getAttribute("numbercolumnsrepeated")
             cell_value = self.__read_cell(cell)
-        except IndexError:
-            cell_value = None
-        return cell_value
+            if repeat:
+                number_of_repeat = int(repeat)
+                for i in range(number_of_repeat):
+                    yield cell_value
+            else:
+                yield cell_value
 
     def __read_row(self, cells):
         tmp_row = []
@@ -119,29 +105,6 @@ class ODSSheet(SheetReader):
                 text_content = self.__read_text_cell(cell)
                 ret = text_content
         return ret
-
-    def __find_columns(self):
-        max = -1
-        for row_index, row in enumerate(self.__rows):
-            cells = row.getElementsByType(TableCell)
-            if self.__check_for_column_repeat(cells):
-                row_cache = self.__read_row(cells)
-                self.__cached_rows.update({str(row_index): row_cache})
-                length = len(row_cache)
-            else:
-                length = len(cells)
-            if length > max:
-                max = length
-        return max
-
-    def __check_for_column_repeat(self, cells):
-        found_repeated_columns = False
-        for cell in cells:
-            repeat = cell.getAttribute("numbercolumnsrepeated")
-            if repeat:
-                found_repeated_columns = True
-                break
-        return found_repeated_columns
 
 
 class ODSBook(BookReader):
