@@ -45,10 +45,10 @@ class ODSSheet(SheetReader):
     def name(self):
         return self._native_sheet.getAttribute("name")
 
-    def _iterate_rows(self):
+    def row_iterator(self):
         return self._native_sheet.getElementsByType(TableRow)
 
-    def _iterate_columns(self, row):
+    def column_iterator(self, row):
         cells = row.getElementsByType(TableCell)
         for cell in cells:
             repeat = cell.getAttribute("numbercolumnsrepeated")
