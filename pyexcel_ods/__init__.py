@@ -2,7 +2,7 @@
     pyexcel_ods
     ~~~~~~~~~~~~~~~~~~~
     The lower level ods file format handler using odfpy
-    :copyright: (c) 2015-2016 by Onni Software Ltd & its contributors
+    :copyright: (c) 2015-2017 by Onni Software Ltd & its contributors
     :license: New BSD License
 """
 # flake8: noqa
