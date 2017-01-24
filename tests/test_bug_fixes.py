@@ -81,5 +81,6 @@ def test_issue_13():
 def test_issue_14():
     # pyexcel issue 61
     test_file = "issue_61.ods"
-    data = get_data(os.path.join("tests", "fixtures", test_file))
+    data = get_data(os.path.join("tests", "fixtures", test_file),
+                    skip_empty_rows=True)
     eq_(data['S-LMC'], [[u'aaa'], [0]])
