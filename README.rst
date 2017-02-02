@@ -43,9 +43,6 @@ Usage
 As a standalone library
 --------------------------------------------------------------------------------
 
-Write to an ods file
-********************************************************************************
-
 .. testcode::
    :hide:
 
@@ -62,6 +59,11 @@ Write to an ods file
     ...     from collections import OrderedDict
 
 
+Write to an ods file
+********************************************************************************
+
+
+
 Here's the sample code to write a dictionary to an ods file:
 
 .. code-block:: python
@@ -71,6 +73,7 @@ Here's the sample code to write a dictionary to an ods file:
     >>> data.update({"Sheet 1": [[1, 2, 3], [4, 5, 6]]})
     >>> data.update({"Sheet 2": [["row 1", "row 2", "row 3"]]})
     >>> save_data("your_file.ods", data)
+
 
 Read from an ods file
 ********************************************************************************
@@ -105,6 +108,7 @@ Here's the sample code to write a dictionary to an ods file:
 
 
 
+
 Read from an ods from memory
 ********************************************************************************
 
@@ -127,6 +131,9 @@ Special notice 30/01/2017: due to the constraints of the underlying 3rd party
 library, it will read the whole file before returning the paginated data. So
 at the end of day, the only benefit is less data returned from the reading
 function. No major performance improvement will be seen.
+
+With that said, please install `pyexcel-odsr <https://github.com/pyexcel/pyexcel-odsr>`_
+and it gives better performance in reading partial ods files.
 
 Let's assume the following file is a huge ods file:
 
@@ -184,16 +191,6 @@ No longer, explicit import is needed since pyexcel version 0.2.2. Instead,
 this library is auto-loaded. So if you want to read data in ods format,
 installing it is enough.
 
-Any version under pyexcel 0.2.2, you have to keep doing the following:
-
-Import it in your file to enable this plugin:
-
-.. code-block:: python
-
-    from pyexcel.ext import ods
-
-Please note only pyexcel version 0.0.4+ support this.
-
 
 Reading from an ods file
 ********************************************************************************
@@ -203,7 +200,6 @@ Here is the sample code:
 .. code-block:: python
 
     >>> import pyexcel as pe
-    >>> # from pyexcel.ext import ods
     >>> sheet = pe.get_book(file_name="your_file.ods")
     >>> sheet
     Sheet 1:
@@ -273,6 +269,7 @@ You need to pass a StringIO instance to Writer:
     >>> # then do something with io
     >>> # In reality, you might give it to your http response
     >>> # object for downloading
+
 
 License
 ================================================================================
