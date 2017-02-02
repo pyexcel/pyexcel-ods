@@ -93,6 +93,10 @@ class ODSSheet(SheetReader):
         if cell_type == "string":
             text_content = self.__read_text_cell(cell)
             ret = text_content
+        elif cell_type == "currency":
+            value = cell.getAttrNS(OFFICENS, value_token)
+            currency = cell.getAttrNS(OFFICENS, cell_type)
+            ret = value + ' ' + currency
         else:
             if cell_type in converter.VALUE_CONVERTERS:
                 value = cell.getAttrNS(OFFICENS, value_token)
