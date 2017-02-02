@@ -1,5 +1,5 @@
 import os
-from pyexcel_ods import ods
+from pyexcel_ods.ods import ODSWriter as Writer, ODSBook as Reader
 from base import PyexcelWriterBase, PyexcelHatWriterBase
 
 
@@ -10,14 +10,15 @@ class TestNativeODSWriter:
             "Sheet2": [[4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6]],
             "Sheet3": [[u'X', u'Y', u'Z'], [1, 4, 7], [2, 5, 8], [3, 6, 9]]
         }
-        self.testfile = "odswriter.ods"
-        writer = ods.ODSWriter()
+        self.testfile = "writer.ods"
+        writer = Writer()
         writer.open(self.testfile)
         writer.write(self.content)
         writer.close()
-        reader = ods.ODSBook()
+        reader = Reader()
         reader.open(self.testfile)
         content = reader.read_all()
+        reader.close()
         for key in content.keys():
             content[key] = list(content[key])
         assert content == self.content
@@ -27,9 +28,9 @@ class TestNativeODSWriter:
             os.unlink(self.testfile)
 
 
-class TestODSnCSVWriter(PyexcelWriterBase):
+class TestodsnCSVWriter(PyexcelWriterBase):
     def setUp(self):
-        self.testfile = "testods.ods"
+        self.testfile = "test.ods"
         self.testfile2 = "test.csv"
 
     def tearDown(self):
@@ -39,9 +40,9 @@ class TestODSnCSVWriter(PyexcelWriterBase):
             os.unlink(self.testfile2)
 
 
-class TestODSHatWriter(PyexcelHatWriterBase):
+class TestodsHatWriter(PyexcelHatWriterBase):
     def setUp(self):
-        self.testfile = "testhat.ods"
+        self.testfile = "test.ods"
 
     def tearDown(self):
         if os.path.exists(self.testfile):
