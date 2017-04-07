@@ -78,12 +78,14 @@ class ODSSheet(SheetReader):
         paragraphs = cell.getElementsByType(P)
         # for each text node
         for paragraph in paragraphs:
+            data = ''
             for node in paragraph.childNodes:
                 if (node.nodeType == 3):
                     if PY2:
-                        text_content.append(unicode(node.data))
+                        data = unicode(node.data)
                     else:
-                        text_content.append(node.data)
+                        data = node.data
+            text_content.append(data)
         return '\n'.join(text_content)
 
     def __read_cell(self, cell):
