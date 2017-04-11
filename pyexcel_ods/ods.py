@@ -113,6 +113,9 @@ class ODSSheet(SheetReader):
 
 class ODSBook(BookReader):
     """read ods book"""
+    file_types = ['ods']
+    stream_type = 'binary'
+    library = 'pyexcel-ods'
 
     def open(self, file_name, **keywords):
         """open ods file"""
@@ -221,6 +224,10 @@ class ODSWriter(BookWriter):
     open document spreadsheet writer
 
     """
+    file_types = ['ods']
+    stream_type = 'binary'
+    library = 'pyexcel-ods'
+
     def __init__(self):
         BookWriter.__init__(self)
         self._native_book = OpenDocumentSpreadsheet()
@@ -242,15 +249,3 @@ class ODSWriter(BookWriter):
 def is_integer_ok_for_xl_float(value):
     """check if a float had zero value in digits"""
     return value == math.floor(value)
-
-
-_ods_registry = {
-    "file_type": "ods",
-    "reader": ODSBook,
-    "writer": ODSWriter,
-    "stream_type": "binary",
-    "mime_type": "application/vnd.oasis.opendocument.spreadsheet",
-    "library": "pyexcel-ods"
-}
-
-exports = (_ods_registry,)
