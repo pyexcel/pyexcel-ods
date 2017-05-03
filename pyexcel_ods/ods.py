@@ -82,9 +82,9 @@ class ODSSheet(SheetReader):
             for node in paragraph.childNodes:
                 if (node.nodeType == 3):
                     if PY2:
-                        data = unicode(node.data)
+                        data += unicode(node.data)
                     else:
-                        data = node.data
+                        data += node.data
             text_content.append(data)
         return '\n'.join(text_content)
 
