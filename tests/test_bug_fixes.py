@@ -92,9 +92,9 @@ def test_issue_6():
                     skip_empty_rows=True)
     eq_(data['Sheet1'][0][0].days, 12)
 
+
 def test_issue_19():
     test_file = "pyexcel_81_ods_19.ods"
     data = get_data(os.path.join("tests", "fixtures", test_file),
                     skip_empty_rows=True)
-    print(data)
-    eq_(data['product.template'][1][1], 'PRODUCT NAME PMP') 
+    eq_(data['product.template'][1][1], 'PRODUCT NAME PMP')
