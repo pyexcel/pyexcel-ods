@@ -40,7 +40,7 @@ or clone it and install it:
 
 .. code-block:: bash
 
-    $ git clone http://github.com/pyexcel/pyexcel-ods.git
+    $ git clone https://github.com/pyexcel/pyexcel-ods.git
     $ cd pyexcel-ods
     $ python setup.py install
 
@@ -353,4 +353,5 @@ Support the project
 ================================================================================
 
 If your company has embedded pyexcel and its components into a revenue generating
-product, please `support me on patreon <https://www.patreon.com/pyexcel>`_.
+product, please `support me on patreon <https://www.patreon.com/pyexcel>`_ to
+maintain the project and develop it further.
