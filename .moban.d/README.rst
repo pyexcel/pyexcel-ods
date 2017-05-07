@@ -1,5 +1,8 @@
 {%extends 'README.rst.jj2' %}
 
+{%block documentation_link%}
+{%endblock%}
+
 {%block description%}
 **pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in
 ods format using python 2.6 and python 2.7. You are likely to use it with
