@@ -1,5 +1,6 @@
 import os
-from pyexcel_ods.ods import ODSWriter as Writer, ODSBook as Reader
+from pyexcel_ods.odsw import ODSWriter as Writer
+from pyexcel_ods.odsr import ODSBook as Reader
 from base import PyexcelWriterBase, PyexcelHatWriterBase
 
 
