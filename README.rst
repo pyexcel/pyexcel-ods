@@ -2,11 +2,14 @@
 pyexcel-ods - Let you focus on data, instead of ods format
 ================================================================================
 
-.. image:: https://api.travis-ci.org/pyexcel/pyexcel-ods.png
-    :target: http://travis-ci.org/pyexcel/pyexcel-ods
+.. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
+   :target: https://www.patreon.com/pyexcel
+
+.. image:: https://api.travis-ci.org/pyexcel/pyexcel-ods.svg?branch=master
+   :target: http://travis-ci.org/pyexcel/pyexcel-ods
 
 .. image:: https://codecov.io/github/pyexcel/pyexcel-ods/coverage.png
-    :target: https://codecov.io/github/pyexcel/pyexcel-ods
+   :target: https://codecov.io/github/pyexcel/pyexcel-ods
 
 **pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in
 ods format using python 2.6 and python 2.7. You are likely to use it with
@@ -34,7 +37,7 @@ or clone it and install it:
 
 .. code-block:: bash
 
-    $ git clone http://github.com/pyexcel/pyexcel-ods.git
+    $ git clone https://github.com/pyexcel/pyexcel-ods.git
     $ cd pyexcel-ods
     $ python setup.py install
 
@@ -342,3 +345,10 @@ ODSReader is originally written by `Marco Conti <https://github.com/marcoconti83
    >>> import os
    >>> os.unlink("your_file.ods")
    >>> os.unlink("another_file.ods")
+
+Support the project
+================================================================================
+
+If your company has embedded pyexcel and its components into a revenue generating
+product, please `support me on patreon <https://www.patreon.com/pyexcel>`_ to
+maintain the project and develop it further.
