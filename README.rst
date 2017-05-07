@@ -11,9 +11,6 @@ pyexcel-ods - Let you focus on data, instead of ods format
 .. image:: https://codecov.io/github/pyexcel/pyexcel-ods/coverage.png
    :target: https://codecov.io/github/pyexcel/pyexcel-ods
 
-.. image:: https://readthedocs.org/projects/pyexcel-ods/badge/?version=latest
-   :target: http://pyexcel-ods.readthedocs.org/en/latest/
-
 **pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in
 ods format using python 2.6 and python 2.7. You are likely to use it with
 `pyexcel <https://github.com/pyexcel/pyexcel>`_.
