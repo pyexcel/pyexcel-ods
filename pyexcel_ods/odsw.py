@@ -80,10 +80,6 @@ class ODSWriter(BookWriter):
     open document spreadsheet writer
 
     """
-    file_types = ['ods']
-    stream_type = 'binary'
-    library = 'pyexcel-ods'
-
     def __init__(self):
         BookWriter.__init__(self)
         self._native_book = OpenDocumentSpreadsheet()
