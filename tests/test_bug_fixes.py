@@ -110,7 +110,7 @@ def test_issue_83_ods_file_handle():
     open_files_l1 = proc.open_files()
 
     # start with a csv file
-    data = pe.iget_array(file_name=test_file)
+    data = pe.iget_array(file_name=test_file, library='pyexcel-ods')
     open_files_l2 = proc.open_files()
     delta = len(open_files_l2) - len(open_files_l1)
     # cannot catch open file handle
