@@ -22,7 +22,6 @@
 # limitations under the License.
 
 # Thanks to grt for the fixes
-import sys
 import math
 
 from odf.table import TableRow, TableCell, Table
@@ -32,16 +31,9 @@ from odf.opendocument import load
 
 from pyexcel_io.book import BookReader
 from pyexcel_io.sheet import SheetReader
+from pyexcel_io._compact import OrderedDict, PY2
 
 import pyexcel_ods.converter as converter
-
-PY2 = sys.version_info[0] == 2
-
-PY27_BELOW = PY2 and sys.version_info[1] < 7
-if PY27_BELOW:
-    from ordereddict import OrderedDict
-else:
-    from collections import OrderedDict
 
 
 class ODSSheet(SheetReader):
@@ -167,6 +159,9 @@ class ODSBook(BookReader):
         """read one native sheet"""
         sheet = ODSSheet(native_sheet, **self._keywords)
         return {sheet.name: sheet.to_array()}
+
+    def close(self):
+        self._native_book = None
 
     def _load_from_memory(self):
         self._native_book = load(self._file_stream)
