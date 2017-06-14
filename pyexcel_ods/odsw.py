@@ -96,3 +96,4 @@ class ODSWriter(BookWriter):
 
         """
         self._native_book.write(self._file_alike_object)
+        self._native_book = None
