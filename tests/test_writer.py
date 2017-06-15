@@ -1,5 +1,6 @@
 import os
-from pyexcel_ods.ods import ODSWriter as Writer, ODSBook as Reader
+from pyexcel_ods.odsw import ODSWriter as Writer
+from pyexcel_ods.odsr import ODSBook as Reader
 from base import PyexcelWriterBase, PyexcelHatWriterBase
 
 
@@ -18,10 +19,10 @@ class TestNativeODSWriter:
         reader = Reader()
         reader.open(self.testfile)
         content = reader.read_all()
-        reader.close()
         for key in content.keys():
             content[key] = list(content[key])
         assert content == self.content
+        reader.close()
 
     def tearDown(self):
         if os.path.exists(self.testfile):

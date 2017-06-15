@@ -1,3 +1,12 @@
+"""
+    pyexcel_ods.odsr
+    ~~~~~~~~~~~~~~~~~~~~~
+
+    ods reader
+
+    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :license: New BSD License, see LICENSE for more details
+"""
 # Copyright 2011 Marco Conti
 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,26 +22,18 @@
 # limitations under the License.
 
 # Thanks to grt for the fixes
-import sys
 import math
 
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
 from odf.namespaces import OFFICENS
-from odf.opendocument import OpenDocumentSpreadsheet, load
+from odf.opendocument import load
 
-from pyexcel_io.book import BookReader, BookWriter
-from pyexcel_io.sheet import SheetReader, SheetWriter
+from pyexcel_io.book import BookReader
+from pyexcel_io.sheet import SheetReader
+from pyexcel_io._compact import OrderedDict, PY2
 
 import pyexcel_ods.converter as converter
-
-PY2 = sys.version_info[0] == 2
-
-PY27_BELOW = PY2 and sys.version_info[1] < 7
-if PY27_BELOW:
-    from ordereddict import OrderedDict
-else:
-    from collections import OrderedDict
 
 
 class ODSSheet(SheetReader):
@@ -115,7 +116,6 @@ class ODSSheet(SheetReader):
 
 class ODSBook(BookReader):
     """read ods book"""
-
     def open(self, file_name, **keywords):
         """open ods file"""
         BookReader.open(self, file_name, **keywords)
@@ -160,6 +160,9 @@ class ODSBook(BookReader):
         sheet = ODSSheet(native_sheet, **self._keywords)
         return {sheet.name: sheet.to_array()}
 
+    def close(self):
+        self._native_book = None
+
     def _load_from_memory(self):
         self._native_book = load(self._file_stream)
 
@@ -167,92 +170,6 @@ class ODSBook(BookReader):
         self._native_book = load(self._file_name)
 
 
-class ODSSheetWriter(SheetWriter):
-    """
-    ODS sheet writer
-    """
-    def set_sheet_name(self, name):
-        """initialize the native table"""
-        self._native_sheet = Table(name=name)
-
-    def set_size(self, size):
-        """not used in this class but used in ods3"""
-        pass
-
-    def write_cell(self, row, cell):
-        """write a native cell"""
-        cell_to_be_written = TableCell()
-        cell_type = type(cell)
-        cell_odf_type = converter.ODS_WRITE_FORMAT_COVERSION.get(
-            cell_type, "string")
-        cell_to_be_written.setAttrNS(OFFICENS, "value-type", cell_odf_type)
-        cell_odf_value_token = converter.VALUE_TOKEN.get(
-            cell_odf_type, "value")
-        converter_func = converter.ODS_VALUE_CONVERTERS.get(
-            cell_odf_type, None)
-        if converter_func:
-            cell = converter_func(cell)
-        if cell_odf_type != 'string':
-            cell_to_be_written.setAttrNS(OFFICENS, cell_odf_value_token, cell)
-            cell_to_be_written.addElement(P(text=cell))
-        else:
-            lines = cell.split('\n')
-            for line in lines:
-                cell_to_be_written.addElement(P(text=line))
-        row.addElement(cell_to_be_written)
-
-    def write_row(self, array):
-        """
-        write a row into the file
-        """
-        row = TableRow()
-        self._native_sheet.addElement(row)
-        for cell in array:
-            self.write_cell(row, cell)
-
-    def close(self):
-        """
-        This call writes file
-
-        """
-        self._native_book.spreadsheet.addElement(self._native_sheet)
-
-
-class ODSWriter(BookWriter):
-    """
-    open document spreadsheet writer
-
-    """
-    def __init__(self):
-        BookWriter.__init__(self)
-        self._native_book = OpenDocumentSpreadsheet()
-
-    def create_sheet(self, name):
-        """
-        write a row into the file
-        """
-        return ODSSheetWriter(self._native_book, None, name)
-
-    def close(self):
-        """
-        This call writes file
-
-        """
-        self._native_book.write(self._file_alike_object)
-
-
 def is_integer_ok_for_xl_float(value):
     """check if a float had zero value in digits"""
     return value == math.floor(value)
-
-
-_ods_registry = {
-    "file_type": "ods",
-    "reader": ODSBook,
-    "writer": ODSWriter,
-    "stream_type": "binary",
-    "mime_type": "application/vnd.oasis.opendocument.spreadsheet",
-    "library": "pyexcel-ods"
-}
-
-exports = (_ods_registry,)
