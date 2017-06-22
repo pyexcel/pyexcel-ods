@@ -61,34 +61,6 @@ class ODSSheet(SheetReader):
             else:
                 yield cell_value
 
-    def __read_row(self, cells):
-        tmp_row = []
-        for cell in cells:
-            # repeated value?
-            repeat = cell.getAttribute("numbercolumnsrepeated")
-            cell_value = self.__read_cell(cell)
-            if repeat:
-                number_of_repeat = int(repeat)
-                tmp_row += [cell_value] * number_of_repeat
-            else:
-                tmp_row.append(cell_value)
-        return tmp_row
-
-    def __read_text_cell(self, cell):
-        text_content = []
-        paragraphs = cell.getElementsByType(P)
-        # for each text node
-        for paragraph in paragraphs:
-            data = ''
-            for node in paragraph.childNodes:
-                if (node.nodeType == 3):
-                    if PY2:
-                        data += unicode(node.data)
-                    else:
-                        data += node.data
-            text_content.append(data)
-        return '\n'.join(text_content)
-
     def __read_cell(self, cell):
         cell_type = cell.getAttrNS(OFFICENS, "value-type")
         value_token = converter.VALUE_TOKEN.get(cell_type, "value")
@@ -105,13 +77,28 @@ class ODSSheet(SheetReader):
                 value = cell.getAttrNS(OFFICENS, value_token)
                 n_value = converter.VALUE_CONVERTERS[cell_type](value)
                 if cell_type == 'float' and self.__auto_detect_int:
-                    if is_integer_ok_for_xl_float(n_value):
+                    if _is_integer_ok_for_xl_float(n_value):
                         n_value = int(n_value)
                 ret = n_value
             else:
                 text_content = self.__read_text_cell(cell)
                 ret = text_content
         return ret
+
+    def __read_text_cell(self, cell):
+        text_content = []
+        paragraphs = cell.getElementsByType(P)
+        # for each text node
+        for paragraph in paragraphs:
+            data = ''
+            for node in paragraph.childNodes:
+                if (node.nodeType == 3):
+                    if PY2:
+                        data += unicode(node.data)
+                    else:
+                        data += node.data
+            text_content.append(data)
+        return '\n'.join(text_content)
 
 
 class ODSBook(BookReader):
@@ -170,6 +157,6 @@ class ODSBook(BookReader):
         self._native_book = load(self._file_name)
 
 
-def is_integer_ok_for_xl_float(value):
+def _is_integer_ok_for_xl_float(value):
     """check if a float had zero value in digits"""
     return value == math.floor(value)
