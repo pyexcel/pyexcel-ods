@@ -131,5 +131,12 @@ def test_issue_83_ods_file_handle():
     eq_(open_files_l1, open_files_l4)
 
 
+def test_pr_22():
+    test_file = get_fixtures("white_space.ods")
+    data = get_data(test_file)
+    # OrderedDict([(u'Sheet1', [[u'paragraph with tab,  space, new line']])])
+    eq_(data['Sheet1'][0][0], 'paragraph with tab(\t),    space, \nnew line')
+
+
 def get_fixtures(filename):
     return os.path.join("tests", "fixtures", filename)

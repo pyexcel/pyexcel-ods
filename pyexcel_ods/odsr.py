@@ -24,7 +24,7 @@
 # Thanks to grt for the fixes
 import math
 
-from odf import teletype
+from odf.teletype import extractText
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
 from odf.namespaces import OFFICENS
@@ -88,16 +88,10 @@ class ODSSheet(SheetReader):
 
     def __read_text_cell(self, cell):
         text_content = []
-        paragraphs = teletype.extractText(cell.getElementsByType(P))
+        paragraphs = cell.getElementsByType(P)
         # for each text node
         for paragraph in paragraphs:
-            data = ''
-            for node in paragraph.childNodes:
-                if (node.nodeType == 3):
-                    if PY2:
-                        data += unicode(node.data)
-                    else:
-                        data += node.data
+            data = extractText(paragraph)
             text_content.append(data)
         return '\n'.join(text_content)
 
