@@ -102,7 +102,7 @@ def test_issue_19():
     test_file = "pyexcel_81_ods_19.ods"
     data = get_data(get_fixtures(test_file),
                     skip_empty_rows=True)
-    eq_(data['product.template'][1][1], 'PRODUCT NAME PMP')
+    eq_(data['product.template'][1][1], 'PRODUCT NAME  PMP')
 
 
 def test_issue_83_ods_file_handle():
@@ -141,9 +141,7 @@ def test_pr_22():
     eq_(data['Sheet1'][0][0], 'paragraph with tab(\t),    space, \nnew line')
 
 
-def test_issue_20():
-    if not IN_TRAVIS:
-        raise SkipTest()
+def test_issue_23():
     pe.get_book(url="https://github.com/pyexcel/pyexcel-ods/raw/master/tests/fixtures/white_space.ods");  # flake8: noqa
 
 

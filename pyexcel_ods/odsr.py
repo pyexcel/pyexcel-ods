@@ -32,7 +32,7 @@ from odf.opendocument import load
 
 from pyexcel_io.book import BookReader
 from pyexcel_io.sheet import SheetReader
-from pyexcel_io._compact import OrderedDict, PY2
+from pyexcel_io._compact import OrderedDict, BytesIO
 
 import pyexcel_ods.converter as converter
 
@@ -105,6 +105,10 @@ class ODSBook(BookReader):
 
     def open_stream(self, file_stream, **keywords):
         """open ods file stream"""
+        if not hasattr(file_stream, 'seek'):
+            # Hei zipfile in odfpy would do a seek
+            # but stream from urlib cannot do seek
+            file_stream = BytesIO(file_stream.read())
         BookReader.open_stream(self, file_stream, **keywords)
         self._load_from_memory()
 
