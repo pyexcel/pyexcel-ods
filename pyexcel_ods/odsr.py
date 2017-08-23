@@ -24,6 +24,7 @@
 # Thanks to grt for the fixes
 import math
 
+from odf import teletype
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
 from odf.namespaces import OFFICENS
@@ -87,7 +88,7 @@ class ODSSheet(SheetReader):
 
     def __read_text_cell(self, cell):
         text_content = []
-        paragraphs = cell.getElementsByType(P)
+        paragraphs = teletype.extractText(cell.getElementsByType(P))
         # for each text node
         for paragraph in paragraphs:
             data = ''
