@@ -5,6 +5,9 @@ import psutil
 import pyexcel as pe
 from pyexcel_ods import get_data, save_data
 from nose.tools import raises, eq_
+from nose import SkipTest
+
+IN_TRAVIS = 'TRAVIS' in os.environ
 
 
 def test_bug_fix_for_issue_1():
@@ -136,6 +139,12 @@ def test_pr_22():
     data = get_data(test_file)
     # OrderedDict([(u'Sheet1', [[u'paragraph with tab,  space, new line']])])
     eq_(data['Sheet1'][0][0], 'paragraph with tab(\t),    space, \nnew line')
+
+
+def test_issue_20():
+    if not IN_TRAVIS:
+        raise SkipTest()
+    pe.get_book(url="https://github.com/pyexcel/pyexcel-ods/raw/master/tests/fixtures/white_space.ods");  # flake8: noqa
 
 
 def get_fixtures(filename):
