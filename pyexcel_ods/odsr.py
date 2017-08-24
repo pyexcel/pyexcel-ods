@@ -23,6 +23,7 @@
 
 # Thanks to grt for the fixes
 import math
+from io import UnsupportedOperation
 
 from odf.teletype import extractText
 from odf.table import TableRow, TableCell, Table
@@ -106,8 +107,15 @@ class ODSBook(BookReader):
     def open_stream(self, file_stream, **keywords):
         """open ods file stream"""
         if not hasattr(file_stream, 'seek'):
+            # python 2
             # Hei zipfile in odfpy would do a seek
             # but stream from urlib cannot do seek
+            import pdb; pdb.set_trace()
+            file_stream = BytesIO(file_stream.read())
+        try:
+            file_stream.seek(0)
+        except UnsupportedOperation:
+            # python 3
             file_stream = BytesIO(file_stream.read())
         BookReader.open_stream(self, file_stream, **keywords)
         self._load_from_memory()
