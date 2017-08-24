@@ -142,6 +142,8 @@ def test_pr_22():
 
 
 def test_issue_23():
+    if not IN_TRAVIS:
+        raise SkipTest()
     pe.get_book(url="https://github.com/pyexcel/pyexcel-ods/raw/master/tests/fixtures/white_space.ods");  # flake8: noqa
 
 

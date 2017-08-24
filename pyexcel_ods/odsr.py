@@ -110,7 +110,6 @@ class ODSBook(BookReader):
             # python 2
             # Hei zipfile in odfpy would do a seek
             # but stream from urlib cannot do seek
-            import pdb; pdb.set_trace()
             file_stream = BytesIO(file_stream.read())
         try:
             file_stream.seek(0)
