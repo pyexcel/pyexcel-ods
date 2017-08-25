@@ -9,6 +9,8 @@ Updated
 
 #. `#23 <https://github.com/pyexcel/pyexcel-ods/issues/23>`_, handle unseekable
    stream given by http response
+#. PR `#22 <https://github.com/pyexcel/pyexcel-ods/pull/22>`_, hanle white
+   spaces in a cell.
 
 0.4.0 - 19.06.2017
 --------------------------------------------------------------------------------
