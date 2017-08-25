@@ -15,8 +15,8 @@ DESCRIPTION = (
     ''
 )
 URL = 'https://github.com/pyexcel/pyexcel-ods'
-DOWNLOAD_URL = '%s/archive/0.4.0.tar.gz' % URL
-FILES = ['README.rst',  'CHANGELOG.rst']
+DOWNLOAD_URL = '%s/archive/0.4.1.tar.gz' % URL
+FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
     'python'
 ]
