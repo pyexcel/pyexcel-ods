@@ -24,25 +24,6 @@ def test_bug_fix_for_issue_2():
     assert new_data["Sheet 2"] == [[u'row 1', u'H\xe9ll\xf4!', u'Hol\xc1!']]
 
 
-def test_date_util_parse():
-    from pyexcel_ods.converter import date_value
-    value = "2015-08-17T19:20:00"
-    d = date_value(value)
-    assert d.strftime("%Y-%m-%dT%H:%M:%S") == "2015-08-17T19:20:00"
-    value = "2015-08-17"
-    d = date_value(value)
-    assert d.strftime("%Y-%m-%d") == "2015-08-17"
-    value = "2015-08-17T19:20:59.999999"
-    d = date_value(value)
-    assert d.strftime("%Y-%m-%dT%H:%M:%S") == "2015-08-17T19:20:59"
-    value = "2015-08-17T19:20:59.99999"
-    d = date_value(value)
-    assert d.strftime("%Y-%m-%dT%H:%M:%S") == "2015-08-17T19:20:59"
-    value = "2015-08-17T19:20:59.999999999999999"
-    d = date_value(value)
-    assert d.strftime("%Y-%m-%dT%H:%M:%S") == "2015-08-17T19:20:59"
-
-
 @raises(Exception)
 def test_invalid_date():
     from pyexcel_ods.ods import date_value

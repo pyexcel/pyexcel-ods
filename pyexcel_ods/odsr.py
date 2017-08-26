@@ -22,8 +22,6 @@
 # limitations under the License.
 
 # Thanks to grt for the fixes
-from io import UnsupportedOperation
-
 from odf.teletype import extractText
 from odf.table import TableRow, TableCell, Table
 from odf.text import P
@@ -32,7 +30,7 @@ from odf.opendocument import load
 
 from pyexcel_io.book import BookReader
 from pyexcel_io.sheet import SheetReader
-from pyexcel_io._compact import OrderedDict, BytesIO
+from pyexcel_io._compact import OrderedDict
 import pyexcel_io.service as service
 
 
@@ -104,16 +102,6 @@ class ODSBook(BookReader):
 
     def open_stream(self, file_stream, **keywords):
         """open ods file stream"""
-        if not hasattr(file_stream, 'seek'):
-            # python 2
-            # Hei zipfile in odfpy would do a seek
-            # but stream from urlib cannot do seek
-            file_stream = BytesIO(file_stream.read())
-        try:
-            file_stream.seek(0)
-        except UnsupportedOperation:
-            # python 3
-            file_stream = BytesIO(file_stream.read())
         BookReader.open_stream(self, file_stream, **keywords)
         self._load_from_memory()
 

@@ -17,7 +17,7 @@ from odf.opendocument import OpenDocumentSpreadsheet
 from pyexcel_io.book import BookWriter
 from pyexcel_io.sheet import SheetWriter
 
-import pyexcel_ods.converter as converter
+import pyexcel_io.service as converter
 
 PY2 = sys.version_info[0] == 2
 
