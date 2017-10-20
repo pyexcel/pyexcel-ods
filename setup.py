@@ -1,5 +1,6 @@
 # Template by setupmobans
 import os
+import sys
 import codecs
 from shutil import rmtree
 from setuptools import setup, find_packages, Command
