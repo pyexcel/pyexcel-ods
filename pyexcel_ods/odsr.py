@@ -88,8 +88,10 @@ class ODSSheet(SheetReader):
         paragraphs = cell.getElementsByType(P)
         # for each text node
         for paragraph in paragraphs:
-            data = extractText(paragraph)
-            text_content.append(data)
+            name_space, tag = paragraph.parentNode.qname
+            if tag != str('annotation'):
+                data = extractText(paragraph)
+                text_content.append(data)
         return '\n'.join(text_content)
 
 

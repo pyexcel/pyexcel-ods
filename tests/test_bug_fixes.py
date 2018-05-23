@@ -128,5 +128,11 @@ def test_issue_23():
     pe.get_book(url="https://github.com/pyexcel/pyexcel-ods/raw/master/tests/fixtures/white_space.ods");  # flake8: noqa
 
 
+def test_issue_24():
+    test_file = get_fixtures("comment-in-cell.ods")
+    data = get_data(test_file)
+    print(data)
+
+
 def get_fixtures(filename):
     return os.path.join("tests", "fixtures", filename)
