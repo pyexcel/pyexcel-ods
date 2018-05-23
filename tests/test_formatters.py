@@ -5,8 +5,6 @@ from nose.tools import eq_
 import pyexcel as pe
 
 
-
-
 class TestAutoDetectInt:
     def setUp(self):
         self.content = [[1, 2, 3.1]]
