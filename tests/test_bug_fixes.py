@@ -131,6 +131,12 @@ def test_issue_23():
 def test_issue_24():
     test_file = get_fixtures("comment-in-cell.ods")
     data = get_data(test_file)
+    eq_(data['Sheet1'], [['test']])
+
+
+def test_issue_25():
+    test_file = get_fixtures("comment-in-cell.ods")
+    data = get_data(test_file)
     print(data)
 
 
