@@ -5,6 +5,8 @@ releases:
   - action: added
     details:
     - '`#24`, ignore comments(<office:comment>) in cell'
+    - '`#27`, exception raised when currency type is missing'
+    - fix odfpy version on 1.3.5.
   date: unreleased
   version: 0.5.3
 - changes:

@@ -9,6 +9,9 @@ added
 
 #. `#24 <https://github.com/pyexcel/pyexcel-ods/issues/24>`_, ignore
    comments(<office:comment>) in cell
+#. `#27 <https://github.com/pyexcel/pyexcel-ods/issues/27>`_, exception raised
+   when currency type is missing
+#. fix odfpy version on 1.3.5.
 
 0.5.2 - 23.10.2017
 --------------------------------------------------------------------------------
