@@ -134,10 +134,10 @@ def test_issue_24():
     eq_(data['Sheet1'], [['test']])
 
 
-def test_issue_25():
-    test_file = get_fixtures("comment-in-cell.ods")
-    data = get_data(test_file)
-    print(data)
+def test_issue_27():
+    test_file = get_fixtures("issue_27.ods")
+    data = get_data(test_file, skip_empty_rows=True)
+    eq_(data['VGPMX'], [['', 'Cost Basis', '0']])
 
 
 def get_fixtures(filename):

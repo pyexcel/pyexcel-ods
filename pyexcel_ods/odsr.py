@@ -69,7 +69,10 @@ class ODSSheet(SheetReader):
         elif cell_type == "currency":
             value = cell.getAttrNS(OFFICENS, value_token)
             currency = cell.getAttrNS(OFFICENS, cell_type)
-            ret = value + ' ' + currency
+            if currency:
+                ret = value + ' ' + currency
+            else:
+                ret = value
         else:
             if cell_type in service.VALUE_CONVERTERS:
                 value = cell.getAttrNS(OFFICENS, value_token)

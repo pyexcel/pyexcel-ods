@@ -36,7 +36,7 @@ CLASSIFIERS = [
 
 INSTALL_REQUIRES = [
     'pyexcel-io>=0.5.3',
-    'odfpy>=1.3.3',
+    'odfpy==1.3.5',
 ]
 SETUP_COMMANDS = {}
 
