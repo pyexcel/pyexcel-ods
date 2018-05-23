@@ -1,0 +1,177 @@
+name: pyexcel-ods
+organisation: pyexcel
+releases:
+- changes:
+  - action: added
+    details:
+    - '`#24`, ignore comments(<office:comment>) in cell'
+  date: unreleased
+  version: 0.5.3
+- changes:
+  - action: updated
+    details:
+    - pyexcel `pyexcel#105`, remove gease  from setup_requires, introduced by 0.5.1.
+    - remove python2.6 test support
+  date: 23.10.2017
+  version: 0.5.2
+- changes:
+  - action: added
+    details:
+    - '`pyexcel#103`, include LICENSE file  in MANIFEST.in, meaning LICENSE file will
+      appear in the released tar ball.'
+  date: 20.10.2017
+  version: 0.5.1
+- changes:
+  - action: Updated
+    details:
+    - put dependency on pyexcel-io 0.5.0, which uses cStringIO instead of StringIO.  Hence,
+      there will be performance boost in handling files in memory.
+  - action: Relocated
+    details:
+    - All ods type conversion code lives in pyexcel_io.service module
+  date: 30.08.2017
+  version: 0.5.0
+- changes:
+  - action: Updated
+    details:
+    - '`pyexcel#pyexcel-ods#23`, handle unseekable  stream given by http response'
+    - PR `pyexcel#pyexcel-ods#PR#22`, hanle white  spaces in a cell.
+  date: 25.08.2017
+  version: 0.4.1
+- changes:
+  - action: Updated
+    details:
+    - '`pyexcel#pyexcel-xlsx#14`, close file  handle'
+    - pyexcel-io plugin interface now updated to use  `lml <https://github.com/chfw/lml>`_.
+  date: 19.06.2017
+  version: 0.4.0
+- changes:
+  - action: Updated
+    details:
+    - issue `pyexcel#pyexcel-odsr#19`, not all texts  in a multi-node cell were extracted.
+  date: 07.05.2017
+  version: 0.3.3
+- changes:
+  - action: Updated
+    details:
+    - issue `pyexcel#pyexcel-ods#17`, empty  new line is ignored
+    - issue `pyexcel#pyexcel-ods#6`, PT288H00M00S  is valid duration
+  date: 13.04.2017
+  version: 0.3.2
+- changes:
+  - action: Added
+    details:
+    - Recognize currency type
+  date: 02.02.2017
+  version: 0.3.1
+- changes:
+  - action: Updated
+    details:
+    - Code refactoring with pyexcel-io v 0.3.0
+  date: 22.12.2016
+  version: 0.3.0
+- changes:
+  - action: Updated
+    details:
+    - issue `pyexcel#pyexcel-ods#14`, index error  when reading a ods file that has
+      non-uniform columns repeated property.
+  date: 24.10.2016
+  version: 0.2.2
+- changes:
+  - action: Added
+    details:
+    - 'support pagination. two pairs: start_row, row_limit and start_column,  column_limit
+      help you deal with large files.'
+    - use odfpy 1.3.3 as compulsory package. offically support python 3
+  date: 31.08.2016
+  version: 0.2.1
+- changes:
+  - action: Added
+    details:
+    - By default, `float` will be converted to `int` where fits. `auto_detect_int`,  a
+      flag to switch off the autoatic conversion from `float` to `int`.
+    - '''library=pyexcel-ods'' was added so as to inform pyexcel to use it instead
+      of  other libraries, in the situation where multiple plugins were installed.'
+  - action: Updated
+    details:
+    - support the auto-import feature of pyexcel-io 0.2.0
+  date: 01.06.2016
+  version: 0.2.0
+- changes:
+  - action: Added
+    details:
+    - '''streaming'' is an extra option given to get_data. Only when ''streaming''  is
+      explicitly set to True, the data will be consisted of generators,  hence will
+      break your existing code.'
+    - uses yield in to_array and returns a generator
+    - 'support multi-line text cell #5'
+    - feature migration from pyexcel-ods3 pyexcel/pyexcel-ods3#5
+  - action: Updated
+    details:
+    - compatibility with pyexcel-io 0.1.1
+  date: 30.01.2016
+  version: 0.1.1
+- changes:
+  - action: Updated
+    details:
+    - 'Bug fix: excessive trailing columns with empty values'
+  date: 10.10.2015
+  version: 0.0.12
+- changes:
+  - action: Updated
+    details:
+    - Complete fix for libreoffice datetime field
+  date: 26.09.2015
+  version: 0.0.11
+- changes:
+  - action: Updated
+    details:
+    - 'Bug fix: date field could have datetime from libreoffice'
+  date: 15.09.2015
+  version: 0.0.10
+- changes:
+  - action: Updated
+    details:
+    - 'Bug fix: utf-8 string throw unicode exceptions'
+  date: 21.08.2015
+  version: 0.0.9
+- changes:
+  - action: Updated
+    details:
+    - Pin dependency odfpy 0.9.6 to avoid buggy odfpy 1.3.0
+  date: 28.06.2015
+  version: 0.0.8
+- changes:
+  - action: Updated
+    details:
+    - 'Bug fix: "number-columns-repeated" is now respected'
+  date: 28.05.2015
+  version: 0.0.7
+- changes:
+  - action: Updated
+    details:
+    - get_data and save_data are seen across pyexcel-* extensions. remember them  once
+      and use them across all extensions.
+  date: 21.05.2015
+  version: 0.0.6
+- changes:
+  - action: Added
+    details:
+    - Loads only one sheet from a multiple sheet book
+    - Use New BSD License
+  date: 22.02.2015
+  version: 0.0.5
+- changes:
+  - action: Updated
+    details:
+    - IO interface update as pyexcel-io introduced keywords.
+    - initial release
+  date: 14.12.2014
+  version: 0.0.4
+- changes:
+  - action: Updated
+    details:
+    - IO interface update as pyexcel-io introduced keywords.
+    - initial release
+  date: 08.12.2014
+  version: 0.0.3
