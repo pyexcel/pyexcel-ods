@@ -5,11 +5,13 @@ import os
 import sys
 import codecs
 from shutil import rmtree
-from setuptools import setup, find_packages, Command
+
+from setuptools import Command, setup, find_packages
+
 
 NAME = 'pyexcel-ods'
 AUTHOR = 'C.W.'
-VERSION = '0.5.3'
+VERSION = '0.5.4'
 EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
@@ -19,7 +21,7 @@ URL = 'https://github.com/pyexcel/pyexcel-ods'
 DOWNLOAD_URL = '%s/archive/0.5.3.tar.gz' % URL
 FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
-    'python'
+    'python',
 ]
 
 CLASSIFIERS = [
@@ -35,7 +37,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'pyexcel-io>=0.5.3',
+    'pyexcel-io>=0.5.9',
     'odfpy==1.3.5',
 ]
 SETUP_COMMANDS = {}
