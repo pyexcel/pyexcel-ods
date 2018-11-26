@@ -4,6 +4,7 @@ import os
 import psutil
 import pyexcel as pe
 from pyexcel_ods import get_data, save_data
+from pyexcel_io.exceptions import IntegerAccuracyLossError
 from nose.tools import raises, eq_
 from nose import SkipTest
 
@@ -125,7 +126,7 @@ def test_pr_22():
 def test_issue_23():
     if not IN_TRAVIS:
         raise SkipTest()
-    pe.get_book(url="https://github.com/pyexcel/pyexcel-ods/raw/master/tests/fixtures/white_space.ods");  # flake8: noqa
+    pe.get_book(url="https://github.com/pyexcel/pyexcel-ods/raw/master/tests/fixtures/white_space.ods")  # noqa: E501
 
 
 def test_issue_24():
@@ -138,6 +139,24 @@ def test_issue_27():
     test_file = get_fixtures("issue_27.ods")
     data = get_data(test_file, skip_empty_rows=True)
     eq_(data['VGPMX'], [['', 'Cost Basis', '0']])
+
+
+def test_issue_30():
+    test_file = "issue_30.ods"
+    sheet = pe.Sheet()
+    sheet[0, 0] = 999999999999999
+    sheet.save_as(test_file)
+    sheet2 = pe.get_sheet(file_name=test_file)
+    eq_(sheet[0, 0], sheet2[0, 0])
+    os.unlink(test_file)
+
+
+@raises(IntegerAccuracyLossError)
+def test_issue_30_precision_loss():
+    test_file = "issue_30_2.ods"
+    sheet = pe.Sheet()
+    sheet[0, 0] = 9999999999999999
+    sheet.save_as(test_file)
 
 
 def get_fixtures(filename):
