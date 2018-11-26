@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
+import codecs
 # Template by pypi-mobans
 import os
 import sys
-import codecs
 from shutil import rmtree
 
-from setuptools import Command, setup, find_packages
-
+from setuptools import Command, find_packages, setup
 
 NAME = 'pyexcel-ods'
 AUTHOR = 'C.W.'

@@ -1,19 +1,21 @@
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
 import os
+
 import psutil
 import pyexcel as pe
-from pyexcel_ods import get_data, save_data
-from pyexcel_io.exceptions import IntegerAccuracyLossError
-from nose.tools import raises, eq_
 from nose import SkipTest
+from nose.tools import eq_, raises
+from pyexcel_io.exceptions import IntegerAccuracyLossError
 
-IN_TRAVIS = 'TRAVIS' in os.environ
+from pyexcel_ods import get_data, save_data
+
+IN_TRAVIS = "TRAVIS" in os.environ
 
 
 def test_bug_fix_for_issue_1():
     data = get_data(get_fixtures("repeated.ods"))
-    eq_(data["Sheet1"], [['repeated', 'repeated', 'repeated', 'repeated']])
+    eq_(data["Sheet1"], [["repeated", "repeated", "repeated", "repeated"]])
 
 
 def test_bug_fix_for_issue_2():
@@ -22,12 +24,13 @@ def test_bug_fix_for_issue_2():
     data.update({"Sheet 2": [[u"row 1", u"Héllô!", u"HolÁ!"]]})
     save_data("your_file.ods", data)
     new_data = get_data("your_file.ods")
-    assert new_data["Sheet 2"] == [[u'row 1', u'H\xe9ll\xf4!', u'Hol\xc1!']]
+    assert new_data["Sheet 2"] == [[u"row 1", u"H\xe9ll\xf4!", u"Hol\xc1!"]]
 
 
 @raises(Exception)
 def test_invalid_date():
     from pyexcel_ods.ods import date_value
+
     value = "2015-08-"
     date_value(value)
 
@@ -35,30 +38,27 @@ def test_invalid_date():
 @raises(Exception)
 def test_fake_date_time_10():
     from pyexcel_ods.ods import date_value
+
     date_value("1234567890")
 
 
 @raises(Exception)
 def test_fake_date_time_19():
     from pyexcel_ods.ods import date_value
+
     date_value("1234567890123456789")
 
 
 @raises(Exception)
 def test_fake_date_time_20():
     from pyexcel_ods.ods import date_value
+
     date_value("12345678901234567890")
 
 
 def test_issue_13():
     test_file = "test_issue_13.ods"
-    data = [
-        [1, 2],
-        [],
-        [],
-        [],
-        [3, 4]
-    ]
+    data = [[1, 2], [], [], [], [3, 4]]
     save_data(test_file, {test_file: data})
     written_data = get_data(test_file, skip_empty_rows=False)
     eq_(data, written_data[test_file])
@@ -68,23 +68,20 @@ def test_issue_13():
 def test_issue_14():
     # pyexcel issue 61
     test_file = "issue_61.ods"
-    data = get_data(get_fixtures(test_file),
-                    skip_empty_rows=True)
-    eq_(data['S-LMC'], [[u'aaa'], [0]])
+    data = get_data(get_fixtures(test_file), skip_empty_rows=True)
+    eq_(data["S-LMC"], [[u"aaa"], [0]])
 
 
 def test_issue_6():
     test_file = "12_day_as_time.ods"
-    data = get_data(get_fixtures(test_file),
-                    skip_empty_rows=True)
-    eq_(data['Sheet1'][0][0].days, 12)
+    data = get_data(get_fixtures(test_file), skip_empty_rows=True)
+    eq_(data["Sheet1"][0][0].days, 12)
 
 
 def test_issue_19():
     test_file = "pyexcel_81_ods_19.ods"
-    data = get_data(get_fixtures(test_file),
-                    skip_empty_rows=True)
-    eq_(data['product.template'][1][1], 'PRODUCT NAME  PMP')
+    data = get_data(get_fixtures(test_file), skip_empty_rows=True)
+    eq_(data["product.template"][1][1], "PRODUCT NAME  PMP")
 
 
 def test_issue_83_ods_file_handle():
@@ -95,7 +92,7 @@ def test_issue_83_ods_file_handle():
     open_files_l1 = proc.open_files()
 
     # start with a csv file
-    data = pe.iget_array(file_name=test_file, library='pyexcel-ods')
+    data = pe.iget_array(file_name=test_file, library="pyexcel-ods")
     open_files_l2 = proc.open_files()
     delta = len(open_files_l2) - len(open_files_l1)
     # cannot catch open file handle
@@ -120,25 +117,27 @@ def test_pr_22():
     test_file = get_fixtures("white_space.ods")
     data = get_data(test_file)
     # OrderedDict([(u'Sheet1', [[u'paragraph with tab,  space, new line']])])
-    eq_(data['Sheet1'][0][0], 'paragraph with tab(\t),    space, \nnew line')
+    eq_(data["Sheet1"][0][0], "paragraph with tab(\t),    space, \nnew line")
 
 
 def test_issue_23():
     if not IN_TRAVIS:
         raise SkipTest()
-    pe.get_book(url="https://github.com/pyexcel/pyexcel-ods/raw/master/tests/fixtures/white_space.ods")  # noqa: E501
+    pe.get_book(
+        url="https://github.com/pyexcel/pyexcel-ods/raw/master/tests/fixtures/white_space.ods"
+    )  # noqa: E501
 
 
 def test_issue_24():
     test_file = get_fixtures("comment-in-cell.ods")
     data = get_data(test_file)
-    eq_(data['Sheet1'], [['test']])
+    eq_(data["Sheet1"], [["test"]])
 
 
 def test_issue_27():
     test_file = get_fixtures("issue_27.ods")
     data = get_data(test_file, skip_empty_rows=True)
-    eq_(data['VGPMX'], [['', 'Cost Basis', '0']])
+    eq_(data["VGPMX"], [["", "Cost Basis", "0"]])
 
 
 def test_issue_30():
