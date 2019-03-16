@@ -4,8 +4,25 @@
 import os
 import sys
 import codecs
+import locale
+import platform
 from shutil import rmtree
-from setuptools import setup, find_packages, Command
+
+from setuptools import Command, setup, find_packages
+
+
+# Work around mbcs bug in distutils.
+# http://bugs.python.org/issue10945
+# This work around is only if a project supports Python < 3.4
+
+# Work around for locale not being set
+try:
+    lc = locale.getlocale()
+    pf = platform.system()
+    if pf != 'Windows' and lc == (None, None):
+        locale.setlocale(locale.LC_ALL, 'C.UTF-8')
+except (ValueError, UnicodeError, locale.Error):
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 NAME = 'pyexcel-ods'
 AUTHOR = 'C.W.'
@@ -19,7 +36,7 @@ URL = 'https://github.com/pyexcel/pyexcel-ods'
 DOWNLOAD_URL = '%s/archive/0.4.1.tar.gz' % URL
 FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
-    'python'
+    'python',
 ]
 
 CLASSIFIERS = [
@@ -157,6 +174,7 @@ def filter_out_test_code(file_handle):
 
 if __name__ == '__main__':
     setup(
+        test_suite="tests",
         name=NAME,
         author=AUTHOR,
         version=VERSION,
