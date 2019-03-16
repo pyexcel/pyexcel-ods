@@ -1,9 +1,10 @@
 overrides: "pyexcel.yaml"
 name: "pyexcel-ods"
 nick_name: ods
-version: 0.5.4
-current_version: 0.5.4
-release: 0.5.4
+version: 0.5.5
+current_version: 0.5.5
+release: 0.5.5
+copyright_year: 2015-2019
 file_type: ods
 dependencies:
   - pyexcel-io>=0.5.10

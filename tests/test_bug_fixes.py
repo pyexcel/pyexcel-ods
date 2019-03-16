@@ -2,12 +2,12 @@
 # -*- encoding: utf-8 -*-
 import os
 
-import psutil
-import pyexcel as pe
 from nose import SkipTest
 from nose.tools import eq_, raises
-from pyexcel_io.exceptions import IntegerAccuracyLossError
 
+import psutil
+import pyexcel as pe
+from pyexcel_io.exceptions import IntegerAccuracyLossError
 from pyexcel_ods import get_data, save_data
 
 IN_TRAVIS = "TRAVIS" in os.environ
