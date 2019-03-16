@@ -21,21 +21,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Thanks to grt for the fixes
-from odf.teletype import extractText
-from odf.table import TableRow, TableCell, Table
-from odf.text import P
+import pyexcel_io.service as service
 from odf.namespaces import OFFICENS
 from odf.opendocument import load
+from odf.table import Table, TableCell, TableRow
 
+# Thanks to grt for the fixes
+from odf.teletype import extractText
+from odf.text import P
+from pyexcel_io._compact import OrderedDict
 from pyexcel_io.book import BookReader
 from pyexcel_io.sheet import SheetReader
-from pyexcel_io._compact import OrderedDict
-import pyexcel_io.service as service
 
 
 class ODSSheet(SheetReader):
     """native ods sheet"""
+
     def __init__(self, sheet, auto_detect_int=True, **keywords):
         SheetReader.__init__(self, sheet, **keywords)
         self.__auto_detect_int = auto_detect_int
@@ -69,12 +70,15 @@ class ODSSheet(SheetReader):
         elif cell_type == "currency":
             value = cell.getAttrNS(OFFICENS, value_token)
             currency = cell.getAttrNS(OFFICENS, cell_type)
-            ret = value + ' ' + currency
+            if currency:
+                ret = value + " " + currency
+            else:
+                ret = value
         else:
             if cell_type in service.VALUE_CONVERTERS:
                 value = cell.getAttrNS(OFFICENS, value_token)
                 n_value = service.VALUE_CONVERTERS[cell_type](value)
-                if cell_type == 'float' and self.__auto_detect_int:
+                if cell_type == "float" and self.__auto_detect_int:
                     if service.has_no_digits_in_float(n_value):
                         n_value = int(n_value)
                 ret = n_value
@@ -88,13 +92,16 @@ class ODSSheet(SheetReader):
         paragraphs = cell.getElementsByType(P)
         # for each text node
         for paragraph in paragraphs:
-            data = extractText(paragraph)
-            text_content.append(data)
-        return '\n'.join(text_content)
+            name_space, tag = paragraph.parentNode.qname
+            if tag != str("annotation"):
+                data = extractText(paragraph)
+                text_content.append(data)
+        return "\n".join(text_content)
 
 
 class ODSBook(BookReader):
     """read ods book"""
+
     def open(self, file_name, **keywords):
         """open ods file"""
         BookReader.open(self, file_name, **keywords)
@@ -108,8 +115,11 @@ class ODSBook(BookReader):
     def read_sheet_by_name(self, sheet_name):
         """read a named sheet"""
         tables = self._native_book.spreadsheet.getElementsByType(Table)
-        rets = [table for table in tables
-                if table.getAttribute('name') == sheet_name]
+        rets = [
+            table
+            for table in tables
+            if table.getAttribute("name") == sheet_name
+        ]
         if len(rets) == 0:
             raise ValueError("%s cannot be found" % sheet_name)
         else:
@@ -122,8 +132,9 @@ class ODSBook(BookReader):
         if sheet_index < length:
             return self.read_sheet(tables[sheet_index])
         else:
-            raise IndexError("Index %d of out bound %d" % (
-                sheet_index, length))
+            raise IndexError(
+                "Index %d of out bound %d" % (sheet_index, length)
+            )
 
     def read_all(self):
         """read all sheets"""

@@ -1,11 +1,11 @@
 overrides: "pyexcel.yaml"
 name: "pyexcel-ods"
 nick_name: ods
-version: 0.4.2
-current_version: 0.4.2
-release: 0.4.1
+version: 0.5.5
+current_version: 0.5.5
+release: 0.5.4
 file_type: ods
 dependencies:
-  - pyexcel-io>=0.4.0
-  - odfpy>=1.3.3
+  - pyexcel-io>=0.5.10
+  - odfpy==1.3.5
 description: A wrapper library to read, manipulate and write data in ods format

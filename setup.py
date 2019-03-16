@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
-# Template by pypi-mobans
-import os
-import sys
 import codecs
 import locale
+# Template by pypi-mobans
+import os
 import platform
+import sys
 from shutil import rmtree
 
-from setuptools import Command, setup, find_packages
-
+from setuptools import Command, find_packages, setup
 
 # Work around mbcs bug in distutils.
 # http://bugs.python.org/issue10945
@@ -26,14 +25,14 @@ except (ValueError, UnicodeError, locale.Error):
 
 NAME = 'pyexcel-ods'
 AUTHOR = 'C.W.'
-VERSION = '0.4.2'
+VERSION = '0.5.5'
 EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
     'A wrapper library to read, manipulate and write data in ods format'
 )
 URL = 'https://github.com/pyexcel/pyexcel-ods'
-DOWNLOAD_URL = '%s/archive/0.4.1.tar.gz' % URL
+DOWNLOAD_URL = '%s/archive/0.5.4.tar.gz' % URL
 FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
     'python',
@@ -52,8 +51,8 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'pyexcel-io>=0.4.0',
-    'odfpy>=1.3.3',
+    'pyexcel-io>=0.5.10',
+    'odfpy==1.3.5',
 ]
 SETUP_COMMANDS = {}
 
@@ -64,8 +63,8 @@ EXTRAS_REQUIRE = {
 # You do not need to read beyond this line
 PUBLISH_COMMAND = '{0} setup.py sdist bdist_wheel upload -r pypi'.format(
     sys.executable)
-GS_COMMAND = ('gs pyexcel-ods v0.4.1 ' +
-              "Find 0.4.1 in changelog for more details")
+GS_COMMAND = ('gs pyexcel-ods v0.5.4 ' +
+              "Find 0.5.4 in changelog for more details")
 NO_GS_MESSAGE = ('Automatic github release is disabled. ' +
                  'Please install gease to enable it.')
 UPLOAD_FAILED_MSG = (
