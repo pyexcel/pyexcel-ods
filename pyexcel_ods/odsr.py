@@ -22,6 +22,10 @@
 # limitations under the License.
 
 import pyexcel_io.service as service
+from pyexcel_io._compact import OrderedDict
+from pyexcel_io.book import BookReader
+from pyexcel_io.sheet import SheetReader
+
 from odf.namespaces import OFFICENS
 from odf.opendocument import load
 from odf.table import Table, TableCell, TableRow
@@ -29,9 +33,6 @@ from odf.table import Table, TableCell, TableRow
 # Thanks to grt for the fixes
 from odf.teletype import extractText
 from odf.text import P
-from pyexcel_io._compact import OrderedDict
-from pyexcel_io.book import BookReader
-from pyexcel_io.sheet import SheetReader
 
 
 class ODSSheet(SheetReader):
