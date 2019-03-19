@@ -1,9 +1,8 @@
 import os
 from textwrap import dedent
 
-from nose.tools import eq_
-
 import pyexcel as pe
+from nose.tools import eq_
 
 
 class TestAutoDetectInt:

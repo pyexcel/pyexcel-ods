@@ -25,14 +25,14 @@ except (ValueError, UnicodeError, locale.Error):
 
 NAME = 'pyexcel-ods'
 AUTHOR = 'C.W.'
-VERSION = '0.5.5'
+VERSION = '0.5.6'
 EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
     'A wrapper library to read, manipulate and write data in ods format'
 )
 URL = 'https://github.com/pyexcel/pyexcel-ods'
-DOWNLOAD_URL = '%s/archive/0.5.5.tar.gz' % URL
+DOWNLOAD_URL = '%s/archive/0.5.6.tar.gz' % URL
 FILES = ['README.rst', 'CHANGELOG.rst']
 KEYWORDS = [
     'python',
@@ -51,8 +51,8 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'pyexcel-io>=0.5.10',
-    'odfpy==1.3.5',
+    'pyexcel-io>=0.5.16',
+    'odfpy>=1.3.5',
 ]
 SETUP_COMMANDS = {}
 
@@ -63,8 +63,8 @@ EXTRAS_REQUIRE = {
 # You do not need to read beyond this line
 PUBLISH_COMMAND = '{0} setup.py sdist bdist_wheel upload -r pypi'.format(
     sys.executable)
-GS_COMMAND = ('gs pyexcel-ods v0.5.5 ' +
-              "Find 0.5.5 in changelog for more details")
+GS_COMMAND = ('gs pyexcel-ods v0.5.6 ' +
+              "Find 0.5.6 in changelog for more details")
 NO_GS_MESSAGE = ('Automatic github release is disabled. ' +
                  'Please install gease to enable it.')
 UPLOAD_FAILED_MSG = (
