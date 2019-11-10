@@ -7,7 +7,7 @@ DESCRIPTION = (
 #
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
-# http://www.sphinx-doc.org/en/master/config
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Path setup --------------------------------------------------------------
 
@@ -21,9 +21,9 @@ DESCRIPTION = (
 
 # -- Project information -----------------------------------------------------
 
-project = 'pyexcel'
-copyright = 'copyright 2015-2019 Onni Software Ltd.'
-author = 'Onni Software Ltd.'
+project = 'pyexcel-ods'
+copyright = '2015-2019 Onni Software Ltd.'
+author = 'C.W.'
 # The short X.Y version
 version = '0.5.6'
 # The full version, including alpha/beta/rc tags
@@ -68,7 +68,7 @@ html_static_path = ['_static']
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {'https://docs.python.org/3/': None}
 # TODO: html_theme not configurable upstream
 html_theme = 'default'
 
@@ -83,3 +83,4 @@ texinfo_documents = [
 intersphinx_mapping.update({
     'pyexcel': ('http://pyexcel.readthedocs.io/en/latest/', None),
 })
+master_doc = "index"
