@@ -5,6 +5,9 @@ pyexcel-ods - Let you focus on data, instead of ods format
 .. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
    :target: https://www.patreon.com/chfw
 
+.. image:: https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg
+   :target: https://awesome-python.com/#specific-formats-processing
+
 .. image:: https://travis-ci.org/pyexcel/pyexcel-ods.svg?branch=master
    :target: http://travis-ci.org/pyexcel/pyexcel-ods
 
@@ -30,6 +33,24 @@ ods format using python 2.6 and python 2.7. You are likely to use it with
 depends on ezodf and lxml. `pyexcel-odsr <https://github.com/pyexcel/pyexcel-odsr>`_
 is the other sister library that has no external dependency but do ods reading only
 
+Support the project
+================================================================================
+
+If your company has embedded pyexcel and its components into a revenue generating
+product, please support me on github, `patreon <https://www.patreon.com/bePatron?u=5537627>`_
+or `bounty source <https://salt.bountysource.com/teams/chfw-pyexcel>`_ to maintain
+the project and develop it further.
+
+If you are an individual, you are welcome to support me too and for however long
+you feel like. As my backer, you will receive
+`early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
+
+And your issues will get prioritized if you would like to become my patreon as `pyexcel pro user`.
+
+With your financial support, I will be able to invest
+a little bit more time in coding, documentation and writing interesting posts.
+
+
 Known constraints
 ==================
 
@@ -53,24 +74,6 @@ or clone it and install it:
     $ git clone https://github.com/pyexcel/pyexcel-ods.git
     $ cd pyexcel-ods
     $ python setup.py install
-
-Support the project
-================================================================================
-
-If your company has embedded pyexcel and its components into a revenue generating
-product, please support me on `github <https://github.com/sponsors/chfw>`_, `patreon <https://www.patreon.com/bePatron?u=5537627>`_
-or `bounty source <https://salt.bountysource.com/teams/chfw-pyexcel>`_ to maintain
-the project and develop it further.
-
-If you are an individual, you are welcome to support me too and for however long
-you feel like. As my backer, you will receive
-`early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
-
-And your issues will get prioritized if you would like to become my patreon as `pyexcel pro user`.
-
-With your financial support, I will be able to invest
-a little bit more time in coding, documentation and writing interesting posts.
-
 
 Usage
 ================================================================================
@@ -353,18 +356,27 @@ On Windows systems, please issue this command::
 
     > test.bat
 
-How to update test environment and update documentation
+
+Before you commit
+------------------------------
+
+Please run::
+
+    $ make format
+
+so as to beautify your code otherwise travis-ci may fail your unit test.
+
+
+And make sure you would have run moban command
 ---------------------------------------------------------
 
 Additional steps are required:
 
 #. pip install moban
 #. make your changes in `.moban.d` directory, then issue command `moban`
+#. moban
 
-What is pyexcel-commons
----------------------------------
-
-Many information that are shared across pyexcel projects, such as: this developer guide, license info, etc. are stored in `pyexcel-commons` project.
+otherwise travis-ci may also fail your unit test.
 
 What is .moban.d
 ---------------------------------
