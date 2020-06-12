@@ -9,6 +9,10 @@ file_type: ods
 dependencies:
   - pyexcel-io>=0.5.16
   - odfpy>=1.3.5
+test_dependencies:
+  - pyexcel
+  - psutil
+  - pyexcel-xls
 description: A wrapper library to read, manipulate and write data in ods format
 python_requires: ">=3.6"
 min_python_version: "3.6"
