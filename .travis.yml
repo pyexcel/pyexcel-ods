@@ -4,11 +4,13 @@ language: python
 notifications:
   email: false
 python:
-  - 3.8-dev
+  - 3.8
   - 3.7
   - 3.6
-  - 3.5
-  - 2.7
+matrix:
+  include:
+    - python: 3.6
+      env: MINREQ=1
 
 stages:
   - lint
