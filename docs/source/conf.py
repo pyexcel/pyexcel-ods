@@ -23,7 +23,7 @@ DESCRIPTION = (
 
 project = 'pyexcel-ods'
 copyright = '2015-2020 Onni Software Ltd.'
-author = 'C.W.'
+author = 'chfw'
 # The short X.Y version
 version = '0.5.6'
 # The full version, including alpha/beta/rc tags
