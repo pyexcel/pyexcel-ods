@@ -1,8 +1,8 @@
 overrides: "pyexcel.yaml"
 name: "pyexcel-ods"
 nick_name: ods
-version: 0.5.6
-current_version: 0.5.6
+version: 0.6.0
+current_version: 0.6.0
 release: 0.5.6
 copyright_year: 2015-2020
 file_type: ods
