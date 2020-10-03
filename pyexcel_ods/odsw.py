@@ -9,13 +9,12 @@
 """
 import sys
 
+import pyexcel_io.service as converter
 from odf.text import P
 from odf.table import Table, TableRow, TableCell
 from odf.namespaces import OFFICENS
-from odf.opendocument import OpenDocumentSpreadsheet
-
-import pyexcel_io.service as converter
 from pyexcel_io.book import BookWriter
+from odf.opendocument import OpenDocumentSpreadsheet
 from pyexcel_io.sheet import SheetWriter
 
 PY2 = sys.version_info[0] == 2
