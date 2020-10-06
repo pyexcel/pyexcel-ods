@@ -30,8 +30,8 @@ from odf.table import Table, TableRow, TableCell
 from odf.teletype import extractText
 from odf.namespaces import OFFICENS
 from odf.opendocument import load
-from pyexcel_io.plugin_api.abstract_sheet import ISheet
-from pyexcel_io.plugin_api.abstract_reader import IReader
+from pyexcel_io.plugin_api import ISheet
+from pyexcel_io.plugin_api import IReader, NamedContent
 
 
 class ODSSheet(ISheet):
@@ -107,13 +107,13 @@ class ODSBook(IReader):
         self._native_book = load(file_alike_object)
         self._keywords = keywords
         self.content_array = [
-            NameObject(table.getAttribute("name"), table)
+            NamedContent(table.getAttribute("name"), table)
             for table in self._native_book.spreadsheet.getElementsByType(Table)
         ]
 
     def read_sheet(self, sheet_index):
         """read a sheet at a specified index"""
-        table = self.content_array[sheet_index].sheet
+        table = self.content_array[sheet_index].payload
         sheet = ODSSheet(table, **self._keywords)
         return sheet
 
@@ -129,9 +129,3 @@ class ODSBookInContent(ODSBook):
     def __init__(self, file_content, file_type, **keywords):
         io = BytesIO(file_content)
         super().__init__(io, file_type, **keywords)
-
-
-class NameObject(object):
-    def __init__(self, name, sheet):
-        self.name = name
-        self.sheet = sheet

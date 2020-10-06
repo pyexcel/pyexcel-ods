@@ -7,19 +7,13 @@
     :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import sys
-
 import pyexcel_io.service as converter
 from odf.text import P
 from odf.table import Table, TableRow, TableCell
 from odf.namespaces import OFFICENS
 from odf.opendocument import OpenDocumentSpreadsheet
-from pyexcel_io.plugin_api.abstract_sheet import ISheetWriter
-from pyexcel_io.plugin_api.abstract_writer import IWriter
-
-PY2 = sys.version_info[0] == 2
-
-PY27_BELOW = PY2 and sys.version_info[1] < 7
+from pyexcel_io.plugin_api import ISheetWriter
+from pyexcel_io.plugin_api import IWriter
 
 
 class ODSSheetWriter(ISheetWriter):
@@ -27,7 +21,7 @@ class ODSSheetWriter(ISheetWriter):
     ODS sheet writer
     """
 
-    def __init__(self, ods_book, ods_sheet, sheet_name, **keywords):
+    def __init__(self, ods_book, sheet_name):
         self._native_book = ods_book
         self._native_sheet = Table(name=sheet_name)
 
@@ -79,20 +73,20 @@ class ODSWriter(IWriter):
 
     """
 
-    def __init__(self, file_alike_object, file_type, **keywords):
-        self._file_alike_object = file_alike_object
+    def __init__(self, file_alike_object, file_type, **_):
+        self.file_alike_object = file_alike_object
         self._native_book = OpenDocumentSpreadsheet()
 
     def create_sheet(self, name):
         """
         write a row into the file
         """
-        return ODSSheetWriter(self._native_book, None, name)
+        return ODSSheetWriter(self._native_book, name)
 
     def close(self):
         """
         This call writes file
 
         """
-        self._native_book.write(self._file_alike_object)
+        self._native_book.write(self.file_alike_object)
         self._native_book = None
