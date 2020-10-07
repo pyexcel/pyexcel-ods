@@ -30,8 +30,7 @@ from odf.table import Table, TableRow, TableCell
 from odf.teletype import extractText
 from odf.namespaces import OFFICENS
 from odf.opendocument import load
-from pyexcel_io.plugin_api import ISheet
-from pyexcel_io.plugin_api import IReader, NamedContent
+from pyexcel_io.plugin_api import ISheet, IReader, NamedContent
 
 
 class ODSSheet(ISheet):

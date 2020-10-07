@@ -12,8 +12,7 @@ from odf.text import P
 from odf.table import Table, TableRow, TableCell
 from odf.namespaces import OFFICENS
 from odf.opendocument import OpenDocumentSpreadsheet
-from pyexcel_io.plugin_api import ISheetWriter
-from pyexcel_io.plugin_api import IWriter
+from pyexcel_io.plugin_api import IWriter, ISheetWriter
 
 
 class ODSSheetWriter(ISheetWriter):
