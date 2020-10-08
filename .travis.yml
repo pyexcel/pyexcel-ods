@@ -4,43 +4,50 @@ language: python
 notifications:
   email: false
 python:
-  - 3.8-dev
+  - 3.8
   - 3.7
   - 3.6
-  - 3.5
-  - 2.7
+env:
+  -  MINREQ=1
 
 stages:
-  - test
   - lint
+  - moban
+  - test
 
-.disable_global: &disable_global
-  before_install: false
-  install: true
-  before_script: false
-  after_success: false
-  after_failure: false
 
 .lint: &lint
-  <<: *disable_global
+  git:
+    submodules: false
   python: 3.6
+  env:
+    - MINREQ=0
   stage: lint
-  install: pip install flake8
   script: make lint
+
+.moban: &moban
+  python: 3.6
+  env:
+    - MINREQ=0
+  stage: moban
+  install: pip install moban gitfs2 pypifs moban-jinja2-github moban-ansible
+  script:
+    - moban
+    - git diff --exit-code
 
 jobs:
   include:
+    - *moban
     - *lint
 
 stage: test
-
-script: make test
 
 before_install:
   - if [[ -f min_requirements.txt && "$MINREQ" -eq 1 ]]; then
       mv min_requirements.txt requirements.txt ;
     fi
-  - test ! -f rnd_requirements.txt || pip install --no-deps -r rnd_requirements.txt
+  - test ! -f rnd_requirements.txt ||
+    pip install --no-deps -r rnd_requirements.txt
   - test ! -f rnd_requirements.txt || pip install -r rnd_requirements.txt ;
   - pip install -r tests/requirements.txt
 script:

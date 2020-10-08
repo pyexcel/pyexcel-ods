@@ -1,12 +1,16 @@
 all: test
 
-test:
+test: lint
 	bash test.sh
 
-format:
-	isort -y $(find pyexcel_ods -name "*.py"|xargs echo) $(find tests -name "*.py"|xargs echo)
-	black -l 79 pyexcel_ods
-	black -l 79 tests
+install_test:
+	pip install -r tests/requirements.txt
 
 lint:
 	bash lint.sh
+
+format:
+	bash format.sh
+
+git-diff-check:
+	git diff --exit-code

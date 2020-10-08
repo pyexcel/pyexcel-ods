@@ -3,10 +3,10 @@ pyexcel-ods - Let you focus on data, instead of ods format
 ================================================================================
 
 .. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
-   :target: https://www.patreon.com/pyexcel
+   :target: https://www.patreon.com/chfw
 
-.. image:: https://api.bountysource.com/badge/team?team_id=288537
-   :target: https://salt.bountysource.com/teams/chfw-pyexcel
+.. image:: https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg
+   :target: https://awesome-python.com/#specific-formats-processing
 
 .. image:: https://travis-ci.org/pyexcel/pyexcel-ods.svg?branch=master
    :target: http://travis-ci.org/pyexcel/pyexcel-ods
@@ -14,9 +14,22 @@ pyexcel-ods - Let you focus on data, instead of ods format
 .. image:: https://codecov.io/gh/pyexcel/pyexcel-ods/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/pyexcel/pyexcel-ods
 
+.. image:: https://badge.fury.io/py/pyexcel-ods.svg
+   :target: https://pypi.org/project/pyexcel-ods
+
+
+.. image:: https://pepy.tech/badge/pyexcel-ods/month
+   :target: https://pepy.tech/project/pyexcel-ods/month
+
+
 .. image:: https://img.shields.io/gitter/room/gitterHQ/gitter.svg
    :target: https://gitter.im/pyexcel/Lobby
 
+.. image:: https://img.shields.io/static/v1?label=continuous%20templating&message=%E6%A8%A1%E7%89%88%E6%9B%B4%E6%96%B0&color=blue&style=flat-square
+    :target: https://moban.readthedocs.io/en/latest/#at-scale-continous-templating-for-open-source-projects
+
+.. image:: https://img.shields.io/static/v1?label=coding%20style&message=black&color=black&style=flat-square
+    :target: https://github.com/psf/black
 
 **pyexcel-ods** is a tiny wrapper library to read, manipulate and write data in
 ods format using python 2.6 and python 2.7. You are likely to use it with
@@ -24,6 +37,24 @@ ods format using python 2.6 and python 2.7. You are likely to use it with
 `pyexcel-ods3 <https://github.com/pyexcel/pyexcel-ods3>`_ is a sister library that
 depends on ezodf and lxml. `pyexcel-odsr <https://github.com/pyexcel/pyexcel-odsr>`_
 is the other sister library that has no external dependency but do ods reading only
+
+Support the project
+================================================================================
+
+If your company has embedded pyexcel and its components into a revenue generating
+product, please support me on github, `patreon <https://www.patreon.com/bePatron?u=5537627>`_
+or `bounty source <https://salt.bountysource.com/teams/chfw-pyexcel>`_ to maintain
+the project and develop it further.
+
+If you are an individual, you are welcome to support me too and for however long
+you feel like. As my backer, you will receive
+`early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
+
+And your issues will get prioritized if you would like to become my patreon as `pyexcel pro user`.
+
+With your financial support, I will be able to invest
+a little bit more time in coding, documentation and writing interesting posts.
+
 
 Known constraints
 ==================
@@ -48,24 +79,6 @@ or clone it and install it:
     $ git clone https://github.com/pyexcel/pyexcel-ods.git
     $ cd pyexcel-ods
     $ python setup.py install
-
-Support the project
-================================================================================
-
-If your company has embedded pyexcel and its components into a revenue generating
-product, please support me on `patreon <https://www.patreon.com/bePatron?u=5537627>`_
-or `bounty source <https://salt.bountysource.com/teams/chfw-pyexcel>`_ to maintain
-the project and develop it further.
-
-If you are an individual, you are welcome to support me too and for however long
-you feel like. As my backer, you will receive
-`early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
-
-And your issues will get prioritized if you would like to become my patreon as `pyexcel pro user`.
-
-With your financial support, I will be able to invest
-a little bit more time in coding, documentation and writing interesting posts.
-
 
 Usage
 ================================================================================
@@ -348,37 +361,16 @@ On Windows systems, please issue this command::
 
     > test.bat
 
-How to update test environment and update documentation
----------------------------------------------------------
 
-Additional steps are required:
+Before you commit
+------------------------------
 
-#. pip install moban
-#. git clone https://github.com/moremoban/setupmobans.git # generic setup
-#. git clone https://github.com/pyexcel/pyexcel-commons.git commons
-#. make your changes in `.moban.d` directory, then issue command `moban`
+Please run::
 
-What is pyexcel-commons
----------------------------------
+    $ make format
 
-Many information that are shared across pyexcel projects, such as: this developer guide, license info, etc. are stored in `pyexcel-commons` project.
+so as to beautify your code otherwise travis-ci may fail your unit test.
 
-What is .moban.d
----------------------------------
-
-`.moban.d` stores the specific meta data for the library.
-
-Acceptance criteria
--------------------
-
-#. Has Test cases written
-#. Has all code lines tested
-#. Passes all Travis CI builds
-#. Has fair amount of documentation if your change is complex
-#. run 'make format' so as to confirm the pyexcel organisation's coding style
-#. Please update CHANGELOG.rst
-#. Please add yourself to CONTRIBUTORS.rst
-#. Agree on NEW BSD License for your contribution
 
 Credits
 ================================================================================

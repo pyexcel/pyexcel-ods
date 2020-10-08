@@ -4,7 +4,7 @@
 
     ods reader
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
 # Copyright 2011 Marco Conti
@@ -20,26 +20,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from io import BytesIO
 
 import pyexcel_io.service as service
-from pyexcel_io._compact import OrderedDict
-from pyexcel_io.book import BookReader
-from pyexcel_io.sheet import SheetReader
-
-from odf.namespaces import OFFICENS
-from odf.opendocument import load
-from odf.table import Table, TableCell, TableRow
+from odf.text import P
+from odf.table import Table, TableRow, TableCell
 
 # Thanks to grt for the fixes
 from odf.teletype import extractText
-from odf.text import P
+from odf.namespaces import OFFICENS
+from odf.opendocument import load
+from pyexcel_io.plugin_api import ISheet, IReader, NamedContent
 
 
-class ODSSheet(SheetReader):
+class ODSSheet(ISheet):
     """native ods sheet"""
 
     def __init__(self, sheet, auto_detect_int=True, **keywords):
-        SheetReader.__init__(self, sheet, **keywords)
+        self._native_sheet = sheet
+        self._keywords = keywords
         self.__auto_detect_int = auto_detect_int
 
     @property
@@ -100,62 +99,32 @@ class ODSSheet(SheetReader):
         return "\n".join(text_content)
 
 
-class ODSBook(BookReader):
+class ODSBook(IReader):
     """read ods book"""
 
-    def open(self, file_name, **keywords):
-        """open ods file"""
-        BookReader.open(self, file_name, **keywords)
-        self._load_from_file()
-
-    def open_stream(self, file_stream, **keywords):
-        """open ods file stream"""
-        BookReader.open_stream(self, file_stream, **keywords)
-        self._load_from_memory()
-
-    def read_sheet_by_name(self, sheet_name):
-        """read a named sheet"""
-        tables = self._native_book.spreadsheet.getElementsByType(Table)
-        rets = [
-            table
-            for table in tables
-            if table.getAttribute("name") == sheet_name
+    def __init__(self, file_alike_object, _, **keywords):
+        self._native_book = load(file_alike_object)
+        self._keywords = keywords
+        self.content_array = [
+            NamedContent(table.getAttribute("name"), table)
+            for table in self._native_book.spreadsheet.getElementsByType(Table)
         ]
-        if len(rets) == 0:
-            raise ValueError("%s cannot be found" % sheet_name)
-        else:
-            return self.read_sheet(rets[0])
 
-    def read_sheet_by_index(self, sheet_index):
+    def read_sheet(self, sheet_index):
         """read a sheet at a specified index"""
-        tables = self._native_book.spreadsheet.getElementsByType(Table)
-        length = len(tables)
-        if sheet_index < length:
-            return self.read_sheet(tables[sheet_index])
-        else:
-            raise IndexError(
-                "Index %d of out bound %d" % (sheet_index, length)
-            )
-
-    def read_all(self):
-        """read all sheets"""
-        result = OrderedDict()
-        for sheet in self._native_book.spreadsheet.getElementsByType(Table):
-            ods_sheet = ODSSheet(sheet, **self._keywords)
-            result[ods_sheet.name] = ods_sheet.to_array()
-
-        return result
-
-    def read_sheet(self, native_sheet):
-        """read one native sheet"""
-        sheet = ODSSheet(native_sheet, **self._keywords)
-        return {sheet.name: sheet.to_array()}
+        table = self.content_array[sheet_index].payload
+        sheet = ODSSheet(table, **self._keywords)
+        return sheet
 
     def close(self):
         self._native_book = None
 
-    def _load_from_memory(self):
-        self._native_book = load(self._file_stream)
 
-    def _load_from_file(self):
-        self._native_book = load(self._file_name)
+class ODSBookInContent(ODSBook):
+    """
+    Open xlsx as read only mode
+    """
+
+    def __init__(self, file_content, file_type, **keywords):
+        io = BytesIO(file_content)
+        super().__init__(io, file_type, **keywords)

@@ -4,11 +4,11 @@ import os
 
 import psutil
 import pyexcel as pe
-from nose import SkipTest
-from nose.tools import eq_, raises
+from pyexcel_ods import get_data, save_data
 from pyexcel_io.exceptions import IntegerAccuracyLossError
 
-from pyexcel_ods import get_data, save_data
+from nose import SkipTest
+from nose.tools import eq_, raises
 
 IN_TRAVIS = "TRAVIS" in os.environ
 

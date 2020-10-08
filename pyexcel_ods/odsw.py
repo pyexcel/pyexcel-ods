@@ -4,37 +4,25 @@
 
     ods writer
 
-    :copyright: (c) 2014-2017 by Onni Software Ltd.
+    :copyright: (c) 2014-2020 by Onni Software Ltd.
     :license: New BSD License, see LICENSE for more details
 """
-import sys
-
 import pyexcel_io.service as converter
-from pyexcel_io.book import BookWriter
-from pyexcel_io.sheet import SheetWriter
-
+from odf.text import P
+from odf.table import Table, TableRow, TableCell
 from odf.namespaces import OFFICENS
 from odf.opendocument import OpenDocumentSpreadsheet
-from odf.table import Table, TableCell, TableRow
-from odf.text import P
-
-PY2 = sys.version_info[0] == 2
-
-PY27_BELOW = PY2 and sys.version_info[1] < 7
+from pyexcel_io.plugin_api import IWriter, ISheetWriter
 
 
-class ODSSheetWriter(SheetWriter):
+class ODSSheetWriter(ISheetWriter):
     """
     ODS sheet writer
     """
 
-    def set_sheet_name(self, name):
-        """initialize the native table"""
-        self._native_sheet = Table(name=name)
-
-    def set_size(self, size):
-        """not used in this class but used in ods3"""
-        pass
+    def __init__(self, ods_book, sheet_name):
+        self._native_book = ods_book
+        self._native_sheet = Table(name=sheet_name)
 
     def write_cell(self, row, cell):
         """write a native cell"""
@@ -78,26 +66,26 @@ class ODSSheetWriter(SheetWriter):
         self._native_book.spreadsheet.addElement(self._native_sheet)
 
 
-class ODSWriter(BookWriter):
+class ODSWriter(IWriter):
     """
     open document spreadsheet writer
 
     """
 
-    def __init__(self):
-        BookWriter.__init__(self)
+    def __init__(self, file_alike_object, file_type, **_):
+        self.file_alike_object = file_alike_object
         self._native_book = OpenDocumentSpreadsheet()
 
     def create_sheet(self, name):
         """
         write a row into the file
         """
-        return ODSSheetWriter(self._native_book, None, name)
+        return ODSSheetWriter(self._native_book, name)
 
     def close(self):
         """
         This call writes file
 
         """
-        self._native_book.write(self._file_alike_object)
+        self._native_book.write(self.file_alike_object)
         self._native_book = None

@@ -2,7 +2,7 @@
     pyexcel_ods
     ~~~~~~~~~~~~~~~~~~~
     The lower level ods file format handler using odfpy
-    :copyright: (c) 2015-2017 by Onni Software Ltd & its contributors
+    :copyright: (c) 2015-2020 by Onni Software Ltd & its contributors
     :license: New BSD License
 """
 
@@ -13,15 +13,23 @@ from pyexcel_io.io import store_data as write_data
 
 # this line has to be place above all else
 # because of dynamic import
-from pyexcel_io.plugins import IOPluginInfoChain
+from pyexcel_io.plugins import IOPluginInfoChain, IOPluginInfoChainV2
 
 __FILE_TYPE__ = "ods"
-IOPluginInfoChain(__name__).add_a_reader(
+IOPluginInfoChain(__name__)
+IOPluginInfoChainV2(__name__).add_a_reader(
     relative_plugin_class_path="odsr.ODSBook",
+    locations=["file", "memory"],
+    file_types=[__FILE_TYPE__],
+    stream_type="binary",
+).add_a_reader(
+    relative_plugin_class_path="odsr.ODSBookInContent",
+    locations=["content"],
     file_types=[__FILE_TYPE__],
     stream_type="binary",
 ).add_a_writer(
     relative_plugin_class_path="odsw.ODSWriter",
+    locations=["file", "memory"],
     file_types=[__FILE_TYPE__],
     stream_type="binary",
 )
