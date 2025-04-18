@@ -111,8 +111,8 @@ class ODSCellTypes:
         assert self.data["Sheet1"][5][1] == "Other"
         # boolean
         assert self.data["Sheet1"][0][2] == "Boolean"
-        assert self.data["Sheet1"][1][2] == True
-        assert self.data["Sheet1"][2][2] == False
+        assert self.data["Sheet1"][1][2] is True
+        assert self.data["Sheet1"][2][2] is False
         # Float
         assert self.data["Sheet1"][0][3] == "Float"
         assert self.data["Sheet1"][1][3] == 11.11
