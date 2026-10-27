@@ -2,6 +2,12 @@ name: pyexcel-ods
 organisation: pyexcel
 releases:
 - changes:
+  - action: fixed
+    details:
+    - '`#31`, display date cells as dates instead of serial numbers'
+  date: tbd
+  version: 0.6.1
+- changes:
   - action: added
     details:
     - 'new style reader and writer plugins. works with pyexcel-io v0.6.2'
