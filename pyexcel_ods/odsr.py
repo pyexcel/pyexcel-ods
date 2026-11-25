@@ -25,11 +25,11 @@ from io import BytesIO
 
 import pyexcel_io.service as service
 from odf.text import P
-from odf.table import Table, TableRow, TableCell
+from odf.table import Table, TableRow
 
 # Thanks to grt for the fixes
 from odf.teletype import extractText
-from odf.namespaces import OFFICENS
+from odf.namespaces import TABLENS, OFFICENS
 from odf.opendocument import load
 from pyexcel_io.plugin_api import ISheet, IReader, NamedContent
 
@@ -50,10 +50,19 @@ class ODSSheet(ISheet):
         return self._native_sheet.getElementsByType(TableRow)
 
     def column_iterator(self, row):
-        cells = row.getElementsByType(TableCell)
+        cells = (
+            cell
+            for cell in row.childNodes
+            if getattr(cell, "qname", None)
+            in ((TABLENS, "table-cell"), (TABLENS, "covered-table-cell"))
+        )
         for cell in cells:
             repeat = cell.getAttribute("numbercolumnsrepeated")
-            cell_value = self.__read_cell(cell)
+            cell_value = (
+                self.__read_cell(cell)
+                if cell.qname == (TABLENS, "table-cell")
+                else ""
+            )
             if repeat:
                 number_of_repeat = int(repeat)
                 for i in range(number_of_repeat):
