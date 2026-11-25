@@ -47,7 +47,28 @@ class ODSSheet(ISheet):
         return self._native_sheet.getAttribute("name")
 
     def row_iterator(self):
-        return self._native_sheet.getElementsByType(TableRow)
+        rows = self._native_sheet.getElementsByType(TableRow)
+        last_content_row = len(rows)
+        while last_content_row and not any(
+            self.__cell_has_content(cell)
+            for cell in rows[last_content_row - 1].getElementsByType(TableCell)
+        ):
+            last_content_row -= 1
+
+        for index, row in enumerate(rows):
+            repeat = row.getAttribute("numberrowsrepeated")
+            # Trailing empty rows may describe the entire unused sheet range.
+            # Keep their existing one-row-per-element behavior.
+            count = int(repeat) if repeat and index < last_content_row else 1
+            for _ in range(count):
+                yield row
+
+    def __cell_has_content(self, cell):
+        cell_type = cell.getAttrNS(OFFICENS, "value-type")
+        value_token = service.VALUE_TOKEN.get(cell_type, "value")
+        return cell.getAttrNS(OFFICENS, value_token) or self.__read_text_cell(
+            cell
+        )
 
     def column_iterator(self, row):
         cells = row.getElementsByType(TableCell)
